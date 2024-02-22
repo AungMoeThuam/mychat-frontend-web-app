@@ -38,17 +38,11 @@ export default function HomePage() {
       dispatch(searchfriendNameThunk(search ? search : ""));
     }
     function listenerForRequest(data: any) {
-      let search = queryParams.get("search");
-      if (data === "acceptedByYou") {
+      if (data === "acceptedByYou")
         toast("You have accepted a friend request!");
-      } else if (data === "acceptedByFriend") {
+      else if (data === "acceptedByFriend")
         toast("Your friend requst is accepted by him!");
-      } else {
-        console.log("received");
-        toast("Received a friend request!", { duration: 3000 });
-      }
-      console.log("search in request or accepted ", search);
-      dispatch(searchfriendNameThunk(search ? search : ""));
+      else toast("Received a friend request!", { duration: 3000 });
     }
     socket.subscribeOneEvent(Event.ACCEPT, listenerForRequest);
     socket.subscribeOneEvent(Event.REQUEST, listenerForRequest);
