@@ -1,0 +1,52 @@
+type Friend = {
+  requester: string;
+  receipent: string;
+  status: number;
+  history: boolean;
+  friendId: string;
+  roomId: string;
+  name: string;
+  senderId: string;
+  receiverId: string;
+  content: string;
+  type: string;
+  deletedByReceiver: boolean;
+  messageCreatedAt: string;
+  active?: boolean;
+};
+interface Message {
+  senderId: string;
+  receiverId: string;
+  roomId: string;
+  content: string;
+  type: string;
+  deletedBySender: boolean;
+  deletedByReceiver: boolean;
+  createdAt: string;
+  messageId: string;
+}
+
+interface HttpResponse {
+  status: string;
+  message: string;
+  data: any;
+}
+
+interface ProfilePhoto {
+  createdAt?: string;
+  mimetype?: string;
+  path?: string;
+  size?: number;
+}
+
+interface User {
+  createdAt: string;
+  name: string;
+  profilePhoto?: ProfilePhoto;
+  _id: string;
+  status?: number;
+  friendshipId?: string;
+  requester?: string;
+}
+
+export type { Friend, Message, HttpResponse, User, ProfilePhoto };

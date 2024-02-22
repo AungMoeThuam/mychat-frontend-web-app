@@ -1,0 +1,24 @@
+@media (max-width: 768px) {
+  #input {
+    max-width: 50dvw;
+  }
+}
+
+@media (max-width: 992px) {
+  #input {
+    min-width: 50dvw;
+  }
+}
+
+#input {
+  max-width: 65dvw;
+}
+
+#input::-webkit-scrollbar {
+  width: 3px;
+  background-color: #3a3a3a;
+}
+
+#input::-webkit-scrollbar-thumb {
+  background-color: aliceblue;
+}

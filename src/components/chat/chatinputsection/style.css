@@ -1,0 +1,7 @@
+#picker {
+  display: none;
+}
+
+#pickerOpener:hover #picker {
+  display: block;
+}

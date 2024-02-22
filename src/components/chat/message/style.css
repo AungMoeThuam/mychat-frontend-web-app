@@ -1,0 +1,7 @@
+#menu {
+  display: none;
+}
+
+#message:hover #menu {
+  display: block;
+}
