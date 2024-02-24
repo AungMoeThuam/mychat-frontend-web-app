@@ -13,6 +13,7 @@ type Friend = {
   deletedByReceiver: boolean;
   messageCreatedAt: string;
   active?: boolean;
+  profilePhoto: ProfilePhoto;
 };
 interface Message {
   senderId: string;

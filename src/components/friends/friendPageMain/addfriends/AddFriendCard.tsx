@@ -9,9 +9,8 @@ import { RootState, StoreDispatch } from "../../../../redux/store/store";
 import { User } from "../../../../utils/types";
 import toast from "react-hot-toast";
 import { searchfriendNameThunk } from "../../../../redux/thunks/searchFriendThunks";
+import { tempCatPhoto } from "../../../../utils/helper";
 
-const defaultPhoto =
-  "https://i.natgeofe.com/n/4cebbf38-5df4-4ed0-864a-4ebeb64d33a4/NationalGeographic_1468962.jpg?w=1260&h=928";
 export default function AddFriendCard({ people }: { people: User }) {
   const currentUserId = useSelector(
     (state: RootState) => state.authSlice.currentUserId
@@ -91,7 +90,7 @@ export default function AddFriendCard({ people }: { people: User }) {
           src={
             people.profilePhoto
               ? `${backendUrlWihoutApiEndpoint}/resources/profiles/${people.profilePhoto.path}`
-              : defaultPhoto
+              : tempCatPhoto
           }
         />
 
@@ -215,39 +214,11 @@ function AddFriendDialog({
       setOperation((prev) => ({ ...prev, loading: false, error: true }));
     }
   };
-  if (operation.error)
-    return (
-      <Modal
-        onClose={
-          operation.error
-            ? () => {
-                return;
-              }
-            : () => setUnFriendShipActionDialog(false)
-        }
-      >
-        <div
-          onClick={(e) => e.stopPropagation()}
-          className="flex flex-col py-3 px-5 gap-10 bg-slate-950 rounded-lg shadow-lg"
-        >
-          <div className="flex  justify-center gap-5 ">
-            <h1>
-              There is a conflict concurrent request at the moment! try refresh
-            </h1>
-            <button
-              onClick={() => document.location.reload()}
-              className=" btn btn-sm bg-teal-500 text-slate-950"
-            >
-              Refresh
-            </button>
-          </div>
-        </div>
-      </Modal>
-    );
+
   return (
     <Modal
       onClose={
-        operation.loading
+        operation.loading === true || operation.error === true
           ? () => {
               return;
             }
@@ -260,6 +231,18 @@ function AddFriendDialog({
       >
         {operation.loading ? (
           <h1>Loading...</h1>
+        ) : operation.error ? (
+          <div className="flex  justify-center gap-5 ">
+            <h1>
+              There is a conflict concurrent request at the moment! try refresh
+            </h1>
+            <button
+              onClick={() => document.location.reload()}
+              className=" btn btn-sm bg-teal-500 text-slate-950"
+            >
+              Refresh
+            </button>
+          </div>
         ) : (
           <>
             <h1>Are u sure to add friend to {people.name} ? </h1>
@@ -286,32 +269,4 @@ function AddFriendDialog({
       </div>
     </Modal>
   );
-}
-
-{
-  /* <h1>Are u sure to add friend to {people.name} ? </h1>
-            <div className="flex  justify-center gap-5 ">
-              <button
-                onClick={() => {
-                  console.log(people.status);
-                  action(people._id, people.status);
-                  setUnFriendShipActionDialog(false);
-                  if (!people.status) setTest("request");
-                }}
-                className=" btn btn-sm bg-teal-500 text-slate-950"
-              >
-                Yes
-              </button>
-              <button
-                onClick={() => {
-                  action(people._id, 0, "cancel");
-                  setUnFriendShipActionDialog(false);
-                }}
-                className="btn  btn-sm bg-slate-900"
-              >
-                No
-              </button> */
-}
-{
-  /* </div> */
 }

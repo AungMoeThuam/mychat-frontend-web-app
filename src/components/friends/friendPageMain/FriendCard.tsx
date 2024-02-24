@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { Friend } from "../../../utils/types";
 import { useState } from "react";
 import UnFriendDialog from "./UnFriendDialog";
+import { backendUrlWihoutApiEndpoint } from "../../../utils/backendConfig";
+import { tempCatPhoto } from "../../../utils/helper";
 
 export default function FriendCard({ friend }: { friend: Friend }) {
   const [unFriendDialog, setUnFriendDialog] = useState(false);
@@ -10,7 +12,11 @@ export default function FriendCard({ friend }: { friend: Friend }) {
       <div className="flex gap-2">
         <img
           className=" avatar w-10 h-10 rounded-full"
-          src="https://i.natgeofe.com/n/4cebbf38-5df4-4ed0-864a-4ebeb64d33a4/NationalGeographic_1468962.jpg?w=1260&h=928"
+          src={
+            friend.profilePhoto
+              ? `${backendUrlWihoutApiEndpoint}/resources/profiles/${friend.profilePhoto.path}`
+              : tempCatPhoto
+          }
         />
 
         <div>

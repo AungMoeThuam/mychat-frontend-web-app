@@ -1,7 +1,6 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store/store";
 import { Friend } from "../../../utils/types";
-import { Link } from "react-router-dom";
 import FriendCard from "./FriendCard";
 
 export default function FriendPageMain() {
@@ -11,7 +10,7 @@ export default function FriendPageMain() {
   return (
     <div className=" flex-1 flex flex-col gap-2 overflow-y-scroll px-4 pt-3 pb-5">
       {friendsList.map((friend: Friend) => {
-        return <FriendCard friend={friend} />;
+        return <FriendCard key={friend.friendId} friend={friend} />;
       })}
     </div>
   );
