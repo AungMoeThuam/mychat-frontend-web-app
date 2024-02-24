@@ -11,10 +11,12 @@ import socket from "../../services/socket";
 import { Event } from "../../utils/contants";
 import { addMessage } from "../../redux/slice/messageSlice";
 import { backgroundColor1, borderColor } from "../../utils/style";
+import { backendUrlWihoutApiEndpoint } from "../../utils/backendConfig";
+import { tempCatPhoto } from "../../utils/helper";
 
 export default function Chat() {
   const { roomId } = useParams();
-  const { friendId, friendName } = useLocation().state;
+  const { friendId, friendName, profilePhoto } = useLocation().state;
   const ref = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch<StoreDispatch>();
   const messageSlice = useSelector((state: RootState) => state.messageSlice);
@@ -48,8 +50,12 @@ export default function Chat() {
       >
         <div className="flex justify-center items-center">
           <img
-            className=" w-16 bg-slate-300 avatar rounded-full shadow mr-2"
-            src="https://i.redd.it/i6cfg5enf50c1.png"
+            className=" w-16 h-16 bg-slate-300 avatar rounded-full shadow mr-2"
+            src={
+              profilePhoto
+                ? `${backendUrlWihoutApiEndpoint}/resources/profiles/${profilePhoto.path}`
+                : tempCatPhoto
+            }
             alt="profile"
           />
           <div className="flex flex-col text-lg font-bold">

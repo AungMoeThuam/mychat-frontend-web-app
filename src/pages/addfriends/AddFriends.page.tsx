@@ -1,6 +1,6 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import AddFriendCard from "../../components/friends/friendPageMain/addfriends/AddFriendCard";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, createContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, StoreDispatch } from "../../redux/store/store";
 import { searchfriendNameThunk } from "../../redux/thunks/searchFriendThunks";
@@ -22,6 +22,7 @@ export interface People {
   };
 }
 
+export const SearchNameContext = createContext("");
 function AddFriendsPage() {
   const [searchName, setSearchName] = useState<string>("");
   const dispatch = useDispatch<StoreDispatch>();
@@ -33,6 +34,7 @@ function AddFriendsPage() {
   const friends = useSelector(
     (state: RootState) => state.searchFriendSlice.poepleList
   );
+  let search = queryParams.get("search");
 
   const searchPeople = (e: FormEvent) => {
     e.preventDefault();
@@ -41,14 +43,13 @@ function AddFriendsPage() {
   };
 
   useEffect(() => {
-    let search = queryParams.get("search");
-    dispatch(searchfriendNameThunk(search ? search : ""));
+    if (search !== null) dispatch(searchfriendNameThunk(search));
   }, [queryParams.get("search")]);
 
   useEffect(() => {
     if (searchName.trim() === "") {
       dispatch(searchFriendByName([]));
-      navigate("/friends/addfriends");
+      // navigate("/friends/addfriends?id=1");
     }
   }, [searchName]);
   return (
@@ -64,23 +65,25 @@ function AddFriendsPage() {
         />
       </form>
 
-      <div className="fle flex-1 flex flex-col gap-3 overflow-y-scroll px-4 pt-3 pb-5">
-        {friends.length === 0 ? (
-          <h1>not found! </h1>
-        ) : (
-          friends.map((item) => {
-            return (
-              <AddFriendCard
-                key={item._id}
-                people={{
-                  ...item,
-                  status: item._id === currentUserId ? 5 : item.status,
-                }}
-              />
-            );
-          })
-        )}
-      </div>
+      <SearchNameContext.Provider value={search!}>
+        <div className="fle flex-1 flex flex-col gap-3 overflow-y-scroll px-4 pt-3 pb-5">
+          {friends.length === 0 ? (
+            <h1>not found! </h1>
+          ) : (
+            friends.map((item) => {
+              return (
+                <AddFriendCard
+                  key={item._id}
+                  people={{
+                    ...item,
+                    status: item._id === currentUserId ? 5 : item.status,
+                  }}
+                />
+              );
+            })
+          )}
+        </div>
+      </SearchNameContext.Provider>
     </>
   );
 }

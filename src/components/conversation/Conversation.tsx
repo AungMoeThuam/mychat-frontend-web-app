@@ -78,7 +78,7 @@ export default function Conversation({
   return (
     <Link
       to={"/messages/" + roomId}
-      state={{ friendId, friendName: name }}
+      state={{ friendId, friendName: name, profilePhoto }}
       id="f"
       className={`${
         false ? " bg-slate-800" : ""

@@ -1,11 +1,6 @@
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import {
-  Link,
-  Outlet,
-  RouterProvider,
-  createBrowserRouter,
-} from "react-router-dom";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Chat from "./components/chat/Chat.tsx";
 import HomePage from "./pages/home/Home.page.tsx";
 import ProfilePage from "./pages/profile/Profile.page.tsx";
@@ -56,7 +51,6 @@ const router = createBrowserRouter([
           {
             path: "addfriends",
             element: <AddFriendsPage />,
-            // children: [{ path: ":name", element: <AddFriendsPage /> }],
           },
         ],
       },
