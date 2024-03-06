@@ -13,6 +13,7 @@ import RequestsPage from "./pages/requests/Requests.page.tsx";
 import FriendPageMain from "./components/friends/friendPageMain/FriendPageMain.tsx";
 import AddFriendsPage from "./pages/addfriends/AddFriends.page.tsx";
 import RegisterPage from "./pages/register/Register.page.tsx";
+import PendingsPage from "./pages/pendings/Pendings.page.tsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -44,6 +45,11 @@ const router = createBrowserRouter([
             index: true,
             element: <FriendPageMain />,
           },
+          {
+            path: "pendings",
+            element: <PendingsPage />,
+          },
+
           {
             path: "requests",
             element: <RequestsPage />,

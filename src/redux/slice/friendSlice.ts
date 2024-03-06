@@ -41,6 +41,11 @@ const friendSlice = createSlice({
     fetchFriendsListLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
+    unFriendUpdate: (state, action: PayloadAction<{ friendId: string }>) => {
+      state.friendsList = state.friendsList.filter(
+        (item: Friend) => item.friendId !== action.payload.friendId
+      );
+    },
     addNewMessage: (state, action: PayloadAction<Message>) => {
       let temp: Friend;
       state.friendsList = state.friendsList
@@ -81,6 +86,7 @@ export const {
   fetchFriendsListLoading,
   addNewMessage,
   updateOnlineFriendStatus,
+  unFriendUpdate,
 } = friendSlice.actions;
 export default friendSlice.reducer;
 export type { FriendSliceState, FriendSliceAction };

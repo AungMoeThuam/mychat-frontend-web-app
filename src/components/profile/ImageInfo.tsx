@@ -41,7 +41,7 @@ export default function ImageInfo() {
               setPhoto(null);
               if (photoRef && photoRef.current)
                 photoRef.current.src = `${backendUrlWihoutApiEndpoint}/resources/profiles/${profilePhoto.path}`;
-              //     "https://i.natgeofe.com/n/4cebbf38-5df4-4ed0-864a-4ebeb64d33a4/NationalGeographic_1468962.jpg?w=1260&h=928";
+
               if (!rawPhotoSrcObject) URL.revokeObjectURL(rawPhotoSrcObject);
             }}
             className=" btn btn-sm btn-error "

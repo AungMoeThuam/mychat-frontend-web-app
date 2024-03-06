@@ -48,7 +48,7 @@ export default function ConversationList() {
     };
   }, []);
   if (error) return <h1>{message}</h1>;
-  if (loading) return <h1>{message}</h1>;
+  if (loading) return <h1>...loading</h1>;
 
   return (
     <>

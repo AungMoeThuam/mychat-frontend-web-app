@@ -1,4 +1,10 @@
-import { Dispatch, SetStateAction, useContext, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { User } from "../../../../../utils/types";
 import { useDispatch } from "react-redux";
 import { StoreDispatch } from "../../../../../redux/store/store";
@@ -8,19 +14,19 @@ import Modal from "../../../../modal/Modal";
 import toast from "react-hot-toast";
 import { RelationshipActionDialogs } from "../AddFriendCard";
 import { SearchNameContext } from "../../../../../pages/addfriends/AddFriends.page";
+import { updateSearchFriends } from "../../../../../redux/slice/searchFriendSlice";
+import { getFriendsListThunk } from "../../../../../redux/thunks/friendThunks";
 
 export default function AcceptFriendDialog({
   people,
-  setUnFriendShipActionDialog,
+  setOpenAcceptFriendDialog,
   currentUserId,
-  searchName,
 }: {
   people: User;
-  setUnFriendShipActionDialog: Dispatch<
+  setOpenAcceptFriendDialog: Dispatch<
     SetStateAction<RelationshipActionDialogs>
   >;
   currentUserId: string;
-  searchName: string | null;
 }) {
   const searchNameContextConsumer = useContext(SearchNameContext);
   const dispatch = useDispatch<StoreDispatch>();
@@ -31,39 +37,42 @@ export default function AcceptFriendDialog({
     message: "",
     success: false,
   });
-  const action = async (
-    id: string,
-    relationshipStatus: number = 0,
-    process: "cancel" | "accept" = "accept"
-  ) => {
-    setOperation((prev) => ({ ...prev, loading: true }));
-    if (process === "cancel") return;
 
+  const acceptFriendRequest = async () => {
+    setOperation((prev) => ({ ...prev, loading: true }));
     try {
-      const res = await Api.manageFriendShipStatus({
-        relationshipStatus,
-        type: "request",
-        id,
+      const { status } = await Api.manageFriendShipStatus({
+        relationshipStatus: people.status,
+        id: people._id,
         currentUserId,
+        type: "accept",
       });
-      if (res.status === "success") {
-        toast("requested successfully!");
-        setOperation((prev) => ({ ...prev, loading: false, success: true }));
-        setUnFriendShipActionDialog((prev) => ({
+      if (status === "success") {
+        toast("you have accepted a friend request ✅");
+        setOpenAcceptFriendDialog((prev) => ({
           ...prev,
-          openAddFriendDialog: false,
+          openAcceptFriendDialog: false,
         }));
-        dispatch(searchfriendNameThunk(searchName ? searchName : ""));
+        dispatch(
+          updateSearchFriends({
+            receipent: currentUserId,
+            requester: people._id,
+            status: 3,
+          })
+        );
+        dispatch(getFriendsListThunk());
       } else {
-        toast.error(res.message + " ❌❌❌", { duration: 4000 });
         setOperation((prev) => ({ ...prev, loading: false, error: true }));
       }
     } catch (error: any) {
-      console.error(error);
-      toast.error(error.message + " ❌❌❌", { duration: 4000 });
+      toast(error.message + "❌");
       setOperation((prev) => ({ ...prev, loading: false, error: true }));
     }
   };
+
+  useEffect(() => {
+    acceptFriendRequest();
+  }, []);
 
   return (
     <Modal
@@ -73,9 +82,9 @@ export default function AcceptFriendDialog({
               return;
             }
           : () =>
-              setUnFriendShipActionDialog((prev) => ({
+              setOpenAcceptFriendDialog((prev) => ({
                 ...prev,
-                openAddFriendDialog: false,
+                openAcceptFriendDialog: false,
               }))
       }
     >
@@ -84,50 +93,28 @@ export default function AcceptFriendDialog({
         className="flex flex-col py-3 px-5 gap-10 bg-slate-950 rounded-lg shadow-lg"
       >
         {operation.loading ? (
-          <h1>Loading...</h1>
-        ) : operation.error ? (
-          <div className="flex  justify-center gap-5 ">
-            <h1>
-              There is a conflict concurrent request at the moment! try refresh
-            </h1>
-            <button
-              onClick={() => {
-                dispatch(searchfriendNameThunk(searchNameContextConsumer));
-                setUnFriendShipActionDialog((prev) => ({
-                  ...prev,
-                  openAddFriendDialog: false,
-                }));
-              }}
-              className=" btn btn-sm bg-teal-500 text-slate-950"
-            >
-              Refresh
-            </button>
-          </div>
+          <h1>loading...</h1>
         ) : (
-          <>
-            <h1>Are u sure to add friend to {people.name}? </h1>
+          operation.error && (
             <div className="flex  justify-center gap-5 ">
+              <h1>
+                There is a conflict concurrent request at the moment! try
+                refresh
+              </h1>
               <button
                 onClick={() => {
-                  action(people._id, people.status);
+                  dispatch(searchfriendNameThunk(searchNameContextConsumer));
+                  setOpenAcceptFriendDialog((prev) => ({
+                    ...prev,
+                    openAcceptFriendDialog: false,
+                  }));
                 }}
                 className=" btn btn-sm bg-teal-500 text-slate-950"
               >
-                Yes
-              </button>
-              <button
-                onClick={() => {
-                  setUnFriendShipActionDialog((prev) => ({
-                    ...prev,
-                    openAddFriendDialog: false,
-                  }));
-                }}
-                className="btn  btn-sm bg-slate-900"
-              >
-                No
+                Refresh
               </button>
             </div>
-          </>
+          )
         )}
       </div>
     </Modal>

@@ -32,19 +32,14 @@ export default function RejectOrCancelFriendRequestDialog({
     message: "",
     success: false,
   });
-  const action = async (
-    id: string,
-    relationshipStatus: number = 0,
-    process: "cancel" | "accept" = "accept"
-  ) => {
+  const action = async () => {
     setOperation((prev) => ({ ...prev, loading: true }));
-    if (process === "cancel") return;
 
     try {
       const res = await Api.manageFriendShipStatus({
-        relationshipStatus,
+        relationshipStatus: 0,
         type: "reject",
-        id,
+        id: people._id,
         currentUserId,
       });
       if (res.status === "success") {
@@ -116,9 +111,7 @@ export default function RejectOrCancelFriendRequestDialog({
             </h1>
             <div className="flex  justify-center gap-5 ">
               <button
-                onClick={() => {
-                  action(people._id, people.status);
-                }}
+                onClick={action}
                 className=" btn btn-sm bg-teal-500 text-slate-950"
               >
                 Yes

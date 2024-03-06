@@ -3,12 +3,16 @@ import authSlice from "../slice/authSlice";
 import friendSlice from "../slice/friendSlice";
 import messageSlice from "../slice/messageSlice";
 import searchFriendSlice from "../slice/searchFriendSlice";
+import requestSlice from "../slice/requestSlice";
+import pendingSlice from "../slice/pendingSlice";
 
 const rootReducer = {
   authSlice,
   friendSlice,
   messageSlice,
   searchFriendSlice,
+  requestSlice,
+  pendingSlice,
 };
 const store = configureStore({
   reducer: rootReducer,

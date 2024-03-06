@@ -1,72 +1,32 @@
 import { useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { backendUrlWihoutApiEndpoint } from "../../../../utils/backendConfig";
-import { Api } from "../../../../services/api";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState, StoreDispatch } from "../../../../redux/store/store";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../redux/store/store";
 import { User } from "../../../../utils/types";
-import toast from "react-hot-toast";
 import { tempCatPhoto } from "../../../../utils/helper";
 import AddFriendDialog from "./dialogs/AddFriendDialog";
 import RejectOrCancelFriendRequestDialog from "./dialogs/RejectOrCancelFriendRequestDialog";
-import { updateSearchFriends } from "../../../../redux/slice/searchFriendSlice";
+import AcceptFriendDialog from "./dialogs/AcceptFriendDialog";
 
 export type RelationshipActionDialogs = {
   openAddFriendDialog: boolean;
   openRejectOrCancelFriendRequestDialog: boolean;
-  acceptFriend: boolean;
+  openAcceptFriendDialog: boolean;
 };
 
 export default function AddFriendCard({ people }: { people: User }) {
-  const dispatch = useDispatch<StoreDispatch>();
   const [relationshipActionDialogs, setRelationshipActionDialogs] =
     useState<RelationshipActionDialogs>({
       openAddFriendDialog: false,
       openRejectOrCancelFriendRequestDialog: false,
-      acceptFriend: false,
+      openAcceptFriendDialog: false,
     });
 
   const currentUserId = useSelector(
     (state: RootState) => state.authSlice.currentUserId
   );
   const [queryParams] = useSearchParams();
-
-  const acceptFriendRequest = async () => {
-    try {
-      const { data, status } = await Api.manageFriendShipStatus({
-        relationshipStatus: people.status,
-        id: people._id,
-        currentUserId,
-        type: "accept",
-      });
-      if (status === "success") {
-        toast("you have accepted a friend request");
-        setRelationshipActionDialogs((prev) => ({
-          ...prev,
-          acceptFriend: false,
-        }));
-        dispatch(
-          updateSearchFriends({
-            receipent: currentUserId,
-            requester: people._id,
-            status: 3,
-          })
-        );
-      } else {
-        toast(data + "❌");
-        setRelationshipActionDialogs((prev) => ({
-          ...prev,
-          acceptFriend: false,
-        }));
-      }
-    } catch (error: any) {
-      toast(error.message + "❌");
-      setRelationshipActionDialogs((prev) => ({
-        ...prev,
-        acceptFriend: false,
-      }));
-    }
-  };
 
   return (
     <div className="flex  gap-2  justify-between p-1 rounded  items-center pr-4   hover:bg-teal-800">
@@ -90,7 +50,7 @@ export default function AddFriendCard({ people }: { people: User }) {
             view your profile
           </Link>
         )}
-        {!people.status && (
+        {(!people.status || people.status === 4) && (
           <button
             onClick={() =>
               setRelationshipActionDialogs((prev) => ({
@@ -119,17 +79,15 @@ export default function AddFriendCard({ people }: { people: User }) {
         {people.status === 1 && people.requester !== currentUserId && (
           <div>
             <button
-              disabled={relationshipActionDialogs.acceptFriend ? true : false}
               onClick={() => {
                 setRelationshipActionDialogs((prev) => ({
                   ...prev,
-                  acceptFriend: true,
+                  openAcceptFriendDialog: true,
                 }));
-                acceptFriendRequest();
               }}
               className=" btn btn-sm     bg-teal-500  text-slate-950"
             >
-              {relationshipActionDialogs.acceptFriend
+              {relationshipActionDialogs.openAcceptFriendDialog
                 ? "loading..."
                 : "accept request"}
             </button>
@@ -168,6 +126,13 @@ export default function AddFriendCard({ people }: { people: User }) {
           currentUserId={currentUserId}
           setRejectOrCancelFriendRequestDialog={setRelationshipActionDialogs}
           searchName={queryParams.get("search")}
+        />
+      )}
+      {relationshipActionDialogs.openAcceptFriendDialog && (
+        <AcceptFriendDialog
+          people={people}
+          currentUserId={currentUserId}
+          setOpenAcceptFriendDialog={setRelationshipActionDialogs}
         />
       )}
     </div>
