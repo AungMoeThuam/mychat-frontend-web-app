@@ -2,13 +2,12 @@ import { useEffect, useState } from "react";
 import { Friend } from "../../utils/types";
 import { backendUrlWihoutApiEndpoint } from "../../utils/backendConfig";
 import { tempCatPhoto } from "../../utils/helper";
-import { Api } from "../../services/api";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, StoreDispatch } from "../../redux/store/store";
-import RequestActionDialog from "../../components/page-components/requests.page/RequestActionDialog";
-import { acceptRequestAction } from "../../redux/slice/requestSlice";
+
 import { getPendingsListThunk } from "../../redux/thunks/pendingThunks";
-import { cancelPendingAction } from "../../redux/slice/pendingSlice";
+
+import PendingActionDialog from "../../components/page-components/pendings.page/PendingActionDialog";
 
 export default function PendingsPage() {
   const { loading, error, message, pendingsList } = useSelector(
@@ -37,30 +36,8 @@ export default function PendingsPage() {
 }
 
 function PendingFriendCard({ friend }: { friend: Friend }) {
-  const [requestActionDialog, setRequestActionDialog] = useState(false);
-  const [operation, setOperation] = useState({
-    loading: false,
-    error: false,
-    success: false,
-  });
-  const dispatch = useDispatch<StoreDispatch>();
-  const cancelRequest = async () => {
-    try {
-      const result = await Api.manageFriendShipStatus({
-        type: "cancelrequest",
-        relationshipStatus: 0,
-        id: friend.friendId,
-        currentUserId: friend.receipent,
-      });
-      if (result.status === "success") {
-        dispatch(cancelPendingAction(friend.friendId));
-      } else {
-        setOperation((prev) => ({ ...prev, loading: false, error: true }));
-      }
-    } catch (error: unknown) {
-      setOperation((prev) => ({ ...prev, loading: false, error: true }));
-    }
-  };
+  const [pendingActionDialog, setPendingActionDialog] = useState(false);
+
   return (
     <div className="flex  gap-2  justify-between p-2 rounded  items-center pr-4 hover:bg-teal-900">
       <div className="flex gap-2 items-center">
@@ -77,16 +54,16 @@ function PendingFriendCard({ friend }: { friend: Friend }) {
       </div>
       <div className="flex gap-4">
         <button
-          onClick={() => setRequestActionDialog(true)}
+          onClick={() => setPendingActionDialog(true)}
           className=" btn btn-sm  bg-slate-950 border-none text-slate-400"
         >
           Cancel
         </button>
       </div>
-      {requestActionDialog && (
-        <RequestActionDialog
+      {pendingActionDialog && (
+        <PendingActionDialog
           friend={friend}
-          onClose={() => setRequestActionDialog(false)}
+          onClose={() => setPendingActionDialog(false)}
         />
       )}
     </div>

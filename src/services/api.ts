@@ -71,6 +71,20 @@ const Api = {
 
     return result;
   },
+  uploadProfilePhoto: async (photo: File, currentUserId: string) => {
+    const form = new FormData();
+    form.append("uploadPhoto", photo);
+    form.append("filename", photo.name);
+    form.append("userId", currentUserId);
+
+    const res = await fetch(`${backendUrl}/profileupload`, {
+      method: "POST",
+      body: form,
+    });
+    const result = await res.json();
+
+    return result;
+  },
 };
 
 export { Api };

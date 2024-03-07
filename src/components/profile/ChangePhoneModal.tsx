@@ -9,8 +9,10 @@ type ChangeInfo = {
 
 export default function ChangePhoneModal({
   changeAction,
+  phone,
 }: {
   changeAction: Dispatch<SetStateAction<ChangeInfo>>;
+  phone: string;
 }) {
   return (
     <Modal
@@ -25,6 +27,18 @@ export default function ChangePhoneModal({
         <h1 className=" text-lg text-white font-bold">
           Changing Phone Number{" "}
         </h1>
+        <label className="form-control w-full max-w-xs ">
+          <div className="label">
+            <span className="label-text text-white">Current Phone</span>
+          </div>
+          <input
+            disabled
+            type="text"
+            value={!phone.trim() ? "none" : phone}
+            placeholder="Type here"
+            className="input input-sm input-bordered w-full max-w-xs"
+          />
+        </label>
         <label className="form-control w-full max-w-xs ">
           <div className="label">
             <span className="label-text text-white">

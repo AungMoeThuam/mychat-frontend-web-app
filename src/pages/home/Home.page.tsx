@@ -14,6 +14,7 @@ import { Event } from "../../utils/contants";
 import toast, { Toaster } from "react-hot-toast";
 import { searchfriendNameThunk } from "../../redux/thunks/searchFriendThunks";
 import { updateSearchFriends } from "../../redux/slice/searchFriendSlice";
+import { getFriendsListThunk } from "../../redux/thunks/friendThunks";
 export default function HomePage() {
   const [queryParams] = useSearchParams();
   const dispatch = useDispatch<StoreDispatch>();
@@ -40,9 +41,10 @@ export default function HomePage() {
     function listenerForRequest(data: any) {
       if (data === "acceptedByYou")
         toast("You have accepted a friend request!");
-      else if (data === "acceptedByFriend")
+      else if (data === "acceptedByFriend") {
+        dispatch(getFriendsListThunk());
         toast("Your friend requst is accepted by him!");
-      else toast("Received a friend request!", { duration: 3000 });
+      } else toast("Received a friend request!", { duration: 3000 });
     }
     socket.subscribeOneEvent(Event.ACCEPT, listenerForRequest);
     socket.subscribeOneEvent(Event.REQUEST, listenerForRequest);
@@ -123,7 +125,7 @@ export default function HomePage() {
         </div>
         <div
           style={{ height: "92%" }}
-          className=" overflow-y-scroll px-2 py-2"
+          className=" overflow-y-scroll px-2 py-2 "
           id="conversationList"
         >
           <ConversationList />

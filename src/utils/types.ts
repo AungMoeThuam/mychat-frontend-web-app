@@ -34,7 +34,7 @@ interface HttpResponse {
 }
 
 interface ProfilePhoto {
-  createdAt?: string;
+  createdAt?: Date;
   mimetype?: string;
   path?: string;
   size?: number;

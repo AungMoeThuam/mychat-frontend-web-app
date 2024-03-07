@@ -1,7 +1,7 @@
 import { AiFillPhone } from "react-icons/ai";
 import { HiDotsVertical } from "react-icons/hi";
 import ChatInputSection from "./chatinputsection/ChatInputSection";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import MessageList from "./MessageList";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,20 +17,38 @@ import { tempCatPhoto } from "../../utils/helper";
 export default function Chat() {
   const { roomId } = useParams();
   const { friendId, friendName, profilePhoto } = useLocation().state;
+  const [lastMessageIdForLoadMessage, setLastMessageIdForLoadMessage] =
+    useState("");
   const ref = useRef<HTMLDivElement>(null);
+  const loadMessageRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch<StoreDispatch>();
   const messageSlice = useSelector((state: RootState) => state.messageSlice);
-
+  const loadMoreMessages = async () => {};
   useEffect(() => {
-    // setTimeout(() =>
-    ref.current?.scrollIntoView({
-      behavior: "instant",
-    });
-    // );
+    setTimeout(() =>
+      ref.current?.scrollIntoView({
+        behavior: "instant",
+      })
+    );
+    console.log(lastMessageIdForLoadMessage);
   }, [messageSlice.messagesList]);
 
+  console.log(
+    "last message ",
+    messageSlice.messagesList[0]?.content,
+    " id - ",
+    messageSlice.messagesList[0]?.messageId
+  );
   useEffect(() => {
     async function onMessageListner(data: any) {
+      // setTimeout(
+      //   () =>
+      //     ref.current?.scrollIntoView({
+      //       behavior: "instant",
+      //     }),
+      //   800
+      // );
+      setLastMessageIdForLoadMessage(data.messageId);
       dispatch(addMessage(data));
     }
     socket.emitEvent(Event.JOINROOM, { roomId });
@@ -80,6 +98,14 @@ export default function Chat() {
         style={{ backgroundColor: "#18181f" }}
         className="   pt-8 px-5 pb-8 w-full flex-1 overflow-y-scroll "
       >
+        <div
+          onClick={loadMoreMessages}
+          className="text-center cursor-pointer"
+          ref={loadMessageRef}
+          key={"##2"}
+        >
+          Load More
+        </div>
         {messageSlice.messagesList.length === 0 ? (
           <h1>Start a conversation with your friend!</h1>
         ) : (

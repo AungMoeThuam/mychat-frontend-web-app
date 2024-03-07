@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import getTimeDuration from "../../utils/time";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { Friend } from "../../utils/types";
 import { backendUrlWihoutApiEndpoint } from "../../utils/backendConfig";
 const tempPhoto =
@@ -76,13 +76,15 @@ export default function Conversation({
   }, [messageCreatedAt, time]);
 
   return (
-    <Link
+    <NavLink
       to={"/messages/" + roomId}
       state={{ friendId, friendName: name, profilePhoto }}
       id="f"
-      className={`${
-        false ? " bg-slate-800" : ""
-      } flex items-center h-16 rounded-md cursor-pointer  gap-3 mb-2  text-white hover:bg-teal-950`}
+      className={({ isActive }) =>
+        isActive
+          ? " flex items-center h-16 rounded-md cursor-pointer  gap-3 mb-2  text-white bg-teal-950 hover:bg-teal-950"
+          : " flex items-center h-16 rounded-md cursor-pointer  gap-3 mb-2  text-white  hover:bg-teal-950"
+      }
     >
       <div className={` w-12 h-12 avatar ${active ? "online" : "offline"}`}>
         <img
@@ -120,6 +122,6 @@ export default function Conversation({
           </p>
         </div>
       </div>
-    </Link>
+    </NavLink>
   );
 }

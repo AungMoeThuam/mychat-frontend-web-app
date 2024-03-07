@@ -1,6 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import socket from "../../services/socket";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
+import { ProfilePhoto } from "../../utils/types";
 
 const { getStorage, setStorage, removeStorage } = useLocalStorage("authToken");
 type AuthState = {
@@ -10,13 +11,15 @@ type AuthState = {
   token: string | null;
   message: string;
   currentUserId: string;
-  profilePhoto: {
-    createdAt?: Date;
-    path?: string;
-    mimetype?: string;
-    size?: number;
-  };
+  profilePhoto: ProfilePhoto;
 };
+
+// {
+//   createdAt?: Date;
+//   path?: string;
+//   mimetype?: string;
+//   size?: number;
+// };
 
 const initialState: AuthState = {
   error: false,
@@ -32,6 +35,14 @@ const authSlice = createSlice({
   name: "authSlice",
   initialState,
   reducers: {
+    updateProfileImage: (state, action: PayloadAction<ProfilePhoto>) => {
+      state.profilePhoto = action.payload;
+      setStorage({
+        currentUserId: state.currentUserId,
+        profilePhoto: action.payload,
+        token: state.token,
+      });
+    },
     checkAuth: (state) => {
       let auth = getStorage();
       if (auth) {
@@ -42,12 +53,7 @@ const authSlice = createSlice({
         }: {
           token: string;
           currentUserId: string;
-          profilePhoto: {
-            createdAt?: Date;
-            path?: string;
-            mimetype?: string;
-            size?: number;
-          };
+          profilePhoto: ProfilePhoto;
         } = auth;
         state.token = token;
         state.currentUserId = currentUserId;
@@ -105,7 +111,13 @@ const authSlice = createSlice({
 type AuthSliceState = ReturnType<typeof authSlice.reducer>;
 type AuthSliceActions = typeof authSlice.actions;
 
-export const { authLoading, authError, authSuccess, logout, checkAuth } =
-  authSlice.actions;
+export const {
+  updateProfileImage,
+  authLoading,
+  authError,
+  authSuccess,
+  logout,
+  checkAuth,
+} = authSlice.actions;
 export default authSlice.reducer;
 export type { AuthSliceActions, AuthSliceState };

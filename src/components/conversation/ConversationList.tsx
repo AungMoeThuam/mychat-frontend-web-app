@@ -52,18 +52,22 @@ export default function ConversationList() {
 
   return (
     <>
-      {friendsList.map((item: Friend) => {
-        return (
-          <Conversation
-            key={item.roomId}
-            data={{
-              ...item,
-              CurrentUserIsLastMessageSender:
-                item.senderId === item.friendId ? false : true, // if the last message senderid is the currentuserId, then true
-            }}
-          />
-        );
-      })}
+      {friendsList.length === 0 ? (
+        <h1>no conversation yet!</h1>
+      ) : (
+        friendsList.map((item: Friend) => {
+          return (
+            <Conversation
+              key={item.roomId}
+              data={{
+                ...item,
+                CurrentUserIsLastMessageSender:
+                  item.senderId === item.friendId ? false : true, // if the last message senderid is the currentuserId, then true
+              }}
+            />
+          );
+        })
+      )}
     </>
   );
 }
