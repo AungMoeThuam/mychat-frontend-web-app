@@ -60,7 +60,9 @@ const deleteMessageThunk = createAsyncThunk(
         friendId,
         currentUserId,
       });
+      console.log(result);
       if (result.error) return;
+
       return dispatch(
         deleteMessage({ messageId, deleteBySender: result.data.deleteBySender })
       );

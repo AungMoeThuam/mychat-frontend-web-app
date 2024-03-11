@@ -9,6 +9,11 @@ import {
   useState,
 } from "react";
 import "./style.css";
+import socket from "../../../services/socket";
+import { Event } from "../../../utils/socketEvents";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store/store";
 
 const MessageInput = forwardRef<
   HTMLParagraphElement | null,
@@ -21,12 +26,18 @@ const MessageInput = forwardRef<
 >(function (props, ref: ForwardedRef<HTMLParagraphElement>) {
   const { roomId, input, setInput, sendMessage } = props;
   const [content, setContent] = useState("type...");
-
   const placeholder = "type...";
+  const { friendId } = useParams();
+  const currentUserId = useSelector(
+    (state: RootState) => state.authSlice.currentUserId
+  );
 
   const handleFocus: FocusEventHandler<HTMLParagraphElement> = (
     e: FocusEvent<HTMLParagraphElement>
   ) => {
+    console.log("start typing!");
+    socket.emitEvent(Event.STARTTYPING, { friendId, userId: currentUserId });
+
     // if (content === placeholder) {
     if (e.currentTarget.innerText === placeholder) {
       // setContent("");
@@ -34,18 +45,20 @@ const MessageInput = forwardRef<
     }
   };
   const handleBlur = (e: any) => {
+    socket.emitEvent(Event.STOPTYPING, { friendId, userId: currentUserId });
+    console.log("stop typing!", friendId);
     if (e.currentTarget.innerText.trim() === "") {
       e.currentTarget.innerText = placeholder;
     }
     // setInput(input);
   };
   const onInput = (e: FormEvent<HTMLParagraphElement>) => {
+    console.log("typing...");
     sessionStorage.setItem(roomId, e.currentTarget.innerText);
   };
   useEffect(() => {
     // Load content from sessionStorage for this tab
     const savedContent = sessionStorage.getItem(roomId);
-    console.log("ref", ref);
     if (savedContent) {
       setContent(savedContent);
       // ref.current.innerText = savedContent;

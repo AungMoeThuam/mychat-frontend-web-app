@@ -22,11 +22,7 @@ type Message = {
   createdAt: Number;
 };
 
-export default function ChatInput(props: {
-  friendId: any;
-  roomId: any;
-  onSendMessage: any;
-}) {
+export default function ChatInput(props: { friendId: any; roomId: any }) {
   const [file, setFile] = useState<File | null>(null);
   const { currentUserId } = useSelector((state: RootState) => state.authSlice);
 
@@ -84,7 +80,7 @@ export default function ChatInput(props: {
         messageToSend.content = filename;
       });
       console.log(messageToSend);
-      // socket.emitEvent(Event.MESSAGE, messageToSend);
+      socket.emitEvent(Event.MESSAGE, messageToSend);
       if (file != null) setFile(null);
       if (textInputRef && textInputRef.current) {
         textInputRef.current.innerText = "";
@@ -92,7 +88,7 @@ export default function ChatInput(props: {
       return;
     }
     console.log(messageToSend);
-    // socket.emitEvent(Event.MESSAGE, messageToSend);
+    socket.emitEvent(Event.MESSAGE, messageToSend);
     // props.onSendMessage(messageToSend, file);
     if (file != null) setFile(null);
     if (textInputRef && textInputRef.current) {

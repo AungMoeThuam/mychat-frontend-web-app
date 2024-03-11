@@ -31,7 +31,7 @@ class SocketIO {
     this.io.disconnect();
   }
 
-  emitEvent(event: string, data: any) {
+  emitEvent(event: string, data?: any) {
     this.io.emit(event, data);
   }
 

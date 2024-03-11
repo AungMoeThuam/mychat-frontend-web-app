@@ -9,13 +9,14 @@ import { RootState, StoreDispatch } from "../../redux/store/store";
 import { getMessagesListThunk } from "../../redux/actions/messageThunks";
 import socket from "../../services/socket";
 import { Event } from "../../utils/socketEvents";
-import { addMessage } from "../../redux/slices/messageSlice";
+import { addMessage, deleteMessage } from "../../redux/slices/messageSlice";
 import { backgroundColor1, borderColor } from "../../utils/style";
 import {
   backendUrl,
   backendUrlWihoutApiEndpoint,
 } from "../../utils/backendConfig";
 import { tempCatPhoto } from "../../utils/helper";
+import TypingIndicator from "./typing-indicator/TypingIndicator";
 
 export default function Chat() {
   const { roomId, friendId } = useParams();
@@ -52,27 +53,25 @@ export default function Chat() {
         behavior: "instant",
       })
     );
-    console.log(lastMessageIdForLoadMessage);
   }, [messageSlice.messagesList]);
 
-  console.log(
-    "last message ",
-    messageSlice.messagesList[0]?.content,
-    " id - ",
-    messageSlice.messagesList[0]?.messageId
-  );
   useEffect(() => {
     async function onMessageListner(data: any) {
       setLastMessageIdForLoadMessage(data.messageId);
       dispatch(addMessage(data));
     }
+    async function onDeleteMessageListener(data: any) {
+      dispatch(deleteMessage(data));
+    }
     socket.emitEvent(Event.JOINROOM, { roomId });
     socket.subscribeOneEvent(Event.MESSAGE, onMessageListner);
+    socket.subscribeOneEvent(Event.DELETEMESSAGE, onDeleteMessageListener);
 
     if (roomId) dispatch(getMessagesListThunk(roomId));
 
     return () => {
       socket.unbSubcribeOneEvent(Event.MESSAGE, onMessageListner);
+      socket.unbSubcribeOneEvent(Event.DELETEMESSAGE, onDeleteMessageListener);
     };
   }, [roomId]);
   console.log("friendId testing ", params.get("rid"));
@@ -127,14 +126,11 @@ export default function Chat() {
         ) : (
           <MessageList {...messageSlice} />
         )}
+        <TypingIndicator key={"##2"} />
         <div ref={ref} key={"###1"}></div>
       </main>
       {isFriend ? (
-        <ChatInputSection
-          friendId={friendId}
-          roomId={roomId}
-          onSendMessage="1"
-        />
+        <ChatInputSection friendId={friendId} roomId={roomId} />
       ) : (
         <div className=" row-span-1 shadow-lg   h-fit  p-2 w-full flex justify-between items-center   px-2">
           <h1>only friend can have conversation!</h1>

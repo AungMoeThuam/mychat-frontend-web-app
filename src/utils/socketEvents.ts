@@ -3,6 +3,8 @@ const videoTypes = ["mp4", "mov", "avi", "mkv", "wmv"];
 
 //event names
 enum Event {
+  STARTTYPING = "start-typing",
+  STOPTYPING = "stop-typing",
   ACCEPT = "accept",
   REQUEST = "request",
   REJECT = "reject",
