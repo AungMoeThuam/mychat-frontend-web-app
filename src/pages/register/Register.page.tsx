@@ -9,17 +9,9 @@ import {
   useState,
 } from "react";
 import { RootState, StoreDispatch } from "../../redux/store/store";
-import { registerThunk } from "../../redux/thunks/authThunks";
-import { authError, authLoading } from "../../redux/slice/authSlice";
+import { registerAction } from "../../redux/actions/authThunks";
 import { useNavigate } from "react-router-dom";
-
-export interface RegisterForm {
-  name: String;
-  email: String;
-  phone: String;
-  password: String;
-  confirmPassword: String;
-}
+import { RegisterForm } from "../../utils/types";
 
 export default function RegisterPage() {
   const [form, setForm] = useState<RegisterForm>({
@@ -43,19 +35,7 @@ export default function RegisterPage() {
     e: FormEvent<HTMLFormElement>
   ) => {
     e.preventDefault();
-    dispatch(authLoading(true));
-
-    if (form.password.trim() !== form.confirmPassword.trim()) {
-      dispatch(
-        authError({
-          message: "passwords are not matched!",
-        })
-      );
-
-      return;
-    }
-
-    dispatch(registerThunk(form));
+    dispatch(registerAction(form));
   };
 
   useEffect(() => {

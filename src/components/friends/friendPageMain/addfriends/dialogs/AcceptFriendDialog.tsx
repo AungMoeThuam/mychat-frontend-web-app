@@ -8,14 +8,14 @@ import {
 import { User } from "../../../../../utils/types";
 import { useDispatch } from "react-redux";
 import { StoreDispatch } from "../../../../../redux/store/store";
-import { Api } from "../../../../../services/api";
-import { searchfriendNameThunk } from "../../../../../redux/thunks/searchFriendThunks";
-import Modal from "../../../../modal/Modal";
+import { FriendShipApi } from "../../../../../services/friendshipApi";
+import { searchfriendNameThunk } from "../../../../../redux/actions/searchFriendThunks";
+import Modal from "../../../../global-components/modal/Modal";
 import toast from "react-hot-toast";
 import { RelationshipActionDialogs } from "../AddFriendCard";
 import { SearchNameContext } from "../../../../../pages/addfriends/AddFriends.page";
-import { updateSearchFriends } from "../../../../../redux/slice/searchFriendSlice";
-import { getFriendsListThunk } from "../../../../../redux/thunks/friendThunks";
+import { updateSearchFriends } from "../../../../../redux/slices/searchFriendSlice";
+import { getFriendsListThunk } from "../../../../../redux/actions/friendThunks";
 
 export default function AcceptFriendDialog({
   people,
@@ -41,7 +41,7 @@ export default function AcceptFriendDialog({
   const acceptFriendRequest = async () => {
     setOperation((prev) => ({ ...prev, loading: true }));
     try {
-      const { status } = await Api.manageFriendShipStatus({
+      const { status } = await FriendShipApi.manageFriendShipStatus({
         relationshipStatus: people.status,
         id: people._id,
         currentUserId,

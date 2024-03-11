@@ -5,7 +5,7 @@ import Chat from "./components/chat/Chat.tsx";
 import HomePage from "./pages/home/Home.page.tsx";
 import ProfilePage from "./pages/profile/Profile.page.tsx";
 import LoginPage from "./pages/login/Login.page.tsx";
-import PrivateRoute from "./components/privateRoute/PrivateRoute.tsx";
+import PrivateRoute from "./components/global-components/privateRoute/PrivateRoute.tsx";
 import { Provider } from "react-redux";
 import store from "./redux/store/store.ts";
 import FriendsPage from "./pages/friends/Friends.page.tsx";
@@ -30,7 +30,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/messages/:roomId",
+        path: "/messages/:roomId/:friendId",
         element: <Chat />,
       },
       {

@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { Api } from "../../../services/api";
-import Modal from "../../modal/Modal";
+import { FriendShipApi } from "../../../services/friendshipApi";
+import Modal from "../../global-components/modal/Modal";
 import { useDispatch } from "react-redux";
 import { StoreDispatch } from "../../../redux/store/store";
-import { unFriendUpdate } from "../../../redux/slice/friendSlice";
+import { unFriendUpdate } from "../../../redux/slices/friendSlice";
 import toast from "react-hot-toast";
-import { getFriendsListThunk } from "../../../redux/thunks/friendThunks";
 
 interface UnFriendDialogProps {
   friendName: string;
@@ -24,21 +23,26 @@ export default function UnFriendDialog({
     error: false,
     loading: false,
     success: false,
+    message: "",
   });
   const unFriend = async () => {
     setOperation((prev) => ({ ...prev, loading: true }));
     try {
-      const result = await Api.unFriend({
+      const result = await FriendShipApi.unFriend({
         id: friendId,
         currentUserId: userId,
       });
-      if (result.status === "success") {
-        toast("UnFriended! ✅");
-        onClose();
-        dispatch(unFriendUpdate({ friendId }));
-      } else {
-        setOperation((prev) => ({ ...prev, loading: false, error: true }));
-      }
+      if (result.error)
+        return setOperation((prev) => ({
+          ...prev,
+          loading: false,
+          error: true,
+          message: result.error ? result.error?.message : "error",
+        }));
+
+      toast("UnFriended! ✅");
+      onClose();
+      dispatch(unFriendUpdate({ friendId }));
     } catch (error) {
       setOperation((prev) => ({ ...prev, loading: false, error: true }));
     }
@@ -66,7 +70,7 @@ export default function UnFriendDialog({
               onClick={onClose}
               className="btn btn-sm bg-teal-500 text-slate-950"
             >
-              Close
+              Refresh
             </button>
           </>
         ) : (

@@ -2,7 +2,6 @@ import { useSelector } from "react-redux";
 import { Message } from "../../utils/types";
 import MessageCard from "./message/Message";
 import { RootState } from "../../redux/store/store";
-import { ForwardedRef, forwardRef, useEffect } from "react";
 
 type MessageListProps = {
   error: boolean;
@@ -25,16 +24,17 @@ function MessageList(props: MessageListProps) {
           .filter((item: Message) => {
             if (item.receiverId === currentUserId) {
               /*
-              if the current user is the receiver of that message and it is deleted by him,
-              then exclude that message
-              */
+            if the current user is the receiver of that message and it is deleted by him,
+            then exclude that message
+            */
+
               return item.deletedByReceiver !== true;
-            } else {
-              // otherwises display the message
-              return true;
             }
+            //otherwises display the message
+            else return true;
           })
-          .map((item: Message, index: number) => {
+
+          .map((item: Message) => {
             return (
               <MessageCard
                 key={item.messageId}

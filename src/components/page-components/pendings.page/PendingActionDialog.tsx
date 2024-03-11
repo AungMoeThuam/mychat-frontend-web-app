@@ -1,10 +1,10 @@
 import { useDispatch } from "react-redux";
-import { Api } from "../../../services/api";
+import { FriendShipApi } from "../../../services/friendshipApi";
 import { Friend } from "../../../utils/types";
-import Modal from "../../modal/Modal";
+import Modal from "../../global-components/modal/Modal";
 import { StoreDispatch } from "../../../redux/store/store";
 import { useState } from "react";
-import { cancelPendingAction } from "../../../redux/slice/pendingSlice";
+import { cancelPendingAction } from "../../../redux/slices/pendingSlice";
 
 type PendingActionDialog = {
   onClose: () => void;
@@ -23,7 +23,7 @@ export default function PendingActionDialog({
   });
   const rejectRequest = async () => {
     try {
-      const result = await Api.manageFriendShipStatus({
+      const result = await FriendShipApi.manageFriendShipStatus({
         type: "reject",
         currentUserId: friend.requester,
         id: friend.friendId,

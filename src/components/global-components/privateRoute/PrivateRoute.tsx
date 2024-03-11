@@ -1,17 +1,17 @@
-import { ReactNode, useEffect, useState } from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import { ReactNode, useEffect } from "react";
+import { Navigate, useLocation, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState, StoreDispatch } from "../../redux/store/store";
-import { checkAuth } from "../../redux/slice/authSlice";
+import { RootState, StoreDispatch } from "../../../redux/store/store";
+import { checkAuth } from "../../../redux/slices/authSlice";
 
 const noNeedTokenRoutes = ["/login", "/register"];
 
 export default function PrivateRoute({ children }: { children: ReactNode }) {
   const location = useLocation();
-  // const token = getStorage().token;
+  const [query] = useSearchParams();
   const { token } = useSelector((state: RootState) => state.authSlice);
   const dispatch = useDispatch<StoreDispatch>();
-
+  const redirect = query.get("redirect");
   useEffect(() => {
     if (token === null) dispatch(checkAuth());
   }, []);
@@ -20,7 +20,13 @@ export default function PrivateRoute({ children }: { children: ReactNode }) {
     if (noNeedTokenRoutes.includes(location.pathname)) {
       return <>{children}</>;
     } else {
-      return <Navigate to={"/login"} state={{ from: location }} replace />;
+      return (
+        <Navigate
+          to={"/login?redirect=" + location.pathname}
+          state={{ from: location }}
+          replace
+        />
+      );
     }
   }
 
@@ -28,7 +34,13 @@ export default function PrivateRoute({ children }: { children: ReactNode }) {
     if (!noNeedTokenRoutes.includes(location.pathname)) {
       return <>{children}</>;
     } else {
-      return <Navigate to={"/"} state={{ from: location }} replace />;
+      return (
+        <Navigate
+          to={redirect ? redirect : "/"}
+          state={{ from: location }}
+          replace
+        />
+      );
     }
   }
 }

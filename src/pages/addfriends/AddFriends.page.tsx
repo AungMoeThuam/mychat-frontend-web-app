@@ -3,8 +3,8 @@ import AddFriendCard from "../../components/friends/friendPageMain/addfriends/Ad
 import { FormEvent, createContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, StoreDispatch } from "../../redux/store/store";
-import { searchfriendNameThunk } from "../../redux/thunks/searchFriendThunks";
-import { searchFriendByName } from "../../redux/slice/searchFriendSlice";
+import { searchfriendNameThunk } from "../../redux/actions/searchFriendThunks";
+import { searchFriendByName } from "../../redux/slices/searchFriendSlice";
 
 export interface People {
   createdAt: string;

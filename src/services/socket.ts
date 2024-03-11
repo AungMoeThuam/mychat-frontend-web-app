@@ -1,5 +1,5 @@
 import { Socket, io } from "socket.io-client";
-import { Event } from "../utils/contants";
+import { Event } from "../utils/socketEvents";
 import { socketUrl } from "../utils/backendConfig";
 
 interface UnSubcribeEventsAndCallbacks {
@@ -44,7 +44,7 @@ class SocketIO {
   }
 
   unSubscribeManyEvents(listeners: UnSubcribeEventsAndCallbacks[]) {
-    listeners.forEach((ev, index) => {
+    listeners.forEach((ev, _) => {
       this.io.off(ev.event, ev.callback);
     });
   }

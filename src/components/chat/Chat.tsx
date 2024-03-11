@@ -2,28 +2,50 @@ import { AiFillPhone } from "react-icons/ai";
 import { HiDotsVertical } from "react-icons/hi";
 import ChatInputSection from "./chatinputsection/ChatInputSection";
 import { useEffect, useRef, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams, useSearchParams } from "react-router-dom";
 import MessageList from "./MessageList";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, StoreDispatch } from "../../redux/store/store";
-import { getMessagesListThunk } from "../../redux/thunks/messageThunks";
+import { getMessagesListThunk } from "../../redux/actions/messageThunks";
 import socket from "../../services/socket";
-import { Event } from "../../utils/contants";
-import { addMessage } from "../../redux/slice/messageSlice";
+import { Event } from "../../utils/socketEvents";
+import { addMessage } from "../../redux/slices/messageSlice";
 import { backgroundColor1, borderColor } from "../../utils/style";
-import { backendUrlWihoutApiEndpoint } from "../../utils/backendConfig";
+import {
+  backendUrl,
+  backendUrlWihoutApiEndpoint,
+} from "../../utils/backendConfig";
 import { tempCatPhoto } from "../../utils/helper";
 
 export default function Chat() {
-  const { roomId } = useParams();
-  const { friendId, friendName, profilePhoto } = useLocation().state;
+  const { roomId, friendId } = useParams();
+  const [isFriend, setIsFriend] = useState(false);
+  const [params] = useSearchParams();
+  const { friendName, profilePhoto } = useLocation().state;
   const [lastMessageIdForLoadMessage, setLastMessageIdForLoadMessage] =
     useState("");
   const ref = useRef<HTMLDivElement>(null);
   const loadMessageRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch<StoreDispatch>();
   const messageSlice = useSelector((state: RootState) => state.messageSlice);
+
   const loadMoreMessages = async () => {};
+  useEffect(() => {
+    async function checkFriendShipStatus() {
+      try {
+        const res = await fetch(`${backendUrl}/friends/check/friend/${roomId}`);
+        const result = await res.json();
+        if (result.status !== "success") {
+          setIsFriend(false);
+        } else {
+          setIsFriend(true);
+        }
+      } catch (error: any) {
+        alert(error.message);
+      }
+    }
+    checkFriendShipStatus();
+  }, []);
   useEffect(() => {
     setTimeout(() =>
       ref.current?.scrollIntoView({
@@ -41,13 +63,6 @@ export default function Chat() {
   );
   useEffect(() => {
     async function onMessageListner(data: any) {
-      // setTimeout(
-      //   () =>
-      //     ref.current?.scrollIntoView({
-      //       behavior: "instant",
-      //     }),
-      //   800
-      // );
       setLastMessageIdForLoadMessage(data.messageId);
       dispatch(addMessage(data));
     }
@@ -60,6 +75,7 @@ export default function Chat() {
       socket.unbSubcribeOneEvent(Event.MESSAGE, onMessageListner);
     };
   }, [roomId]);
+  console.log("friendId testing ", params.get("rid"));
   return (
     <div className="  h-full   w-full flex flex-col ">
       <header
@@ -113,7 +129,17 @@ export default function Chat() {
         )}
         <div ref={ref} key={"###1"}></div>
       </main>
-      <ChatInputSection friendId={friendId} roomId={roomId} onSendMessage="1" />
+      {isFriend ? (
+        <ChatInputSection
+          friendId={friendId}
+          roomId={roomId}
+          onSendMessage="1"
+        />
+      ) : (
+        <div className=" row-span-1 shadow-lg   h-fit  p-2 w-full flex justify-between items-center   px-2">
+          <h1>only friend can have conversation!</h1>
+        </div>
+      )}
     </div>
   );
 }

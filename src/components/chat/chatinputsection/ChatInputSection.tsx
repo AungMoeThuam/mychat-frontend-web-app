@@ -3,7 +3,7 @@ import { IoSendSharp } from "react-icons/io5";
 import { ImSmile } from "react-icons/im";
 import Picker from "@emoji-mart/react";
 import { FiPaperclip } from "react-icons/fi";
-import { Event, imageTypes, videoTypes } from "../../../utils/contants";
+import { Event, imageTypes, videoTypes } from "../../../utils/socketEvents";
 import MessageInput from "../messageInput/MessageInput";
 import "./style.css";
 import generateVideoThumbnail from "../../../utils/generateThumbnail";
@@ -34,7 +34,6 @@ export default function ChatInput(props: {
   const textInputRef = useRef<HTMLParagraphElement>(null);
   const fileDisplayRef = useRef<HTMLImageElement>(null);
   const [emojiPicker, setEmojiPicker] = useState(false);
-  const [input, setInput] = useState("");
   const sendMessage = async (e: FormEvent) => {
     e.preventDefault();
     if (textInputRef?.current?.innerText.trim() == "") return;
@@ -81,21 +80,19 @@ export default function ChatInput(props: {
         },
       });
 
-      await Promise.all([res]).then((value) => {
+      await Promise.all([res]).then(() => {
         messageToSend.content = filename;
       });
-
-      console.log("file", file);
-
-      socket.emitEvent(Event.MESSAGE, messageToSend);
+      console.log(messageToSend);
+      // socket.emitEvent(Event.MESSAGE, messageToSend);
       if (file != null) setFile(null);
       if (textInputRef && textInputRef.current) {
         textInputRef.current.innerText = "";
       }
       return;
     }
-
-    socket.emitEvent(Event.MESSAGE, messageToSend);
+    console.log(messageToSend);
+    // socket.emitEvent(Event.MESSAGE, messageToSend);
     // props.onSendMessage(messageToSend, file);
     if (file != null) setFile(null);
     if (textInputRef && textInputRef.current) {
@@ -118,8 +115,6 @@ export default function ChatInput(props: {
 
     return () => URL.revokeObjectURL(url);
   }, [file]);
-
-  useEffect(() => console.log(input), [input]);
 
   return (
     <form

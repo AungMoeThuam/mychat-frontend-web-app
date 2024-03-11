@@ -2,9 +2,9 @@ import { Dispatch, SetStateAction, useContext, useState } from "react";
 import { User } from "../../../../../utils/types";
 import { useDispatch } from "react-redux";
 import { StoreDispatch } from "../../../../../redux/store/store";
-import { Api } from "../../../../../services/api";
-import { searchfriendNameThunk } from "../../../../../redux/thunks/searchFriendThunks";
-import Modal from "../../../../modal/Modal";
+import { FriendShipApi } from "../../../../../services/friendshipApi";
+import { searchfriendNameThunk } from "../../../../../redux/actions/searchFriendThunks";
+import Modal from "../../../../global-components/modal/Modal";
 import toast from "react-hot-toast";
 import { RelationshipActionDialogs } from "../AddFriendCard";
 import { SearchNameContext } from "../../../../../pages/addfriends/AddFriends.page";
@@ -40,7 +40,7 @@ export default function AddFriendDialog({
     if (process === "cancel") return;
 
     try {
-      const res = await Api.manageFriendShipStatus({
+      const res = await FriendShipApi.manageFriendShipStatus({
         relationshipStatus,
         type: "request",
         id,

@@ -10,9 +10,8 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 
 import { useNavigate } from "react-router-dom";
-import { loginThunk } from "../../redux/thunks/authThunks";
+import { loginAction } from "../../redux/actions/authThunks";
 import { RootState, StoreDispatch } from "../../redux/store/store";
-import { backgroundColor } from "../../utils/style";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -23,8 +22,8 @@ export default function LoginPage() {
 
   //getting from from user input
   const [form, setForm] = useState<{
-    email: String;
-    password: String;
+    email: string;
+    password: string;
   }>({
     email: "",
     password: "",
@@ -36,13 +35,13 @@ export default function LoginPage() {
 
   const login: FormEventHandler = (e: FormEvent) => {
     e.preventDefault();
-    diapatch(loginThunk(form));
+    diapatch(loginAction(form));
   };
   useEffect(() => {
     if (success === true) navigate("/");
   }, [success]);
   return (
-    <div style={{ backgroundColor: backgroundColor }} className="h-screen">
+    <div className="h-screen bg-slate-950">
       <main className=" h-full  px-2 md:px-18 lg:px-40 py-10 flex justify-center md:grid grid-cols-12  ">
         <section className=" hidden col-span-6 md:flex  lg:flex flex-col  justify-center align-middle ">
           <h1 className="">MyChat</h1>
@@ -62,7 +61,7 @@ export default function LoginPage() {
             <label htmlFor="email">Email</label>
             <input
               required
-              className="border p-2 bg-slate-100"
+              className="rounded-md border p-2 bg-slate-100 "
               type="email"
               name="email"
               id="email"
@@ -72,7 +71,7 @@ export default function LoginPage() {
             <label htmlFor="password">Password</label>
             <input
               required
-              className="border p-2 bg-slate-100"
+              className="rounded-md border p-2 bg-slate-100"
               type="password"
               name="password"
               id="password"
@@ -83,7 +82,7 @@ export default function LoginPage() {
               <p className=" text-red-500 font-bold">{message}</p>
             )}
             <input
-              className=" bg-yellow-400 p-2 cursor-pointer"
+              className=" btn btn-md bg-teal-900 font-bold text-white p-2 cursor-pointer"
               type="submit"
               value={loading === true ? "loading...." : "Login"}
             />

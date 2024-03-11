@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import { ImCross } from "react-icons/im";
-import ImageInfo from "../../components/profile/ImageInfo";
-import NameInput from "../../components/profile/NameInput";
-import ChangeableInfoList from "../../components/profile/ChangeableInfoList";
-import ChangePasswordModal from "../../components/profile/ChangePasswordModal";
-import ChangeEmailModal from "../../components/profile/ChnageEmailModal";
-import ChangePhoneModal from "../../components/profile/ChangePhoneModal";
+import ImageInfo from "../../components/page-components/profile.page/ImageInfo";
+import NameInput from "../../components/page-components/profile.page/NameInput";
+import ChangeableInfoList from "../../components/page-components/profile.page/ChangeableInfoList";
+import ChangePasswordModal from "../../components/page-components/profile.page/ChangePasswordModal";
+import ChangeEmailModal from "../../components/page-components/profile.page/ChnageEmailModal";
+import ChangePhoneModal from "../../components/page-components/profile.page/ChangePhoneModal";
 import { useNavigate } from "react-router-dom";
 import { backendUrl } from "../../utils/backendConfig";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, StoreDispatch } from "../../redux/store/store";
 import toast, { Toaster } from "react-hot-toast";
-import { logout } from "../../redux/slice/authSlice";
+import { logout } from "../../redux/slices/authSlice";
 
 type ChangeInfo = {
   changePassword: boolean;

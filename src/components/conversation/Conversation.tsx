@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import getTimeDuration from "../../utils/time";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { Friend } from "../../utils/types";
 import { backendUrlWihoutApiEndpoint } from "../../utils/backendConfig";
 const tempPhoto =
@@ -77,7 +77,7 @@ export default function Conversation({
 
   return (
     <NavLink
-      to={"/messages/" + roomId}
+      to={"/messages/" + roomId + "/" + friendId}
       state={{ friendId, friendName: name, profilePhoto }}
       id="f"
       className={({ isActive }) =>

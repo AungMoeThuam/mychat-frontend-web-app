@@ -3,29 +3,30 @@ import ConversationList from "../../components/conversation/ConversationList";
 import "./style.css";
 import { Link, Outlet, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../redux/slice/authSlice";
+import { logout } from "../../redux/slices/authSlice";
 import { backendUrlWihoutApiEndpoint } from "../../utils/backendConfig";
 import { RootState, StoreDispatch } from "../../redux/store/store";
 import { BsChatTextFill, BsPeopleFill } from "react-icons/bs";
 import { backgroundColor1 } from "../../utils/style";
 import { useEffect } from "react";
 import socket from "../../services/socket";
-import { Event } from "../../utils/contants";
+import { Event } from "../../utils/socketEvents";
 import toast, { Toaster } from "react-hot-toast";
-import { searchfriendNameThunk } from "../../redux/thunks/searchFriendThunks";
-import { updateSearchFriends } from "../../redux/slice/searchFriendSlice";
-import { getFriendsListThunk } from "../../redux/thunks/friendThunks";
+import { searchfriendNameThunk } from "../../redux/actions/searchFriendThunks";
+import { updateSearchFriends } from "../../redux/slices/searchFriendSlice";
+import { getFriendsListThunk } from "../../redux/actions/friendThunks";
 export default function HomePage() {
   const [queryParams] = useSearchParams();
   const dispatch = useDispatch<StoreDispatch>();
+
   const profilePhoto = useSelector(
     (state: RootState) => state.authSlice.profilePhoto
   );
-  useEffect(() => console.log("home page render!"));
+  const test = useSelector((state: RootState) => state.friendSlice.friendsList);
+  console.log("friend list - ", test);
   useEffect(() => {
     function listenerForReject(data: any) {
       let search = queryParams.get("search");
-      console.log("search in reject", search);
       if (typeof data === "object") {
         dispatch(
           updateSearchFriends({
@@ -44,7 +45,7 @@ export default function HomePage() {
       else if (data === "acceptedByFriend") {
         dispatch(getFriendsListThunk());
         toast("Your friend requst is accepted by him!");
-      } else toast("Received a friend request!", { duration: 3000 });
+      } else toast("Received a friend request!");
     }
     socket.subscribeOneEvent(Event.ACCEPT, listenerForRequest);
     socket.subscribeOneEvent(Event.REQUEST, listenerForRequest);

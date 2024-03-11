@@ -1,5 +1,5 @@
 import { SetStateAction, Dispatch } from "react";
-import Modal from "../modal/Modal";
+import Modal from "../../global-components/modal/Modal";
 
 type ChangeInfo = {
   changePassword: boolean;

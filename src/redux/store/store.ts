@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import authSlice from "../slice/authSlice";
-import friendSlice from "../slice/friendSlice";
-import messageSlice from "../slice/messageSlice";
-import searchFriendSlice from "../slice/searchFriendSlice";
-import requestSlice from "../slice/requestSlice";
-import pendingSlice from "../slice/pendingSlice";
+import authSlice from "../slices/authSlice";
+import friendSlice from "../slices/friendSlice";
+import messageSlice from "../slices/messageSlice";
+import searchFriendSlice from "../slices/searchFriendSlice";
+import requestSlice from "../slices/requestSlice";
+import pendingSlice from "../slices/pendingSlice";
 
 const rootReducer = {
   authSlice,

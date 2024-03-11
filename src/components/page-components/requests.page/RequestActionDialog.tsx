@@ -1,9 +1,9 @@
 import { useDispatch } from "react-redux";
-import { Api } from "../../../services/api";
+import { FriendShipApi } from "../../../services/friendshipApi";
 import { Friend } from "../../../utils/types";
-import Modal from "../../modal/Modal";
+import Modal from "../../global-components/modal/Modal";
 import { StoreDispatch } from "../../../redux/store/store";
-import { acceptRequestAction } from "../../../redux/slice/requestSlice";
+import { acceptRequestAction } from "../../../redux/slices/requestSlice";
 import { useState } from "react";
 
 type RequestActionDialog = {
@@ -23,7 +23,7 @@ export default function RequestActionDialog({
   });
   const rejectRequest = async () => {
     try {
-      const result = await Api.manageFriendShipStatus({
+      const result = await FriendShipApi.manageFriendShipStatus({
         type: "reject",
         currentUserId: friend.receipent,
         id: friend.friendId,

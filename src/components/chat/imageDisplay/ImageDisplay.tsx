@@ -1,6 +1,6 @@
 import { ImCross } from "react-icons/im";
 
-import Modal from "../../modal/Modal";
+import Modal from "../../global-components/modal/Modal";
 
 export default function ImageDisplayDialog({
   imageUrl,

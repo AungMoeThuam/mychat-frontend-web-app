@@ -1,15 +1,14 @@
 import "./style.css";
-import { ForwardedRef, forwardRef, useState } from "react";
+import { useState } from "react";
 import DeleteMessageDialog from "../deletemessagedialog/DeleteMessageDialog";
 import VideoMessageDisplay from "./VideoMessageDisplay";
 import ImageMessageDisplay from "./ImageMessageDisplay";
 import TextMessageDisplay from "./TextMessageDisplay";
 import { BsTrashFill } from "react-icons/bs";
-import { deleteMessageThunk } from "../../../redux/thunks/messageThunks";
+import { deleteMessageThunk } from "../../../redux/actions/messageThunks";
 import { useDispatch } from "react-redux";
 import { StoreDispatch } from "../../../redux/store/store";
 import { backendUrlWihoutApiEndpoint } from "../../../utils/backendConfig";
-import { FaFileAlt } from "react-icons/fa";
 import pptx from "../../../assets/fileicons/ppt.png";
 import pdf from "../../../assets/fileicons/pdf.png";
 import docx from "../../../assets/fileicons/docx.png";

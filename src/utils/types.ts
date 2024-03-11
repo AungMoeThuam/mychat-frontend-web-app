@@ -33,6 +33,11 @@ interface HttpResponse {
   data: any;
 }
 
+interface Result {
+  data: null | any;
+  error: { message: string } | null;
+}
+
 interface ProfilePhoto {
   createdAt?: Date;
   mimetype?: string;
@@ -50,4 +55,20 @@ interface User {
   requester?: string;
 }
 
-export type { Friend, Message, HttpResponse, User, ProfilePhoto };
+interface RegisterForm {
+  name: String;
+  email: String;
+  phone: String;
+  password: String;
+  confirmPassword: String;
+}
+
+export type {
+  Friend,
+  Message,
+  HttpResponse,
+  User,
+  ProfilePhoto,
+  Result,
+  RegisterForm,
+};
