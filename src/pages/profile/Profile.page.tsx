@@ -7,11 +7,11 @@ import ChangePasswordModal from "../../components/page-components/profile.page/C
 import ChangeEmailModal from "../../components/page-components/profile.page/ChnageEmailModal";
 import ChangePhoneModal from "../../components/page-components/profile.page/ChangePhoneModal";
 import { useNavigate } from "react-router-dom";
-import { backendUrl } from "../../utils/backendConfig";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, StoreDispatch } from "../../redux/store/store";
 import toast, { Toaster } from "react-hot-toast";
 import { logout } from "../../redux/slices/authSlice";
+import useUserProfileInfo from "../../hooks/useUserProfileInfo";
 
 type ChangeInfo = {
   changePassword: boolean;
@@ -21,15 +21,15 @@ type ChangeInfo = {
 
 export default function ProfilePage() {
   const navigate = useNavigate();
-  const [userInfo, setUserInfo] = useState({
-    loading: false,
-    error: false,
-    message: "",
-    data: { name: "", email: "", _id: "", phone: "" },
-  });
   const currentUserId = useSelector(
     (state: RootState) => state.authSlice.currentUserId
   );
+  const {
+    loading,
+    error,
+    message,
+    data: user,
+  } = useUserProfileInfo(currentUserId);
 
   const dispatch = useDispatch<StoreDispatch>();
   const [changeInfo, setChangeInfo] = useState<ChangeInfo>({
@@ -46,41 +46,8 @@ export default function ProfilePage() {
     dispatch(logout());
   };
 
-  useEffect(() => {
-    async function fetchUserInfo() {
-      setUserInfo((prev) => ({ ...prev, loading: true }));
-      try {
-        const res = await fetch(`${backendUrl}/user/${currentUserId}`, {
-          method: "GET",
-        });
-        const result = await res.json();
-        if (result.status === "success") {
-          setUserInfo((prev) => ({
-            ...prev,
-            loading: false,
-            data: result.data,
-          }));
-        } else {
-          setUserInfo((prev) => ({
-            ...prev,
-            loading: false,
-            error: true,
-            message: result.message,
-          }));
-        }
-      } catch (error: any) {
-        setUserInfo((prev) => ({
-          ...prev,
-          loading: false,
-          error: true,
-          message: error.message,
-        }));
-      }
-    }
-    fetchUserInfo();
-  }, []);
-  if (userInfo.loading) return <h1>loading...</h1>;
-  if (userInfo.error) return <h1>{userInfo.message}</h1>;
+  if (loading) return <h1>loading...</h1>;
+  if (error) return <h1>{message}</h1>;
   return (
     <div
       style={{ backgroundColor: "#18191d", height: "100dvh" }}
@@ -92,7 +59,7 @@ export default function ProfilePage() {
       >
         <ImCross /> Back
       </button>
-      <h1 className=" my-5 text-left font-bold text-lg">My Profile</h1>
+      <h1 className=" py-2 text-left font-bold text-lg">My Profile</h1>
       <div
         style={{ backgroundColor: "#18181f" }}
         className=" flex lg:flex-row flex-col  gap-4 p-2 rounded-md  w-96"
@@ -102,7 +69,7 @@ export default function ProfilePage() {
             <ImageInfo />
           </div>
           <div className="flex flex-col gap-3 items-start  ">
-            <div className="flex  items-center gap-5">
+            <div className="flex  items-center gap-3">
               <h1 className=" font-mono text-slate-500">
                 id - <b>{currentUserId}</b>{" "}
               </h1>
@@ -131,16 +98,12 @@ export default function ProfilePage() {
               <div className="label  ">
                 <span className="label-text text-white">Name</span>
               </div>
-              <NameInput
-                name="name"
-                initValue={userInfo.data.name}
-                type="text"
-              />
+              <NameInput name="name" initValue={user.name} type="text" />
             </label>
             <ChangeableInfoList setChangeInfo={setChangeInfo} />
             <button
               onClick={loggingOut}
-              className="btn b bg-teal-900 border-none w-full mt-4"
+              className="btn  bg-teal-900 border-none w-full "
             >
               Logout
             </button>
@@ -152,16 +115,10 @@ export default function ProfilePage() {
         <ChangePasswordModal changeAction={setChangeInfo} />
       )}
       {changeInfo.changeEmail && (
-        <ChangeEmailModal
-          changeAction={setChangeInfo}
-          email={userInfo.data.email}
-        />
+        <ChangeEmailModal changeAction={setChangeInfo} email={user.email} />
       )}
       {changeInfo.changePhoneNo && (
-        <ChangePhoneModal
-          changeAction={setChangeInfo}
-          phone={userInfo.data.phone}
-        />
+        <ChangePhoneModal changeAction={setChangeInfo} phone={user.phone} />
       )}
     </div>
   );

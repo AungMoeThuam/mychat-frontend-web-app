@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
-import { Message } from "../../utils/types";
+import { Message } from "../../../utils/types";
 import MessageCard from "./message/Message";
-import { RootState } from "../../redux/store/store";
+import { RootState } from "../../../redux/store/store";
 
 type MessageListProps = {
   error: boolean;
@@ -47,7 +47,7 @@ function MessageList(props: MessageListProps) {
                   currentUserIsSender: item.senderId === currentUserId,
                   content: item.content,
                   type: item.type,
-                  onViewImage: () => alert("onviewimage"),
+                  createdAt: item.createdAt,
                 }}
               />
             );

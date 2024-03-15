@@ -26,6 +26,20 @@ const UserApi = {
       return ErrorResult(error);
     }
   },
+
+  getUserInfo: async (currentUserId: string) => {
+    try {
+      const res = await fetch(`${backendUrl}/user/${currentUserId}`, {
+        method: "GET",
+      });
+      const result: HttpResponse = await res.json();
+      if (result.status === "success") return SuccessResult(result.data);
+
+      return ErrorResult(result.message);
+    } catch (error) {
+      return ErrorResult(error);
+    }
+  },
 };
 
 export { UserApi };

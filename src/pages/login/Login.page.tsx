@@ -9,7 +9,7 @@ import {
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { loginAction } from "../../redux/actions/authThunks";
 import { RootState, StoreDispatch } from "../../redux/store/store";
 
@@ -86,6 +86,7 @@ export default function LoginPage() {
               type="submit"
               value={loading === true ? "loading...." : "Login"}
             />
+            <Link to={"/register"}>Registered?</Link>
           </form>
         </section>
       </main>

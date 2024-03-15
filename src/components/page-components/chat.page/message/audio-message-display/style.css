@@ -1,0 +1,39 @@
+#au::-webkit-media-controls-panel {
+  width: clamp(10px, 250px, 400px);
+}
+
+#au::-webkit-media-controls-timeline {
+  width: 100%;
+}
+#au::-webkit-media-controls-current-time-display {
+  display: none;
+}
+#au::-webkit-media-controls-time-remaining-display {
+  display: none;
+}
+
+#au::-webkit-media-controls-enclosure {
+  background-color: transparent;
+}
+
+#au {
+  width: clamp(10px, 250px, 400px);
+}
+
+#au::-webkit-media-controls-volume-button {
+  display: none;
+}
+#au::-webkit-media-controls-mute-button {
+  display: none;
+}
+
+#au::-webkit-media-controls-volume-slider-container {
+  display: none;
+}
+#au::-webkit-media-controls-volume-slider {
+  display: none; /* Hide the volume slider for WebKit browsers (Chrome, Safari) */
+}
+
+#p {
+  transform: translateY(-50%);
+}

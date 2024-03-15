@@ -15,7 +15,7 @@ import toast from "react-hot-toast";
 import { RelationshipActionDialogs } from "../AddFriendCard";
 import { SearchNameContext } from "../../../../../pages/addfriends/AddFriends.page";
 import { updateSearchFriends } from "../../../../../redux/slices/searchFriendSlice";
-import { getFriendsListThunk } from "../../../../../redux/actions/friendThunks";
+import { getFriendsListAction } from "../../../../../redux/actions/friendThunks";
 
 export default function AcceptFriendDialog({
   people,
@@ -60,7 +60,7 @@ export default function AcceptFriendDialog({
             status: 3,
           })
         );
-        dispatch(getFriendsListThunk());
+        dispatch(getFriendsListAction());
       } else {
         setOperation((prev) => ({ ...prev, loading: false, error: true }));
       }

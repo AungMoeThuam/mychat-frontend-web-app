@@ -45,11 +45,14 @@ export default function AddFriendCard({ people }: { people: User }) {
         </div>
       </div>
       <div className="flex gap-2">
+        {/* //if the person is the current user itself */}
         {people.status === 5 && (
           <Link className=" btn btn-sm bg-slate-950" to={"/profile"}>
             view your profile
           </Link>
         )}
+        {/* if the person does not any relation status or the status is 4 then it
+         is applicable for add friend */}
         {(!people.status || people.status === 4) && (
           <button
             onClick={() =>
@@ -63,6 +66,8 @@ export default function AddFriendCard({ people }: { people: User }) {
             Add Friend
           </button>
         )}
+        {/* if the person status 1 and requester in that relation is the current */}
+        {/* user */}
         {people.status === 1 && people.requester === currentUserId && (
           <button
             onClick={() => {
@@ -76,6 +81,8 @@ export default function AddFriendCard({ people }: { people: User }) {
             cancel request
           </button>
         )}
+        {/* if the person status 1 and requester in that relation is not the */}
+        {/* current user */}
         {people.status === 1 && people.requester !== currentUserId && (
           <div>
             <button
@@ -105,7 +112,7 @@ export default function AddFriendCard({ people }: { people: User }) {
             </button>
           </div>
         )}
-
+        {/* if the person is already friend with the current user */}
         {people.status === 3 && "Friend"}
       </div>
 

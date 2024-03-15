@@ -4,7 +4,7 @@ import { FormEvent, createContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, StoreDispatch } from "../../redux/store/store";
 import { searchfriendNameThunk } from "../../redux/actions/searchFriendThunks";
-import { searchFriendByName } from "../../redux/slices/searchFriendSlice";
+import { searchFriendSuccess } from "../../redux/slices/searchFriendSlice";
 
 export interface People {
   createdAt: string;
@@ -48,7 +48,7 @@ function AddFriendsPage() {
 
   useEffect(() => {
     if (searchName.trim() === "") {
-      dispatch(searchFriendByName([]));
+      dispatch(searchFriendSuccess([]));
       // navigate("/friends/addfriends?id=1");
     }
   }, [searchName]);

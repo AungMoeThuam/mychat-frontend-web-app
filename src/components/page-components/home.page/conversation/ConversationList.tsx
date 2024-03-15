@@ -1,16 +1,16 @@
 import { useEffect } from "react";
 import Conversation from "./Conversation";
 import { useDispatch, useSelector } from "react-redux";
-import { getFriendsListThunk } from "../../redux/actions/friendThunks";
-import { RootState, StoreDispatch } from "../../redux/store/store";
-import { Friend, Message } from "../../utils/types";
-import socket from "../../services/socket";
-import { Event } from "../../utils/socketEvents";
+import { getFriendsListAction } from "../../../../redux/actions/friendThunks";
+import { RootState, StoreDispatch } from "../../../../redux/store/store";
+import { Friend, Message } from "../../../../utils/types";
+import socket from "../../../../services/socket";
+import { Event } from "../../../../utils/socketEvents";
 import {
   addNewMessage,
   updateOnlineFriendStatus,
-} from "../../redux/slices/friendSlice";
-import { deleteMessage } from "../../redux/slices/messageSlice";
+} from "../../../../redux/slices/friendSlice";
+import { deleteMessage } from "../../../../redux/slices/messageSlice";
 
 export default function ConversationList() {
   const { friendsList, error, loading, message } = useSelector(
@@ -32,7 +32,7 @@ export default function ConversationList() {
       dispatch(deleteMessage(data));
     }
 
-    dispatch(getFriendsListThunk());
+    dispatch(getFriendsListAction());
 
     socket.subscribeOneEvent(Event.NEWACTIVEUSER, listener);
     socket.subscribeOneEvent(Event.NEWOFFLINEUSER, listener);

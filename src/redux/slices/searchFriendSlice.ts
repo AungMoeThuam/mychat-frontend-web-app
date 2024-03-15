@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Friend, Message, User } from "../../utils/types";
+import { User } from "../../utils/types";
 
 type SearchFriendState = {
   error: boolean;
@@ -21,9 +21,17 @@ const searchFriendSlice = createSlice({
   name: "searchFriendSlice",
   initialState,
   reducers: {
-    searchFriendByName: (state, action: PayloadAction<User[]>) => {
-      console.log("payload ", action.payload);
+    searchFriendLoading: (state) => {
+      state.loading = true;
+    },
+    searchFriendSuccess: (state, action: PayloadAction<User[]>) => {
       state.poepleList = action.payload;
+      state.loading = false;
+    },
+    searchFriendError: (state, action: PayloadAction<string>) => {
+      state.error = true;
+      state.loading = false;
+      state.message = action.payload;
     },
     updateSearchFriends: (
       state,
@@ -46,7 +54,11 @@ const searchFriendSlice = createSlice({
 type FriendSliceState = ReturnType<typeof searchFriendSlice.reducer>;
 type FriendSliceAction = typeof searchFriendSlice.actions;
 
-export const { searchFriendByName, updateSearchFriends } =
-  searchFriendSlice.actions;
+export const {
+  searchFriendSuccess,
+  searchFriendError,
+  updateSearchFriends,
+  searchFriendLoading,
+} = searchFriendSlice.actions;
 export default searchFriendSlice.reducer;
 export type { FriendSliceState, FriendSliceAction };

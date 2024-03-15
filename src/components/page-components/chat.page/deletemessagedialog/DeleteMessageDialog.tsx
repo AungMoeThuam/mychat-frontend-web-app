@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import Modal from "../../global-components/modal/Modal";
+import Modal from "../../../global-components/modal/Modal";
 
 export default function DeleteMessageDialog({
   deleteMessageAction,

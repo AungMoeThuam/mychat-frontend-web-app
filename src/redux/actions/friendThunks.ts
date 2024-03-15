@@ -8,7 +8,7 @@ import { RootState } from "../store/store";
 import { FriendShipApi } from "../../services/friendshipApi";
 import { UNKNOWN_ERROR } from "../../utils/constants/messages/errorMessages";
 
-const getFriendsListThunk = createAsyncThunk(
+const getFriendsListAction = createAsyncThunk(
   "friends/getALl",
   async (_, { dispatch, getState }) => {
     try {
@@ -32,4 +32,4 @@ const getFriendsListThunk = createAsyncThunk(
   }
 );
 
-export { getFriendsListThunk };
+export { getFriendsListAction };

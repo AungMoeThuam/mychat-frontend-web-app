@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import getTimeDuration from "../../utils/time";
+import getTimeDuration from "../../../../utils/time";
 import { NavLink } from "react-router-dom";
-import { Friend } from "../../utils/types";
-import { backendUrlWihoutApiEndpoint } from "../../utils/backendConfig";
+import { Friend } from "../../../../utils/types";
+import { backendUrlWihoutApiEndpoint } from "../../../../utils/backendConfig";
 const tempPhoto =
   "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 export default function Conversation({
@@ -26,6 +26,7 @@ export default function Conversation({
   } = data;
 
   function displayMessage() {
+    if (type === undefined) return "no conversation yet!";
     let text = CurrentUserIsLastMessageSender === true ? "you: " : "";
 
     if (senderId === friendId && deletedByReceiver === true) {
@@ -33,18 +34,23 @@ export default function Conversation({
       return text;
     }
 
-    if (type == "image" && "sent a photo") {
+    if (type?.split("/")[0] == "image" && "sent a photo") {
       text += "sent a photo";
       return text;
     }
 
-    if (type == "video" && "sent a video") {
+    if (type?.split("/")[0] == "video" && "sent a video") {
       text += "sent a video";
       return text;
     }
 
-    if (type == "file" && "sent a file") {
-      text += "sent a video";
+    if (
+      type?.split("/")[0] !== "image" &&
+      type?.split("/")[0] !== "video" &&
+      type !== "text" &&
+      "sent a file"
+    ) {
+      text += "sent a file";
       return text;
     }
     if (content === undefined) return "no message yet!";

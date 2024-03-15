@@ -126,6 +126,26 @@ const FriendShipApi = {
       return ErrorResult(error);
     }
   },
+  checkFriendShipStatus: async (friendId: string, roomId: string) => {
+    try {
+      const res = await fetch(`${backendUrl}/friends/check/friend`, {
+        method: "POST",
+        body: JSON.stringify({
+          friendId,
+          roomId,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const result: HttpResponse = await res.json();
+
+      if (result.status === "success") return SuccessResult(result.data);
+      return ErrorResult(result.message);
+    } catch (error) {
+      return ErrorResult(error);
+    }
+  },
 };
 
 export { FriendShipApi };

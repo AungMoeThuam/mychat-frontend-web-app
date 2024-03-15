@@ -1,5 +1,5 @@
 import { IoSettings } from "react-icons/io5";
-import ConversationList from "../../components/conversation/ConversationList";
+import ConversationList from "../../components/page-components/home.page/conversation/ConversationList";
 import "./style.css";
 import { Link, Outlet, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,7 +14,7 @@ import { Event } from "../../utils/socketEvents";
 import toast, { Toaster } from "react-hot-toast";
 import { searchfriendNameThunk } from "../../redux/actions/searchFriendThunks";
 import { updateSearchFriends } from "../../redux/slices/searchFriendSlice";
-import { getFriendsListThunk } from "../../redux/actions/friendThunks";
+import { getFriendsListAction } from "../../redux/actions/friendThunks";
 export default function HomePage() {
   const [queryParams] = useSearchParams();
   const dispatch = useDispatch<StoreDispatch>();
@@ -22,8 +22,7 @@ export default function HomePage() {
   const profilePhoto = useSelector(
     (state: RootState) => state.authSlice.profilePhoto
   );
-  const test = useSelector((state: RootState) => state.friendSlice.friendsList);
-  console.log("friend list - ", test);
+
   useEffect(() => {
     function listenerForReject(data: any) {
       let search = queryParams.get("search");
@@ -43,7 +42,7 @@ export default function HomePage() {
       if (data === "acceptedByYou")
         toast("You have accepted a friend request!");
       else if (data === "acceptedByFriend") {
-        dispatch(getFriendsListThunk());
+        dispatch(getFriendsListAction());
         toast("Your friend requst is accepted by him!");
       } else toast("Received a friend request!");
     }

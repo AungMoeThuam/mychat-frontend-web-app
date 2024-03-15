@@ -6,7 +6,7 @@ import RequestActionDialog from "./RequestActionDialog";
 import { backendUrlWihoutApiEndpoint } from "../../../utils/backendConfig";
 import { tempCatPhoto } from "../../../utils/helper";
 import { acceptRequestAction } from "../../../redux/slices/requestSlice";
-import { getFriendsListThunk } from "../../../redux/actions/friendThunks";
+import { getFriendsListAction } from "../../../redux/actions/friendThunks";
 import { Friend } from "../../../utils/types";
 
 export default function RequestFriendCard({ friend }: { friend: Friend }) {
@@ -27,7 +27,7 @@ export default function RequestFriendCard({ friend }: { friend: Friend }) {
       });
       if (result.status === "success") {
         dispatch(acceptRequestAction(friend.friendId));
-        dispatch(getFriendsListThunk());
+        dispatch(getFriendsListAction());
       } else {
         setOperation((prev) => ({ ...prev, loading: false, error: true }));
       }

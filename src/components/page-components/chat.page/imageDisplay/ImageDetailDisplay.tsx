@@ -1,8 +1,7 @@
 import { ImCross } from "react-icons/im";
+import Modal from "../../../global-components/modal/Modal";
 
-import Modal from "../../global-components/modal/Modal";
-
-export default function ImageDisplayDialog({
+export default function ImageDetailDisplayDialog({
   imageUrl,
   onClose,
 }: {
@@ -10,7 +9,7 @@ export default function ImageDisplayDialog({
   onClose: () => void;
 }) {
   return (
-    <Modal>
+    <Modal onClose={onClose}>
       <div
         onClick={(e) => {
           e.stopPropagation();
@@ -26,7 +25,7 @@ export default function ImageDisplayDialog({
           <img
             style={{ height: "90dvh" }}
             className=" relative object-contain aspect-auto  rounded-lg"
-            src={`http://192.168.0.146:4000/resources/${imageUrl}`}
+            src={`http://192.168.0.146:4000/resources/chats/${imageUrl}`}
             alt="cat"
           />
           <button

@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import Chat from "./components/chat/Chat.tsx";
+import Chat from "./pages/chat/Chat.page.tsx";
 import HomePage from "./pages/home/Home.page.tsx";
 import ProfilePage from "./pages/profile/Profile.page.tsx";
 import LoginPage from "./pages/login/Login.page.tsx";
