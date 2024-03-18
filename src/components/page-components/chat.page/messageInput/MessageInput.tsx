@@ -1,8 +1,10 @@
 import {
+  ChangeEvent,
   Dispatch,
   FocusEventHandler,
   FormEvent,
   ForwardedRef,
+  KeyboardEvent,
   PropsWithChildren,
   SetStateAction,
   forwardRef,
@@ -44,11 +46,33 @@ const MessageInput = forwardRef<
     console.log("stop typing!", friendId);
   };
 
+  const handleInput = (e: FormEvent<HTMLTextAreaElement>) => {
+    let rows = e.currentTarget.value.split("\n").length;
+    if (rows > 5) return;
+    if (rows > 2) {
+      e.currentTarget.rows += 1;
+    } else {
+      e.currentTarget.rows = 1;
+    }
+  };
+
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    sessionStorage.setItem(roomId, e.currentTarget.value);
+    let rows = e.currentTarget.value.split("\n").length;
+    if (rows > 3) e.currentTarget.rows = 5;
+    setContent(e.target.value);
+  };
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter") {
+      sendMessage(e);
+      setContent("");
+    }
+  };
+
   useEffect(() => {
     // Load content from sessionStorage for this tab
     const savedContent = sessionStorage.getItem(roomId);
-    console.log("have ", content);
-    console.log("save ", savedContent);
 
     if (savedContent) {
       setContent(savedContent);
@@ -71,40 +95,23 @@ const MessageInput = forwardRef<
     <>
       <textarea
         ref={ref}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") sendMessage(e);
-        }}
         rows={1}
+        onKeyDown={handleKeyDown}
         onFocus={handleFocus}
-        onInput={(e) => {
-          let rows = e.currentTarget.value.split("\n").length;
-          sessionStorage.setItem(roomId, e.currentTarget.value);
-          if (rows > 5) return;
-          if (rows > 2) {
-            e.currentTarget.rows += 1;
-          } else {
-            e.currentTarget.rows = 1;
-          }
-        }}
-        placeholder="type here..."
-        className=" textarea  w-full "
-        value={content}
-        onChange={(e) => {
-          let rows = e.currentTarget.value.split("\n").length;
-          if (rows > 3) e.currentTarget.rows = 5;
-          setContent(e.target.value);
-        }}
+        onInput={handleInput}
         onBlur={handleBlur}
+        onChange={handleChange}
+        placeholder="type here..."
+        className="textarea  w-full"
+        value={content}
       />
 
       <div className="relative">
         {emojiPicker && (
           <div
-            onMouseLeave={() => {
-              setEmojiPicker(false);
-            }}
+            onMouseLeave={() => setEmojiPicker(false)}
             style={{ right: "3dvw", bottom: "50px" }}
-            className="absolute    z-50"
+            className="absolute z-50"
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => {
               if (e.key === "Enter") sendMessage(e);
@@ -116,14 +123,7 @@ const MessageInput = forwardRef<
           </div>
         )}
 
-        <div
-          style={{ color: "#68686E" }}
-          onClick={() => {
-            console.log("mouse enter");
-
-            setEmojiPicker(true);
-          }}
-        >
+        <div style={{ color: "#68686E" }} onClick={() => setEmojiPicker(true)}>
           <ImSmile className="text-teal-500" />
         </div>
       </div>

@@ -11,7 +11,11 @@ import { UNKNOWN_ERROR } from "../../utils/constants/messages/errorMessages";
 
 const getMessagesListThunk = createAsyncThunk(
   "messages/getAll",
-  async (roomId: string, { dispatch, getState }) => {
+  async (
+    info: { roomId: string; friendId: string },
+    { dispatch, getState }
+  ) => {
+    const { roomId, friendId } = info;
     try {
       dispatch(fetchMessagesListLoading(true));
 
@@ -19,7 +23,8 @@ const getMessagesListThunk = createAsyncThunk(
       const result = await MessageApi.getMessagesList(
         roomId,
         token,
-        currentUserId
+        currentUserId,
+        friendId
       );
 
       if (result.error)

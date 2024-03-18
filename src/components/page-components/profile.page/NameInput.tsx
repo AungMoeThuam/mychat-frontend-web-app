@@ -31,12 +31,7 @@ export default function NameInput({
             className="input input-bordered w-full mb-1"
           />
           <div className="flex  justify-end gap-2">
-            <button
-              onClick={() => {
-                setEdit(false);
-              }}
-              className="btn btn-sm"
-            >
+            <button onClick={() => setEdit(false)} className="btn btn-sm">
               Cancel
             </button>
             <button

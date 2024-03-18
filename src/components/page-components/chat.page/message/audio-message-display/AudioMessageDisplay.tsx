@@ -1,13 +1,16 @@
-import { useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { backendUrlWihoutApiEndpoint } from "../../../../../utils/backendConfig";
 import "./style.css";
 import { audioDurationExtractor } from "../../../../../utils/audioDurationExtractor";
-export default function AudioMessageDisplay({
+import { BsTrashFill } from "react-icons/bs";
+export default function RecordedAudioDisplayer({
   content,
   flag = false,
+  setFile,
 }: {
   content: string;
   flag?: boolean;
+  setFile: Dispatch<SetStateAction<File | null>>;
 }) {
   const ref = useRef<HTMLAudioElement>(null);
   const [duration, setDuration] = useState("");
@@ -27,23 +30,36 @@ export default function AudioMessageDisplay({
     };
   }, []);
   return (
-    <div className="relative ">
-      <audio ref={ref} id="au" className="" controlsList="nodownload" controls>
-        <source
-          src={
-            flag
-              ? content
-              : `${backendUrlWihoutApiEndpoint}/resources/chats/${content}`
-          }
-        />
-        not supported
-      </audio>
-      <small
-        style={{ top: "50%", transform: "translateY(-50%)" }}
-        className="absolute right-0 lg:right-3 "
-      >
-        {duration}
-      </small>
+    <div className="flex items-center rounded-md bg-teal-950 px-5">
+      <BsTrashFill
+        className="text-red-500  cursor-pointer"
+        size={20}
+        onClick={() => setFile(null)}
+      />
+      <div className="relative ">
+        <audio
+          ref={ref}
+          id="au"
+          className=""
+          controlsList="nodownload"
+          controls
+        >
+          <source
+            src={
+              flag
+                ? content
+                : `${backendUrlWihoutApiEndpoint}/resources/chats/${content}`
+            }
+          />
+          not supported
+        </audio>
+        <small
+          style={{ top: "50%", transform: "translateY(-50%)" }}
+          className="absolute right-0 lg:right-3 "
+        >
+          {duration}
+        </small>
+      </div>
     </div>
   );
 }

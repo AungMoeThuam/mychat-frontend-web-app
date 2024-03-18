@@ -48,6 +48,9 @@ class SocketIO {
       this.io.off(ev.event, ev.callback);
     });
   }
+  leaveRoom(roomId: string) {
+    this.io.emit("leave_room_event", roomId);
+  }
 
   public static getInstance(url: string): SocketIO {
     if (!SocketIO.instance) {

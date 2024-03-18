@@ -1,4 +1,4 @@
-import ChatInputSection from "../../components/page-components/chat.page/chatinputsection/ChatInputSection";
+import ChatInputSection from "../../components/page-components/chat.page/chat-input-section/ChatInputSection";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import MessageList from "../../components/page-components/chat.page/MessageList";
@@ -7,7 +7,10 @@ import { RootState, StoreDispatch } from "../../redux/store/store";
 import { getMessagesListThunk } from "../../redux/actions/messageThunks";
 import socket from "../../services/socket";
 import { Event } from "../../utils/socketEvents";
-import { addMessage } from "../../redux/slices/messageSlice";
+import {
+  addMessage,
+  updateMessageStatusAction,
+} from "../../redux/slices/messageSlice";
 import TypingIndicator from "../../components/page-components/chat.page/typing-indicator/TypingIndicator";
 import { ProfilePhoto } from "../../utils/types";
 import { FriendShipApi } from "../../services/friendshipApi";
@@ -15,6 +18,12 @@ import ChatHeader from "../../components/page-components/chat.page/chat-header/C
 type FriendInfo = {
   name: string;
   profilePhoto: ProfilePhoto;
+};
+const elementIsVisibleInViewport = (el: HTMLElement) => {
+  if (!el) return "no loaded";
+  const { top, left, bottom, right } = el.getBoundingClientRect();
+  const { innerHeight, innerWidth } = window;
+  return top >= 0 && left >= 0 && bottom <= innerHeight && right <= innerWidth;
 };
 export default function Chat() {
   const { roomId, friendId } = useParams();
@@ -26,6 +35,7 @@ export default function Chat() {
   const messageSlice = useSelector((state: RootState) => state.messageSlice);
 
   const loadMoreMessages = async () => {};
+
   useEffect(() => {
     async function checkFriendShipStatus() {
       try {
@@ -45,20 +55,33 @@ export default function Chat() {
       ref.current?.scrollIntoView({
         behavior: "instant",
       });
+    if (elementIsVisibleInViewport(ref.current!) === false)
+      ref.current?.scrollIntoView({
+        behavior: "instant",
+      });
   }, [messageSlice.messagesList]);
 
   useEffect(() => {
     async function onMessageListner(data: any) {
-      dispatch(addMessage(data));
+      console.log(data);
+
+      if (data.roomId === roomId) dispatch(addMessage(data));
+    }
+    async function onMessageStatusListener(data: any[]) {
+      dispatch(updateMessageStatusAction(data));
     }
 
     socket.emitEvent(Event.JOINROOM, { roomId });
     socket.subscribeOneEvent(Event.MESSAGE, onMessageListner);
+    socket.subscribeOneEvent(Event.MESSAGE_STATUS, onMessageStatusListener);
 
-    if (roomId) dispatch(getMessagesListThunk(roomId));
+    if (roomId && friendId)
+      dispatch(getMessagesListThunk({ roomId, friendId }));
 
     return () => {
       socket.unbSubcribeOneEvent(Event.MESSAGE, onMessageListner);
+      socket.unbSubcribeOneEvent(Event.MESSAGE_STATUS, onMessageStatusListener);
+      socket.leaveRoom(roomId!);
     };
   }, [roomId]);
 

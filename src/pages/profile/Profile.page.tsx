@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { ImCross } from "react-icons/im";
-import ImageInfo from "../../components/page-components/profile.page/ImageInfo";
-import NameInput from "../../components/page-components/profile.page/NameInput";
+import UserProfilePhotoDisplayer from "../../components/page-components/profile.page/UserProfilePhotoDisplayer";
 import ChangeableInfoList from "../../components/page-components/profile.page/ChangeableInfoList";
 import ChangePasswordModal from "../../components/page-components/profile.page/ChangePasswordModal";
 import ChangeEmailModal from "../../components/page-components/profile.page/ChnageEmailModal";
@@ -9,9 +8,11 @@ import ChangePhoneModal from "../../components/page-components/profile.page/Chan
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, StoreDispatch } from "../../redux/store/store";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { logout } from "../../redux/slices/authSlice";
 import useUserProfileInfo from "../../hooks/useUserProfileInfo";
+import UserIdDisplayer from "../../components/page-components/profile.page/UserIdDisplayer";
+import UserNameDisplayer from "../../components/page-components/profile.page/UserNameDisplayer";
 
 type ChangeInfo = {
   changePassword: boolean;
@@ -66,40 +67,11 @@ export default function ProfilePage() {
       >
         <div className="flex  flex-col gap-3 w-full ">
           <div className="flex flex-col justify-center items-center gap-2 ">
-            <ImageInfo />
+            <UserProfilePhotoDisplayer />
           </div>
           <div className="flex flex-col gap-3 items-start  ">
-            <div className="flex  items-center gap-3">
-              <h1 className=" font-mono text-slate-500">
-                id - <b>{currentUserId}</b>{" "}
-              </h1>
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText(currentUserId).then(() =>
-                    toast.success("copied id", {
-                      style: {
-                        border: "1px solid #713200",
-                        padding: "16px",
-                        color: "#713200",
-                      },
-                      iconTheme: {
-                        primary: "#713200",
-                        secondary: "#FFFAEE",
-                      },
-                    })
-                  );
-                }}
-                className="btn btn-sm bg-teal-800"
-              >
-                copy id
-              </button>
-            </div>
-            <label className="form-control w-full ">
-              <div className="label  ">
-                <span className="label-text text-white">Name</span>
-              </div>
-              <NameInput name="name" initValue={user.name} type="text" />
-            </label>
+            <UserIdDisplayer currentUserId={currentUserId} />
+            <UserNameDisplayer name={user.name} />
             <ChangeableInfoList setChangeInfo={setChangeInfo} />
             <button
               onClick={loggingOut}
@@ -111,6 +83,9 @@ export default function ProfilePage() {
         </div>
       </div>
       <Toaster position="bottom-center" />
+
+      {/* modal dialogs */}
+
       {changeInfo.changePassword && (
         <ChangePasswordModal changeAction={setChangeInfo} />
       )}

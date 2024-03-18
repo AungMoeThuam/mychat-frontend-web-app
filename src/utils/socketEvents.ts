@@ -16,6 +16,7 @@ enum Event {
   NEWACTIVEUSER = "newActiveUser",
   NEWOFFLINEUSER = "newOfflineUser",
   NEWNOTIFICATION = "newNotification",
+  MESSAGE_STATUS = "message_status_event",
 }
 
 export { imageTypes, videoTypes, Event };

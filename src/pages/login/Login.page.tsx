@@ -12,7 +12,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { loginAction } from "../../redux/actions/authThunks";
 import { RootState, StoreDispatch } from "../../redux/store/store";
-
+type LoginCredential = {
+  email: string;
+  password: string;
+};
 export default function LoginPage() {
   const navigate = useNavigate();
   const { error, loading, success, message } = useSelector(
@@ -21,10 +24,7 @@ export default function LoginPage() {
   const diapatch = useDispatch<StoreDispatch>();
 
   //getting from from user input
-  const [form, setForm] = useState<{
-    email: string;
-    password: string;
-  }>({
+  const [form, setForm] = useState<LoginCredential>({
     email: "",
     password: "",
   });

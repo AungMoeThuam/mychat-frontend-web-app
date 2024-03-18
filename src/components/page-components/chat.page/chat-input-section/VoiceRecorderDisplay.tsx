@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { FaStopCircle } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
 
-export default function VoiceRecorderDipslay({
+export default function VoiceRecorder({
   stopRecording,
   removeFile,
 }: {

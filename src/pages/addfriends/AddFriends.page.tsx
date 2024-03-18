@@ -31,8 +31,8 @@ function AddFriendsPage() {
   const currentUserId = useSelector(
     (state: RootState) => state.authSlice.currentUserId
   );
-  const friends = useSelector(
-    (state: RootState) => state.searchFriendSlice.poepleList
+  const { poepleList, loading } = useSelector(
+    (state: RootState) => state.searchFriendSlice
   );
   let search = queryParams.get("search");
 
@@ -47,11 +47,9 @@ function AddFriendsPage() {
   }, [queryParams.get("search")]);
 
   useEffect(() => {
-    if (searchName.trim() === "") {
-      dispatch(searchFriendSuccess([]));
-      // navigate("/friends/addfriends?id=1");
-    }
+    if (searchName.trim() === "") dispatch(searchFriendSuccess([]));
   }, [searchName]);
+
   return (
     <>
       <form className="px-4 flex gap-2 items-center " onSubmit={searchPeople}>
@@ -65,25 +63,29 @@ function AddFriendsPage() {
         />
       </form>
 
-      <SearchNameContext.Provider value={search!}>
-        <div className="fle flex-1 flex flex-col gap-3 overflow-y-scroll px-4 pt-3 pb-5">
-          {friends.length === 0 ? (
-            <h1>not found! </h1>
-          ) : (
-            friends.map((item) => {
-              return (
-                <AddFriendCard
-                  key={item._id}
-                  people={{
-                    ...item,
-                    status: item._id === currentUserId ? 5 : item.status,
-                  }}
-                />
-              );
-            })
-          )}
-        </div>
-      </SearchNameContext.Provider>
+      {loading ? (
+        <div>loading...</div>
+      ) : (
+        <SearchNameContext.Provider value={search!}>
+          <div className="fle flex-1 flex flex-col gap-3 overflow-y-scroll px-4 pt-3 pb-5">
+            {poepleList.length === 0 ? (
+              <h1>not found! </h1>
+            ) : (
+              poepleList.map((item) => {
+                return (
+                  <AddFriendCard
+                    key={item._id}
+                    people={{
+                      ...item,
+                      status: item._id === currentUserId ? 5 : item.status,
+                    }}
+                  />
+                );
+              })
+            )}
+          </div>
+        </SearchNameContext.Provider>
+      )}
     </>
   );
 }

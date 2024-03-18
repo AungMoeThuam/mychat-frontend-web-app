@@ -44,6 +44,22 @@ const messageSlice = createSlice({
     addMessage: (state, action) => {
       state.messagesList = [...state.messagesList, action.payload];
     },
+    updateMessageStatusAction: (state, action: PayloadAction<any[]>) => {
+      let noNeedUpdate = state.messagesList.filter(
+        (m) => m.status !== 0 && m.status !== 1
+      );
+      let needUpdate = state.messagesList.filter(
+        (m) => m.status === 1 || m.status === 0
+      );
+      needUpdate = needUpdate.map((e) => {
+        e.status = 2;
+        return e;
+      });
+
+      state.messagesList = [...noNeedUpdate, ...needUpdate];
+      console.log(state);
+    },
+
     deleteMessage: (
       state,
       action: PayloadAction<{
@@ -76,6 +92,7 @@ export const {
   fetchMessagesListLoading,
   addMessage,
   deleteMessage,
+  updateMessageStatusAction,
 } = messageSlice.actions;
 export default messageSlice.reducer;
 export type { MessageSliceState, MessageSliceAction };

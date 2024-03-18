@@ -25,6 +25,7 @@ interface Message {
   deletedByReceiver: boolean;
   createdAt: string;
   messageId: string;
+  status: number;
 }
 
 interface HttpResponse {

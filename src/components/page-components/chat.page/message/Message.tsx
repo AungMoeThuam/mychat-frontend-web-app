@@ -1,10 +1,10 @@
 import "./style.css";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import DeleteMessageDialog from "../deletemessagedialog/DeleteMessageDialog";
 import VideoMessageDisplay from "./VideoMessageDisplay";
 import ImageMessageDisplay from "./ImageMessageDisplay";
 import TextMessageDisplay from "./TextMessageDisplay";
-import { BsPlay, BsSaveFill, BsTrashFill } from "react-icons/bs";
+import { BsSaveFill, BsTrashFill } from "react-icons/bs";
 import { deleteMessageThunk } from "../../../../redux/actions/messageThunks";
 import { useDispatch } from "react-redux";
 import { StoreDispatch } from "../../../../redux/store/store";
@@ -22,10 +22,18 @@ type MessageProps = {
   type?: string;
   friendId: string;
   createdAt: string;
+  status: number;
 };
 function Message(props: { message: MessageProps }) {
-  const { currentUserIsSender, messageId, type, content, friendId, createdAt } =
-    props.message;
+  const {
+    currentUserIsSender,
+    messageId,
+    type,
+    content,
+    friendId,
+    createdAt,
+    status,
+  } = props.message;
   const [deleteMessageDialog, setDeleteMessageDialog] = useState(false);
   const openDeleteMessageDialog = () => setDeleteMessageDialog(true);
   const dispatch = useDispatch<StoreDispatch>();
@@ -56,7 +64,7 @@ function Message(props: { message: MessageProps }) {
           }
         >
           {type?.split("/")[0] == "audio" && (
-            <AudioMessageDisplay content={content} />
+            <AudioMessageDisplay content={content} setFile={() => null} />
           )}
           {type?.split("/")[0] == "image" && (
             <ImageMessageDisplay content={content} />
@@ -95,6 +103,7 @@ function Message(props: { message: MessageProps }) {
               onClose={setDeleteMessageDialog}
             />
           )}
+
           <menu
             id="menu"
             style={
@@ -140,7 +149,9 @@ function Message(props: { message: MessageProps }) {
           </menu>
         </div>
         <small className=" text-slate-500  text-xs">
-          {new Date(createdAt).toLocaleString()}
+          {new Date(createdAt).toLocaleString()}{" "}
+          {currentUserIsSender &&
+            (status === 0 ? "sent" : status === 1 ? "delivered" : "seen")}
         </small>
       </div>
     </div>

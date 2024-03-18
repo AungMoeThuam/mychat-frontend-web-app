@@ -39,6 +39,7 @@ function MessageList(props: MessageListProps) {
               <MessageCard
                 key={item.messageId}
                 message={{
+                  status: item.status,
                   friendId:
                     item.senderId === currentUserId
                       ? item.receiverId

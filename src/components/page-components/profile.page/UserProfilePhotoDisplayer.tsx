@@ -11,7 +11,7 @@ import {
 } from "../../../utils/constants/messages/errorMessages";
 import { allowUploadImageExtensionTypes } from "../../../utils/constants/allowImageUploadExtensionTypes";
 
-export default function ImageInfo() {
+export default function UserProfilePhotoDisplayer() {
   const dispatch = useDispatch<StoreDispatch>();
   const currentUser = useSelector((state: RootState) => state.authSlice);
   const [operation, setOperation] = useState({
