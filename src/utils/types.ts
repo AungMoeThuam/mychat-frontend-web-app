@@ -14,6 +14,7 @@ type Friend = {
   messageCreatedAt: string;
   active?: boolean;
   profilePhoto: ProfilePhoto;
+  unreadMessageCount?: number;
 };
 interface Message {
   senderId: string;

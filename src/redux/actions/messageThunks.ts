@@ -77,4 +77,40 @@ const deleteMessageThunk = createAsyncThunk(
   }
 );
 
-export { getMessagesListThunk, deleteMessageThunk };
+const getMessagesListInBackgroundThunk = createAsyncThunk(
+  "messages/getAllInBackground",
+  async (
+    info: { roomId: string; friendId: string },
+    { dispatch, getState }
+  ) => {
+    const { roomId, friendId } = info;
+    try {
+      const { currentUserId, token } = (getState() as RootState).authSlice;
+      const result = await MessageApi.getMessagesList(
+        roomId,
+        token,
+        currentUserId,
+        friendId
+      );
+
+      if (result.error)
+        return dispatch(
+          fetchMessagesListError({ message: result.error.message })
+        );
+
+      return dispatch(
+        fetchMessagesListSuccess({ data: result.data, message: "Success!" })
+      );
+    } catch (error: unknown) {
+      if (error instanceof Error)
+        return dispatch(fetchMessagesListError({ message: error.message }));
+      return dispatch(fetchMessagesListError({ message: UNKNOWN_ERROR }));
+    }
+  }
+);
+
+export {
+  getMessagesListThunk,
+  deleteMessageThunk,
+  getMessagesListInBackgroundThunk,
+};

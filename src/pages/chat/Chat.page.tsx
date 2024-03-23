@@ -9,7 +9,8 @@ import socket from "../../services/socket";
 import { Event } from "../../utils/socketEvents";
 import {
   addMessage,
-  updateMessageStatusAction,
+  updateMessageStatusIntoDeliveredAction,
+  updateMessageStatusIntoSeenAction,
 } from "../../redux/slices/messageSlice";
 import TypingIndicator from "../../components/page-components/chat.page/typing-indicator/TypingIndicator";
 import { ProfilePhoto } from "../../utils/types";
@@ -33,6 +34,9 @@ export default function Chat() {
   const loadMessageRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch<StoreDispatch>();
   const messageSlice = useSelector((state: RootState) => state.messageSlice);
+  const currentUserId = useSelector(
+    (state: RootState) => state.authSlice.currentUserId
+  );
 
   const loadMoreMessages = async () => {};
 
@@ -67,20 +71,36 @@ export default function Chat() {
 
       if (data.roomId === roomId) dispatch(addMessage(data));
     }
-    async function onMessageStatusListener(data: any[]) {
-      dispatch(updateMessageStatusAction(data));
+    async function onMessageStatusListener() {
+      dispatch(updateMessageStatusIntoSeenAction());
     }
-
-    socket.emitEvent(Event.JOINROOM, { roomId });
+    async function OnTest(data: { friendId: string }) {
+      const { friendId: fId } = data;
+      if (fId === friendId && roomId)
+        dispatch(updateMessageStatusIntoDeliveredAction());
+    }
+    socket.emitEvent(Event.JOINROOM, {
+      roomId,
+      userId: currentUserId,
+      friendId,
+    });
     socket.subscribeOneEvent(Event.MESSAGE, onMessageListner);
-    socket.subscribeOneEvent(Event.MESSAGE_STATUS, onMessageStatusListener);
+    socket.subscribeOneEvent(
+      Event.MESSAGE_STATUS_SEEN,
+      onMessageStatusListener
+    );
+    socket.subscribeOneEvent(Event.MESSAGE_STATUS_DELIVERED, OnTest);
 
     if (roomId && friendId)
       dispatch(getMessagesListThunk({ roomId, friendId }));
 
     return () => {
       socket.unbSubcribeOneEvent(Event.MESSAGE, onMessageListner);
-      socket.unbSubcribeOneEvent(Event.MESSAGE_STATUS, onMessageStatusListener);
+      socket.unbSubcribeOneEvent(
+        Event.MESSAGE_STATUS_SEEN,
+        onMessageStatusListener
+      );
+      socket.unbSubcribeOneEvent(Event.MESSAGE_STATUS_DELIVERED, OnTest);
       socket.leaveRoom(roomId!);
     };
   }, [roomId]);

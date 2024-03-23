@@ -62,6 +62,9 @@ export default function ConversationList() {
               key={item.roomId}
               data={{
                 ...item,
+                unreadMessageCount: item.unreadMessageCount
+                  ? item.unreadMessageCount
+                  : 0,
                 CurrentUserIsLastMessageSender:
                   item.senderId === item.friendId ? false : true, // if the last message senderid is the currentuserId, then true
               }}

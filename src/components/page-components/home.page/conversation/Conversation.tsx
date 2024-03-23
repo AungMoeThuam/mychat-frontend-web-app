@@ -23,6 +23,7 @@ export default function Conversation({
     type,
     deletedByReceiver,
     profilePhoto,
+    unreadMessageCount,
   } = data;
 
   function displayMessage() {
@@ -120,12 +121,14 @@ export default function Conversation({
           <p style={{ fontSize: "0.7rem" }} className="  text-slate-500">
             {time}
           </p>
-          <p
-            style={{ fontSize: "0.7rem" }}
-            className=" bg-red-400 rounded-full w-4 h-4 flex justify-center"
-          >
-            4
-          </p>
+          {unreadMessageCount !== 0 && !CurrentUserIsLastMessageSender && (
+            <p
+              style={{ fontSize: "0.7rem" }}
+              className=" bg-red-400 rounded-full w-4 h-4 flex justify-center"
+            >
+              {unreadMessageCount}
+            </p>
+          )}
         </div>
       </div>
     </NavLink>

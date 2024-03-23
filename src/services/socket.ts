@@ -22,10 +22,8 @@ class SocketIO {
   }
 
   connect(currentUserId: string) {
-    if (!this.io.active) {
-      console.log(currentUserId);
+    if (!this.io.active)
       this.io.connect().emit(Event.ACTIVE, { userId: currentUserId });
-    }
   }
   disconnect() {
     this.io.disconnect();
