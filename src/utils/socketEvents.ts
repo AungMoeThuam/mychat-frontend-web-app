@@ -18,6 +18,7 @@ enum Event {
   NEWNOTIFICATION = "newNotification",
   MESSAGE_STATUS_SEEN = "message_status_seen",
   MESSAGE_STATUS_DELIVERED = "message_status_delivered",
+  YOUHAVEREADTHEMESSAGE = "youhavereadthemessage",
 }
 
 export { imageTypes, videoTypes, Event };

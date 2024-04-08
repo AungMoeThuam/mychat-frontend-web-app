@@ -16,6 +16,7 @@ import TypingIndicator from "../../components/page-components/chat.page/typing-i
 import { ProfilePhoto } from "../../utils/types";
 import { FriendShipApi } from "../../services/friendshipApi";
 import ChatHeader from "../../components/page-components/chat.page/chat-header/ChatHeader";
+import { clearUnReadMessageCount } from "../../redux/slices/friendSlice";
 type FriendInfo = {
   name: string;
   profilePhoto: ProfilePhoto;
@@ -66,9 +67,13 @@ export default function Chat() {
   }, [messageSlice.messagesList]);
 
   useEffect(() => {
-    async function onMessageListner(data: any) {
-      console.log(data);
+    const onReadMessage = (data: any) => {
+      dispatch(clearUnReadMessageCount(data));
+    };
 
+    onReadMessage(roomId);
+
+    async function onMessageListner(data: any) {
       if (data.roomId === roomId) dispatch(addMessage(data));
     }
     async function onMessageStatusListener() {

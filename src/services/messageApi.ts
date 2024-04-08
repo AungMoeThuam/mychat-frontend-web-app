@@ -50,14 +50,13 @@ const MessageApi = {
   }) => {
     try {
       const res = await fetch(
-        `${backendUrl}/messages/${
-          bySender ? "bysender" : "byreceiver"
-        }/${messageId}`,
+        `${backendUrl}/messages/${bySender ? "bysender" : "byreceiver"}`,
         {
           method: "DELETE",
           body: JSON.stringify({
             userId: currentUserId,
             friendId: friendId,
+            messageId,
           }),
           headers: {
             "Content-Type": "application/json",
@@ -94,7 +93,6 @@ const MessageApi = {
       let filename = containsNonISO8859Characters(messageToSend.file.name)
         ? `${new Date().getTime()}.${messageToSend.file.name.split(".")[1]}`
         : `${new Date().getTime()}.${messageToSend.file.name.split(".")[1]}`;
-      // await new Promise((res) => setTimeout(() => res(true), 8000));
 
       const res = await fetch(`${backendUrl}/fileupload`, {
         method: "POST",
@@ -106,10 +104,9 @@ const MessageApi = {
       });
 
       messageToSend.content = filename;
-      console.log("event", messageToSend);
+
       delete messageToSend.file;
       socket.emitEvent(Event.MESSAGE, messageToSend);
-      console.log("event");
 
       return SuccessResult(true);
     } catch (error) {

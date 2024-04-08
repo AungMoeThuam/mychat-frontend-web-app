@@ -46,6 +46,23 @@ const friendSlice = createSlice({
         (item: Friend) => item.friendId !== action.payload.friendId
       );
     },
+    addNewUnreadMessage: (state, action: PayloadAction<Message>) => {
+      let temp: Friend;
+      state.friendsList = state.friendsList
+        .map((item: Friend) => {
+          if (item.roomId === action.payload.roomId) {
+            item.messageCreatedAt = action.payload.createdAt;
+            item.content = action.payload.content;
+            item.senderId = action.payload.senderId;
+            item.type = action.payload.type;
+            item.unreadMessageCount += 1;
+            temp = item;
+            return item;
+          } else return item;
+        })
+        .filter((item) => item.roomId !== action.payload.roomId);
+      state.friendsList.unshift(temp!); // temporarary code need to be fixed next
+    },
     addNewMessage: (state, action: PayloadAction<Message>) => {
       let temp: Friend;
       state.friendsList = state.friendsList
@@ -74,6 +91,15 @@ const friendSlice = createSlice({
         return item;
       });
     },
+    clearUnReadMessageCount: (state, action: PayloadAction<string>) => {
+      state.friendsList = state.friendsList.map((item) => {
+        if (item.roomId === action.payload) {
+          item.unreadMessageCount = 0;
+          return item;
+        }
+        return item;
+      });
+    },
   },
 });
 
@@ -87,6 +113,8 @@ export const {
   addNewMessage,
   updateOnlineFriendStatus,
   unFriendUpdate,
+  clearUnReadMessageCount,
+  addNewUnreadMessage,
 } = friendSlice.actions;
 export default friendSlice.reducer;
 export type { FriendSliceState, FriendSliceAction };

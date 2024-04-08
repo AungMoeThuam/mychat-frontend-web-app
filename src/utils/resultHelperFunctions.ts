@@ -3,7 +3,7 @@ import { Result } from "./types";
 
 export const SuccessResult = (data: any): Result => ({ error: null, data });
 
-export const ErrorResult = (errorMessage: unknown | Error): Result => {
+export const ErrorResult = (errorMessage: unknown): Result => {
   if (errorMessage instanceof Error)
     return { error: { message: errorMessage.message }, data: null };
   if (typeof errorMessage === "string")

@@ -32,4 +32,27 @@ const getFriendsListAction = createAsyncThunk(
   }
 );
 
-export { getFriendsListAction };
+const getFriendsListInBackgroundAction = createAsyncThunk(
+  "friends/getALlInBackground",
+  async (_, { dispatch, getState }) => {
+    try {
+      const accessToken = (getState() as RootState).authSlice.token;
+
+      const result = await FriendShipApi.getFriendsList(accessToken);
+
+      if (result.error)
+        return dispatch(
+          fetchFriendsListError({ message: result.error.message })
+        );
+
+      const { data } = result;
+      return dispatch(fetchFriendsListSuccess({ data, message: "Success!" }));
+    } catch (error: unknown) {
+      if (error instanceof Error)
+        return dispatch(fetchFriendsListError({ message: error.message }));
+      return dispatch(fetchFriendsListError({ message: UNKNOWN_ERROR }));
+    }
+  }
+);
+
+export { getFriendsListAction, getFriendsListInBackgroundAction };

@@ -37,7 +37,7 @@ export default function RejectOrCancelFriendRequestDialog({
 
     try {
       const res = await FriendShipApi.manageFriendShipStatus({
-        relationshipStatus: 0,
+        relationshipStatus: RejectOrCancelDialog === "cancel" ? 0 : 1,
         type: "reject",
         id: people._id,
         currentUserId,
