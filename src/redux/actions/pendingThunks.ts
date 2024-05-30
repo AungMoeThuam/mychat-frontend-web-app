@@ -17,9 +17,7 @@ const getPendingsListThunk = createAsyncThunk(
       const result = await FriendShipApi.getPendingsList(currentUserId);
 
       if (result.error)
-        return dispatch(
-          fetchPendingsListError({ message: result.error.message })
-        );
+        return dispatch(fetchPendingsListError({ message: result.error }));
 
       return dispatch(
         fetchPendingsListSuccess({

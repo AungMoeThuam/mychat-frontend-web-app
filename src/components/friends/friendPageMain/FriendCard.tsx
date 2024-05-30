@@ -27,7 +27,6 @@ export default function FriendCard({ friend }: { friend: Friend }) {
       <div className="flex gap-2">
         <Link
           to={`/messages/${friend.roomId}/${friend.friendId}`}
-          state={{ friendId: friend.friendId, friendName: friend.name }}
           className="btn  btn-sm hover:text-slate-400  bg-teal-500 text-black"
         >
           message

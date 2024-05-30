@@ -14,6 +14,8 @@ import FriendPageMain from "./components/friends/friendPageMain/FriendPageMain.t
 import AddFriendsPage from "./pages/addfriends/AddFriends.page.tsx";
 import RegisterPage from "./pages/register/Register.page.tsx";
 import PendingsPage from "./pages/pendings/Pendings.page.tsx";
+import PublicRoute from "./components/global-components/publicRoute/PublicRoute.tsx";
+import ServerDownPage from "./pages/serverdown.page/ServerDown.page.tsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -75,18 +77,22 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: (
-      <PrivateRoute>
+      <PublicRoute>
         <LoginPage />
-      </PrivateRoute>
+      </PublicRoute>
     ),
   },
   {
     path: "/register",
     element: (
-      <PrivateRoute>
+      <PublicRoute>
         <RegisterPage />
-      </PrivateRoute>
+      </PublicRoute>
     ),
+  },
+  {
+    path: "/serverdown",
+    element: <ServerDownPage />,
   },
 ]);
 

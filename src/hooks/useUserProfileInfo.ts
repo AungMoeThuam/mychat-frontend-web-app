@@ -18,7 +18,7 @@ export default function useUserProfileInfo(currentUserId: string) {
             ...prev,
             loading: false,
             error: true,
-            message: result.error ? result.error?.message : "Unknown Error!",
+            message: result.error ? result.error : "Unknown Error!",
           }));
 
         return setUserInfo((prev) => ({

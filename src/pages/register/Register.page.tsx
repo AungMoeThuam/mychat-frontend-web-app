@@ -10,7 +10,7 @@ import {
 } from "react";
 import { RootState, StoreDispatch } from "../../redux/store/store";
 import { registerAction } from "../../redux/actions/authThunks";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { RegisterForm } from "../../utils/types";
 
 export default function RegisterPage() {
@@ -120,6 +120,7 @@ export default function RegisterPage() {
               type="submit"
               value={loading === true ? "loading...." : "register"}
             />
+            <Link to={"/login"}>Login</Link>
           </form>
         </section>
       </main>

@@ -1,25 +1,10 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Friend } from "../../utils/types";
-
-type RequestState = {
-  error: boolean;
-  success: boolean;
-  loading: boolean;
-  requestsList: Friend[];
-  message: string;
-};
-
-const initialState: RequestState = {
-  error: false,
-  success: false,
-  loading: false,
-  requestsList: [],
-  message: "loading...",
-};
+import requestInitialState from "../stateTypes.ts/requestState";
 
 const requestSlice = createSlice({
   name: "requestSlice",
-  initialState,
+  initialState: requestInitialState,
   reducers: {
     fetchRequestsListError: (
       state,

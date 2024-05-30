@@ -12,6 +12,7 @@ import { searchfriendNameThunk } from "../../redux/actions/searchFriendThunks";
 import { updateSearchFriends } from "../../redux/slices/searchFriendSlice";
 import { getFriendsListAction } from "../../redux/actions/friendThunks";
 import SideNavigationMenu from "../../components/page-components/home.page/side-navigation-menu/SideNavigationMenu";
+import componentRenderInspector from "../../utils/test/componentRenderInspector";
 export default function HomePage() {
   const [queryParams] = useSearchParams();
   const dispatch = useDispatch<StoreDispatch>();
@@ -48,6 +49,9 @@ export default function HomePage() {
       socket.unbSubcribeOneEvent(Event.REJECT, listenerForReject);
     };
   }, []);
+
+  componentRenderInspector("home");
+
   return (
     <div
       style={{
@@ -60,28 +64,7 @@ export default function HomePage() {
       <SideNavigationMenu />
 
       <section style={{ width: "20%" }}>
-        <div
-          style={{
-            height: "8%",
-            borderRight: "5px solid #0a0a0a",
-          }}
-          className=" p-2 "
-        >
-          <input
-            className="input input-sm input-bordered w-full max-w-xs "
-            placeholder="search..."
-            type="search"
-            name="search"
-            id="search"
-          />
-        </div>
-        <div
-          style={{ height: "92%" }}
-          className=" overflow-y-scroll px-2 py-2 "
-          id="conversationList"
-        >
-          <ConversationList />
-        </div>
+        <ConversationList />
       </section>
 
       <main className=" flex-1">

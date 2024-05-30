@@ -25,11 +25,11 @@ export default function RequestFriendCard({ friend }: { friend: Friend }) {
         id: friend.friendId,
         currentUserId: friend.receipent,
       });
-      if (result.status === "success") {
+      if (result.error)
+        setOperation((prev) => ({ ...prev, loading: false, error: true }));
+      else {
         dispatch(acceptRequestAction(friend.friendId));
         dispatch(getFriendsListAction());
-      } else {
-        setOperation((prev) => ({ ...prev, loading: false, error: true }));
       }
     } catch (error: unknown) {
       setOperation((prev) => ({ ...prev, loading: false, error: true }));
@@ -39,7 +39,7 @@ export default function RequestFriendCard({ friend }: { friend: Friend }) {
     <div className="flex  gap-2  justify-between p-2 rounded  items-center pr-4 hover:bg-teal-900">
       <div className="flex gap-2 items-center">
         <img
-          className=" avatar w-10 h-10 rounded-full"
+          className=" avatar w-10 h-10 rounded-full object-cover"
           src={
             friend.profilePhoto
               ? `${backendUrlWihoutApiEndpoint}/resources/profiles/${friend.profilePhoto.path}`

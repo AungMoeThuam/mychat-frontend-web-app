@@ -14,7 +14,6 @@ export default function RejectOrCancelFriendRequestDialog({
   people,
   setRejectOrCancelFriendRequestDialog,
   currentUserId,
-  searchName,
 }: {
   RejectOrCancelDialog: "cancel" | "reject";
   people: User;
@@ -22,7 +21,6 @@ export default function RejectOrCancelFriendRequestDialog({
     SetStateAction<RelationshipActionDialogs>
   >;
   currentUserId: string;
-  searchName: string | null;
 }) {
   const searchNameContextConsumer = useContext(SearchNameContext);
   const dispatch = useDispatch<StoreDispatch>();
@@ -42,18 +40,18 @@ export default function RejectOrCancelFriendRequestDialog({
         id: people._id,
         currentUserId,
       });
-      if (res.status === "success") {
+      if (res.error) {
+        toast.error(res.error + " ❌❌❌", { duration: 4000 });
+        setOperation((prev) => ({ ...prev, loading: false, error: true }));
+      } else {
         toast("rejected successfully!");
         setOperation((prev) => ({ ...prev, loading: false, success: true }));
         setRejectOrCancelFriendRequestDialog((prev) => ({
           ...prev,
           openRejectOrCancelFriendRequestDialog: false,
         }));
-        console.log("searchname in dialog - ", searchName);
+
         dispatch(searchfriendNameThunk(searchNameContextConsumer));
-      } else {
-        toast.error(res.message + " ❌❌❌", { duration: 4000 });
-        setOperation((prev) => ({ ...prev, loading: false, error: true }));
       }
     } catch (error: any) {
       console.error(error);

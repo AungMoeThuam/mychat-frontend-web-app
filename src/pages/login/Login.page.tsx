@@ -37,9 +37,11 @@ export default function LoginPage() {
     e.preventDefault();
     diapatch(loginAction(form));
   };
+
   useEffect(() => {
     if (success === true) navigate("/");
   }, [success]);
+
   return (
     <div className="h-screen bg-slate-950">
       <main className=" h-full  px-2 md:px-18 lg:px-40 py-10 flex justify-center md:grid grid-cols-12  ">

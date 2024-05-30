@@ -19,18 +19,15 @@ const getMessagesListThunk = createAsyncThunk(
     try {
       dispatch(fetchMessagesListLoading(true));
 
-      const { currentUserId, token } = (getState() as RootState).authSlice;
+      const { currentUserId } = (getState() as RootState).authSlice;
       const result = await MessageApi.getMessagesList(
         roomId,
-        token,
         currentUserId,
         friendId
       );
 
       if (result.error)
-        return dispatch(
-          fetchMessagesListError({ message: result.error.message })
-        );
+        return dispatch(fetchMessagesListError({ message: result.error }));
 
       return dispatch(
         fetchMessagesListSuccess({ data: result.data, message: "Success!" })
@@ -85,18 +82,15 @@ const getMessagesListInBackgroundThunk = createAsyncThunk(
   ) => {
     const { roomId, friendId } = info;
     try {
-      const { currentUserId, token } = (getState() as RootState).authSlice;
+      const { currentUserId } = (getState() as RootState).authSlice;
       const result = await MessageApi.getMessagesList(
         roomId,
-        token,
         currentUserId,
         friendId
       );
 
       if (result.error)
-        return dispatch(
-          fetchMessagesListError({ message: result.error.message })
-        );
+        return dispatch(fetchMessagesListError({ message: result.error }));
 
       return dispatch(
         fetchMessagesListSuccess({ data: result.data, message: "Success!" })

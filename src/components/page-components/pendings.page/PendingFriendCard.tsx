@@ -11,7 +11,7 @@ export default function PendingFriendCard({ friend }: { friend: Friend }) {
     <div className="flex  gap-2  justify-between p-2 rounded  items-center pr-4 hover:bg-teal-900">
       <div className="flex gap-2 items-center">
         <img
-          className=" avatar w-10 h-10 rounded-full"
+          className=" avatar w-10 h-10 rounded-full object-cover"
           src={
             friend.profilePhoto
               ? `${backendUrlWihoutApiEndpoint}/resources/profiles/${friend.profilePhoto.path}`

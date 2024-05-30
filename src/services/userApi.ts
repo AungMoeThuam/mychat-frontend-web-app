@@ -1,6 +1,6 @@
-import { backendUrl } from "../utils/backendConfig";
 import { ErrorResult, SuccessResult } from "../utils/resultHelperFunctions";
-import { HttpResponse, Result } from "../utils/types";
+import { Result } from "../utils/types";
+import API from "./api-setup";
 
 const UserApi = {
   uploadProfilePhoto: async (
@@ -13,15 +13,8 @@ const UserApi = {
       form.append("filename", photo.name);
       form.append("userId", currentUserId);
 
-      const res = await fetch(`${backendUrl}/profileupload`, {
-        method: "POST",
-        body: form,
-      });
-      const result: HttpResponse = await res.json();
-
-      if (result.status === "success") return SuccessResult(result.data);
-
-      return ErrorResult(result.message);
+      const { data } = await API.post(`/profileupload`, form);
+      return SuccessResult(data);
     } catch (error) {
       return ErrorResult(error);
     }
@@ -29,13 +22,8 @@ const UserApi = {
 
   getUserInfo: async (currentUserId: string) => {
     try {
-      const res = await fetch(`${backendUrl}/user/${currentUserId}`, {
-        method: "GET",
-      });
-      const result: HttpResponse = await res.json();
-      if (result.status === "success") return SuccessResult(result.data);
-
-      return ErrorResult(result.message);
+      const { data } = await API.get(`/user/${currentUserId}`);
+      return SuccessResult(data);
     } catch (error) {
       return ErrorResult(error);
     }

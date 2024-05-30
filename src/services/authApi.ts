@@ -1,6 +1,6 @@
-import { backendUrl } from "../utils/backendConfig";
 import { ErrorResult, SuccessResult } from "../utils/resultHelperFunctions";
-import { HttpResponse, RegisterForm, Result } from "../utils/types";
+import { RegisterForm, Result } from "../utils/types";
+import API from "./api-setup";
 
 const AuthApi = {
   login: async (loginCredential: {
@@ -8,36 +8,18 @@ const AuthApi = {
     password: string;
   }): Promise<Result> => {
     try {
-      const res = await fetch(backendUrl + "/user/login", {
-        method: "POST",
-        body: JSON.stringify(loginCredential),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const result: HttpResponse = await res.json();
-
-      if (result.status === "success") return SuccessResult(result.data);
-
-      return ErrorResult(result.message);
-    } catch (error: any) {
+      const result = await API.post("/user/login", loginCredential);
+      return SuccessResult(result.data);
+    } catch (error) {
+      console.log(error);
       return ErrorResult(error);
     }
   },
+
   register: async (registerCredential: RegisterForm): Promise<Result> => {
     try {
-      const res = await fetch(backendUrl + "/user/register", {
-        method: "POST",
-        body: JSON.stringify(registerCredential),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const result: HttpResponse = await res.json();
-
-      if (result.status === "success") return SuccessResult(result.data);
-
-      return ErrorResult({ message: result.message });
+      const result = await API.post("/user/register", registerCredential);
+      return SuccessResult(result.data);
     } catch (error) {
       return ErrorResult(error);
     }

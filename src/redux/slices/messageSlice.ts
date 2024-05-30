@@ -1,25 +1,10 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Message } from "../../utils/types";
-
-type MessageState = {
-  error: boolean;
-  success: boolean;
-  loading: boolean;
-  messagesList: Message[];
-  message: string;
-};
-
-const initialState: MessageState = {
-  error: false,
-  success: false,
-  loading: false,
-  messagesList: [],
-  message: "loading...",
-};
+import messageInitialState from "../stateTypes.ts/messageState";
 
 const messageSlice = createSlice({
   name: "messageSlice",
-  initialState,
+  initialState: messageInitialState,
   reducers: {
     fetchMessagesListError: (
       state,
@@ -43,6 +28,17 @@ const messageSlice = createSlice({
     },
     addMessage: (state, action) => {
       state.messagesList = [...state.messagesList, action.payload];
+    },
+    updateMessage: (state, action) => {
+      let tempMsg = state.messagesList.filter(
+        (msg) => msg.messageId === action.payload.temporaryMessageId
+      )[0];
+      tempMsg = action.payload;
+
+      state.messagesList = state.messagesList.filter(
+        (msg) => msg.messageId !== action.payload.temporaryMessageId
+      );
+      state.messagesList.push(tempMsg);
     },
     updateMessageStatusIntoSeenAction: (state) => {
       let noNeedUpdate = state.messagesList.filter(
@@ -96,6 +92,7 @@ export const {
   fetchMessagesListLoading,
   addMessage,
   deleteMessage,
+  updateMessage,
   updateMessageStatusIntoSeenAction,
   updateMessageStatusIntoDeliveredAction,
 } = messageSlice.actions;

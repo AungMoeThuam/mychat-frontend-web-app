@@ -5,7 +5,7 @@ import ChangeableInfoList from "../../components/page-components/profile.page/Ch
 import ChangePasswordModal from "../../components/page-components/profile.page/ChangePasswordModal";
 import ChangeEmailModal from "../../components/page-components/profile.page/ChnageEmailModal";
 import ChangePhoneModal from "../../components/page-components/profile.page/ChangePhoneModal";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, StoreDispatch } from "../../redux/store/store";
 import { Toaster } from "react-hot-toast";
@@ -21,6 +21,8 @@ type ChangeInfo = {
 };
 
 export default function ProfilePage() {
+  const [params] = useSearchParams();
+  const history = params.get("history");
   const navigate = useNavigate();
   const currentUserId = useSelector(
     (state: RootState) => state.authSlice.currentUserId
@@ -55,7 +57,10 @@ export default function ProfilePage() {
       className=" relative  flex flex-col items-center  justify-start text-white"
     >
       <button
-        onClick={() => navigate(-1)}
+        onClick={() => {
+          if (history) navigate(-1);
+          navigate("/");
+        }}
         className=" absolute right-0 top-0 m-2 text-teal-500 hover:text-teal-900  flex flex-col  gap-1 items-center"
       >
         <ImCross /> Back

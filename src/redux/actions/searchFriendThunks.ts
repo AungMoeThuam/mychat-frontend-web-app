@@ -19,7 +19,7 @@ const searchfriendNameThunk = createAsyncThunk(
         name,
         currentUserId
       );
-      if (result.error) return searchFriendError(result.error.message);
+      if (result.error) return searchFriendError(result.error);
 
       dispatch(searchFriendSuccess(result.data));
     } catch (error: unknown) {

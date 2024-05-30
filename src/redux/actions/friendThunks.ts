@@ -4,23 +4,19 @@ import {
   fetchFriendsListLoading,
   fetchFriendsListSuccess,
 } from "../slices/friendSlice";
-import { RootState } from "../store/store";
 import { FriendShipApi } from "../../services/friendshipApi";
 import { UNKNOWN_ERROR } from "../../utils/constants/messages/errorMessages";
 
 const getFriendsListAction = createAsyncThunk(
   "friends/getALl",
-  async (_, { dispatch, getState }) => {
+  async (_, { dispatch }) => {
     try {
       dispatch(fetchFriendsListLoading(true));
-      const accessToken = (getState() as RootState).authSlice.token;
 
-      const result = await FriendShipApi.getFriendsList(accessToken);
+      const result = await FriendShipApi.getFriendsList();
 
       if (result.error)
-        return dispatch(
-          fetchFriendsListError({ message: result.error.message })
-        );
+        return dispatch(fetchFriendsListError({ message: result.error }));
 
       const { data } = result;
       return dispatch(fetchFriendsListSuccess({ data, message: "Success!" }));
@@ -34,16 +30,12 @@ const getFriendsListAction = createAsyncThunk(
 
 const getFriendsListInBackgroundAction = createAsyncThunk(
   "friends/getALlInBackground",
-  async (_, { dispatch, getState }) => {
+  async (_, { dispatch }) => {
     try {
-      const accessToken = (getState() as RootState).authSlice.token;
-
-      const result = await FriendShipApi.getFriendsList(accessToken);
+      const result = await FriendShipApi.getFriendsList();
 
       if (result.error)
-        return dispatch(
-          fetchFriendsListError({ message: result.error.message })
-        );
+        return dispatch(fetchFriendsListError({ message: result.error }));
 
       const { data } = result;
       return dispatch(fetchFriendsListSuccess({ data, message: "Success!" }));

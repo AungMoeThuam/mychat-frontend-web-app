@@ -1,25 +1,10 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { User } from "../../utils/types";
-
-type SearchFriendState = {
-  error: boolean;
-  success: boolean;
-  loading: boolean;
-  poepleList: User[];
-  message: string;
-};
-
-const initialState: SearchFriendState = {
-  error: false,
-  success: false,
-  loading: false,
-  poepleList: [],
-  message: "loading...",
-};
+import searchFriendInitialState from "../stateTypes.ts/searchFriendstate";
 
 const searchFriendSlice = createSlice({
   name: "searchFriendSlice",
-  initialState,
+  initialState: searchFriendInitialState,
   reducers: {
     searchFriendLoading: (state) => {
       state.loading = true;

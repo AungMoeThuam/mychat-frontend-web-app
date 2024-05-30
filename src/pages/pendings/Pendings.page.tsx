@@ -17,6 +17,7 @@ export default function PendingsPage() {
   }, []);
   if (loading) return <h1>...loading</h1>;
   if (error) return <h1>{message}</h1>;
+  console.log("pending list ", pendingsList);
   return (
     <div className="  flex-1 flex flex-col gap-1 overflow-y-scroll px-4 pt-3 pb-5">
       {pendingsList.length === 0 ? (

@@ -1,6 +1,6 @@
-import { backendUrl } from "../utils/backendConfig";
 import { ErrorResult, SuccessResult } from "../utils/resultHelperFunctions";
-import { HttpResponse, Result } from "../utils/types";
+import { Result } from "../utils/types";
+import API from "./api-setup";
 
 const FriendShipApi = {
   searchFriendsByName: async (
@@ -10,17 +10,11 @@ const FriendShipApi = {
     try {
       if (peopleSearch.trim() === "") return SuccessResult([]);
 
-      const res = await fetch(
-        backendUrl +
-          `/users/search?name=${peopleSearch}&userId=${currentUserId}`,
-        {
-          method: "POST",
-        }
+      const { data } = await API.post(
+        `/users/search?name=${peopleSearch}&userId=${currentUserId}`
       );
-      let result: HttpResponse = await res.json();
-      if (result.status === "success") return SuccessResult(result.data);
 
-      return ErrorResult(result.message);
+      return SuccessResult(data);
     } catch (error) {
       return ErrorResult(error);
     }
@@ -31,27 +25,20 @@ const FriendShipApi = {
     id: string;
     type: "request" | "accept" | "cancelrequest" | "reject";
     currentUserId: string;
-  }): Promise<{
-    status: string;
-    data?: any;
-    errorCode?: number;
-    message: string;
-  }> => {
-    const { type, relationshipStatus, id, currentUserId } = friendshipInfo;
-    const mybody =
-      relationshipStatus === 1
-        ? { receipentId: currentUserId, requesterId: id }
-        : { receipentId: id, requesterId: currentUserId };
+  }): Promise<Result> => {
+    try {
+      const { type, relationshipStatus, id, currentUserId } = friendshipInfo;
+      const mybody =
+        relationshipStatus === 1
+          ? { receipentId: currentUserId, requesterId: id }
+          : { receipentId: id, requesterId: currentUserId };
 
-    const res = await fetch(`${backendUrl}/friends/${type}`, {
-      method: "POST",
-      body: JSON.stringify(mybody),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const result = await res.json();
-    return result;
+      const { data } = await API.post(`/friends/${type}`, mybody);
+
+      return SuccessResult(data);
+    } catch (error) {
+      return ErrorResult(error);
+    }
   },
 
   unFriend: async (friendshipInfo: {
@@ -61,87 +48,49 @@ const FriendShipApi = {
     try {
       const { id, currentUserId } = friendshipInfo;
       const mybody = { friendId: id, userId: currentUserId };
-      const res = await fetch(`${backendUrl}/friends/unfriend`, {
-        method: "POST",
-        body: JSON.stringify(mybody),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const result: HttpResponse = await res.json();
-      if (result.status === "success") return SuccessResult(result.data);
-      return ErrorResult(result.message);
+      const { data } = await API.post(`/friends/unfriend`, mybody);
+      return SuccessResult(data);
     } catch (error) {
       return ErrorResult(error);
     }
   },
   getPendingsList: async (currentUserId: string): Promise<Result> => {
     try {
-      const res = await fetch(
-        `${backendUrl}/friends/pendings/${currentUserId}`,
-        {
-          method: "GET",
-        }
-      );
-      const result: HttpResponse = await res.json();
-
-      if (result.status === "success") return SuccessResult(result.data);
-
-      return ErrorResult(result.message);
+      const { data } = await API.get(`/friends/pendings/${currentUserId}`);
+      return SuccessResult(data);
     } catch (error) {
       return ErrorResult(error);
     }
   },
   getRequestsList: async (currentUserId: string): Promise<Result> => {
     try {
-      const res = await fetch(
-        `${backendUrl}/friends/requests/${currentUserId}`,
-        {
-          method: "GET",
-        }
-      );
-      const result: HttpResponse = await res.json();
-
-      if (result.status === "success") return SuccessResult(result.data);
-
-      return ErrorResult(result.message);
+      const { data } = await API.get(`/friends/requests/${currentUserId}`);
+      return SuccessResult(data);
     } catch (error) {
       return ErrorResult(error);
     }
   },
-  getFriendsList: async (accessToken: string | null): Promise<Result> => {
+  getFriendsList: async (): Promise<Result> => {
     try {
-      if (!accessToken) return ErrorResult("Access Token required!");
-      const res = await fetch(`${backendUrl}/friends`, {
-        method: "POST",
-        headers: {
-          Authorization: "Bearer " + accessToken,
-        },
-      });
-      const result: HttpResponse = await res.json();
-      if (result.status === "success") return SuccessResult(result.data);
-
-      return ErrorResult(result.message);
+      const { data } = await API.post("/friends");
+      return SuccessResult(data);
     } catch (error) {
       return ErrorResult(error);
     }
   },
-  checkFriendShipStatus: async (friendId: string, roomId: string) => {
+  checkFriendShipStatus: async (
+    friendId: string,
+    roomId: string,
+    currentUserId: string
+  ) => {
     try {
-      const res = await fetch(`${backendUrl}/friends/check/friend`, {
-        method: "POST",
-        body: JSON.stringify({
-          friendId,
-          roomId,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
+      const { data } = await API.post(`/friends/check/friend`, {
+        friendId,
+        roomId,
+        currentUserId,
       });
-      const result: HttpResponse = await res.json();
 
-      if (result.status === "success") return SuccessResult(result.data);
-      return ErrorResult(result.message);
+      return SuccessResult(data);
     } catch (error) {
       return ErrorResult(error);
     }

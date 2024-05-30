@@ -14,8 +14,7 @@ const loginAction = createAsyncThunk(
     try {
       dispatch(authLoading(true));
       const result = await AuthApi.login(form);
-      if (result.error)
-        return dispatch(authError({ message: result.error.message }));
+      if (result.error) return dispatch(authError({ message: result.error }));
 
       return dispatch(
         authSuccess({
@@ -48,8 +47,7 @@ const registerAction = createAsyncThunk(
         );
 
       const result = await AuthApi.register(form);
-      if (result.error)
-        return dispatch(authError({ message: result.error.message }));
+      if (result.error) return dispatch(authError({ message: result.error }));
 
       return dispatch(
         authSuccess({

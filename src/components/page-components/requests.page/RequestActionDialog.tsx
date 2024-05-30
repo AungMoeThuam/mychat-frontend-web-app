@@ -29,19 +29,19 @@ export default function RequestActionDialog({
         id: friend.friendId,
         relationshipStatus: 1,
       });
-      if (result.status === "success") {
+      if (result.error) {
+        setOperation((prev) => ({
+          ...prev,
+          error: true,
+          loading: false,
+          message: result.error ? result.error : "unknown error",
+        }));
+      } else {
         setOperation((prev) => ({
           ...prev,
           loading: false,
         }));
         dispatch(acceptRequestAction(friend.friendId));
-      } else {
-        setOperation((prev) => ({
-          ...prev,
-          error: true,
-          loading: false,
-          message: result.message,
-        }));
       }
     } catch (error: any) {
       setOperation((prev) => ({

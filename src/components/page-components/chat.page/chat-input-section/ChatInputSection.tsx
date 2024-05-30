@@ -3,8 +3,8 @@ import { IoSendSharp } from "react-icons/io5";
 import MessageInput from "../messageInput/MessageInput";
 import "./style.css";
 import generateVideoThumbnail from "../../../../utils/generateThumbnail";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../../redux/store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, StoreDispatch } from "../../../../redux/store/store";
 import { MdKeyboardVoice } from "react-icons/md";
 import voiceRecorderService from "../../../../services/voiceRecorderService";
 import RecordedAudioDisplayer from "../message/audio-message-display/AudioMessageDisplay";
@@ -12,16 +12,8 @@ import FilePicker from "./FilePicker";
 import SelectedFileDisplayer from "./SelectFileDisplay";
 import VoiceRecorder from "./VoiceRecorderDisplay";
 import { MessageApi } from "../../../../services/messageApi";
-
-type Message = {
-  content: any;
-  senderId: any;
-  receiverId: string;
-  // type: "image" | "video" | "text" | "others";
-  type: string;
-  roomId: string;
-  createdAt: Number;
-};
+import toast from "react-hot-toast";
+import { addMessage } from "../../../../redux/slices/messageSlice";
 
 export default function ChatInput(props: { friendId: any; roomId: any }) {
   const [file, setFile] = useState<File | null>(null);
@@ -30,19 +22,38 @@ export default function ChatInput(props: { friendId: any; roomId: any }) {
   const textInputRef = useRef<HTMLTextAreaElement>(null);
   const fileDisplayRef = useRef<HTMLImageElement>(null);
   const [emojiPicker, setEmojiPicker] = useState(false);
-
+  const dispatch = useDispatch<StoreDispatch>();
   const sendMessage = async (e: FormEvent) => {
     e.preventDefault();
+    let temporaryMessageId = "-temp" + Math.round(Math.random() * 1000000);
+    dispatch(
+      addMessage({
+        messageId: temporaryMessageId,
+        content: file ? file.name : textInputRef.current!.value,
+        type: file ? file.type : "text",
+        senderId: currentUserId,
+        receiverId: props.friendId,
+        roomId: props.roomId,
+        status: 9,
+        createdAt: new Date(),
+      })
+    );
+
     if (textInputRef?.current?.value.trim() == "") return;
+    let f = file;
+    setFile(null);
     const result = await MessageApi.sendMessage({
-      content: file ? file.name : textInputRef.current!.value,
-      type: file ? file.type : "text",
+      temporaryMessageId,
+      content: f ? f.name : textInputRef.current!.value,
+      type: f ? f.type : "text",
       senderId: currentUserId,
       receiverId: props.friendId,
       roomId: props.roomId,
-      createdAt: Date.now(),
-      file: file,
+      file: f,
     });
+    if (result.error) {
+      toast("failed to send!");
+    }
     console.log("result ", result);
     if (file != null) setFile(null);
   };

@@ -16,7 +16,7 @@ export default function ChatHeader(props: {
     >
       <div className="flex justify-center items-center">
         <img
-          className=" w-16 h-16 bg-slate-300 avatar rounded-full shadow mr-2"
+          className=" object-cover w-16 h-16 bg-slate-300 avatar rounded-full shadow mr-2"
           src={
             profilePhotoFilePath
               ? `${backendUrlWihoutApiEndpoint}/resources/profiles/${profilePhotoFilePath}`

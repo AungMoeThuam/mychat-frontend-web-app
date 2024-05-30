@@ -1,25 +1,10 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Friend } from "../../utils/types";
-
-type PendingState = {
-  error: boolean;
-  success: boolean;
-  loading: boolean;
-  pendingsList: Friend[];
-  message: string;
-};
-
-const initialState: PendingState = {
-  error: false,
-  success: false,
-  loading: false,
-  pendingsList: [],
-  message: "loading...",
-};
+import pendingInitialState from "../stateTypes.ts/pendingState";
 
 const pendingSlice = createSlice({
   name: "pendingSlice",
-  initialState,
+  initialState: pendingInitialState,
   reducers: {
     fetchPendingsListError: (
       state,

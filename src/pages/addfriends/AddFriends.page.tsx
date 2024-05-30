@@ -6,22 +6,6 @@ import { RootState, StoreDispatch } from "../../redux/store/store";
 import { searchfriendNameThunk } from "../../redux/actions/searchFriendThunks";
 import { searchFriendSuccess } from "../../redux/slices/searchFriendSlice";
 
-export interface People {
-  createdAt: string;
-  friendshipId: string;
-  name: string;
-  requester: string;
-  status: number | undefined;
-  __v: number;
-  _id: string;
-  profilePhoto?: {
-    createdAt: string;
-    mimetype: string;
-    path: string;
-    size: number;
-  };
-}
-
 export const SearchNameContext = createContext("");
 function AddFriendsPage() {
   const [searchName, setSearchName] = useState<string>("");

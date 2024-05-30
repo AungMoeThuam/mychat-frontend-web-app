@@ -15,9 +15,7 @@ const getRequestsListThunk = createAsyncThunk(
       const result = await FriendShipApi.getRequestsList(currentUserId);
 
       if (result.error)
-        return dispatch(
-          fetchRequestsListError({ message: result.error.message })
-        );
+        return dispatch(fetchRequestsListError({ message: result.error }));
 
       return dispatch(
         fetchRequestsListSuccess({

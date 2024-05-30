@@ -44,7 +44,7 @@ export default function UserProfilePhotoDisplayer() {
           ...prev,
           error: true,
           loading: false,
-          message: result.error ? result.error.message : UNKNOWN_ERROR,
+          message: result.error ? result.error : UNKNOWN_ERROR,
         }));
       } else {
         dispatch(updateProfileImage(result.data.profilePhoto));

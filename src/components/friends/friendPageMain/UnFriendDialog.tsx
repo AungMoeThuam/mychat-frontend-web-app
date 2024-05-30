@@ -37,7 +37,7 @@ export default function UnFriendDialog({
           ...prev,
           loading: false,
           error: true,
-          message: result.error ? result.error?.message : "error",
+          message: result.error ? result.error : "error",
         }));
 
       toast("UnFriended! ✅");

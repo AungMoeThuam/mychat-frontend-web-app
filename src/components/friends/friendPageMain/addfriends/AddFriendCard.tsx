@@ -32,7 +32,7 @@ export default function AddFriendCard({ people }: { people: User }) {
     <div className="flex  gap-2  justify-between p-1 rounded  items-center pr-4   hover:bg-teal-800">
       <div className="flex gap-2 items-center">
         <img
-          className=" avatar w-10 h-10 rounded-full"
+          className=" avatar w-10 h-10 rounded-full object-cover"
           src={
             people.profilePhoto
               ? `${backendUrlWihoutApiEndpoint}/resources/profiles/${people.profilePhoto.path}`
@@ -51,7 +51,7 @@ export default function AddFriendCard({ people }: { people: User }) {
             view your profile
           </Link>
         )}
-        {/* if the person does not any relation status or the status is 4 then it
+        {/* if the person does not have any relation status or the status is 4 then it
          is applicable for add friend */}
         {(!people.status || people.status === 4) && (
           <button
@@ -132,7 +132,6 @@ export default function AddFriendCard({ people }: { people: User }) {
           people={people}
           currentUserId={currentUserId}
           setRejectOrCancelFriendRequestDialog={setRelationshipActionDialogs}
-          searchName={queryParams.get("search")}
         />
       )}
       {relationshipActionDialogs.openAcceptFriendDialog && (

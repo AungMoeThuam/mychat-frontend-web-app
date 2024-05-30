@@ -29,8 +29,12 @@ class SocketIO {
     this.io.disconnect();
   }
 
-  emitEvent(event: string, data?: any) {
-    this.io.emit(event, data);
+  emitEvent(
+    event: string,
+    data?: any,
+    callback?: (response: { status: any }) => void
+  ) {
+    this.io.emit(event, data, callback);
   }
 
   subscribeOneEvent(event: string, listener: (data?: any) => void) {

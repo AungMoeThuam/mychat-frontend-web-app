@@ -1,25 +1,10 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Friend, Message } from "../../utils/types";
-
-type FriendState = {
-  error: boolean;
-  success: boolean;
-  loading: boolean;
-  friendsList: Friend[];
-  message: string;
-};
-
-const initialState: FriendState = {
-  error: false,
-  success: false,
-  loading: false,
-  friendsList: [],
-  message: "loading...",
-};
+import friendInitialState from "../stateTypes.ts/friendState";
 
 const friendSlice = createSlice({
   name: "friendSlice",
-  initialState,
+  initialState: friendInitialState,
   reducers: {
     fetchFriendsListError: (
       state,

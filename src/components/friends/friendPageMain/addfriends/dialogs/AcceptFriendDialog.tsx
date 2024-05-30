@@ -41,13 +41,15 @@ export default function AcceptFriendDialog({
   const acceptFriendRequest = async () => {
     setOperation((prev) => ({ ...prev, loading: true }));
     try {
-      const { status } = await FriendShipApi.manageFriendShipStatus({
+      const { error } = await FriendShipApi.manageFriendShipStatus({
         relationshipStatus: people.status,
         id: people._id,
         currentUserId,
         type: "accept",
       });
-      if (status === "success") {
+      if (error) {
+        setOperation((prev) => ({ ...prev, loading: false, error: true }));
+      } else {
         toast("you have accepted a friend request ✅");
         setOpenAcceptFriendDialog((prev) => ({
           ...prev,
@@ -61,8 +63,6 @@ export default function AcceptFriendDialog({
           })
         );
         dispatch(getFriendsListAction());
-      } else {
-        setOperation((prev) => ({ ...prev, loading: false, error: true }));
       }
     } catch (error: any) {
       toast(error.message + "❌");

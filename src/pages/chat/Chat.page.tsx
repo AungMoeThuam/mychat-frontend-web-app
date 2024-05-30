@@ -9,58 +9,36 @@ import socket from "../../services/socket";
 import { Event } from "../../utils/socketEvents";
 import {
   addMessage,
+  updateMessage,
   updateMessageStatusIntoDeliveredAction,
   updateMessageStatusIntoSeenAction,
 } from "../../redux/slices/messageSlice";
 import TypingIndicator from "../../components/page-components/chat.page/typing-indicator/TypingIndicator";
-import { ProfilePhoto } from "../../utils/types";
-import { FriendShipApi } from "../../services/friendshipApi";
 import ChatHeader from "../../components/page-components/chat.page/chat-header/ChatHeader";
 import { clearUnReadMessageCount } from "../../redux/slices/friendSlice";
-type FriendInfo = {
-  name: string;
-  profilePhoto: ProfilePhoto;
-};
-const elementIsVisibleInViewport = (el: HTMLElement) => {
-  if (!el) return "no loaded";
-  const { top, left, bottom, right } = el.getBoundingClientRect();
-  const { innerHeight, innerWidth } = window;
-  return top >= 0 && left >= 0 && bottom <= innerHeight && right <= innerWidth;
-};
+import useFriendInfo from "../../hooks/useFriendInfo";
+import toast from "react-hot-toast";
+
 export default function Chat() {
+  const currentUserId = useSelector(
+    (state: RootState) => state.authSlice.currentUserId
+  );
   const { roomId, friendId } = useParams();
   const [isMessageRemaining, setisMessageRemaining] = useState(false);
-  const [friendInfo, setFriendInfo] = useState<FriendInfo | null>(null);
+  const { data: friendInfo } = useFriendInfo({
+    friendId: friendId!,
+    currentUserId: currentUserId,
+    roomId: roomId!,
+  });
   const ref = useRef<HTMLDivElement>(null);
   const loadMessageRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch<StoreDispatch>();
   const messageSlice = useSelector((state: RootState) => state.messageSlice);
-  const currentUserId = useSelector(
-    (state: RootState) => state.authSlice.currentUserId
-  );
 
   const loadMoreMessages = async () => {};
 
   useEffect(() => {
-    async function checkFriendShipStatus() {
-      try {
-        const result = await FriendShipApi.checkFriendShipStatus(
-          friendId!,
-          roomId!
-        );
-        if (!result.error) return setFriendInfo(result.data);
-      } catch (error: any) {
-        alert(error.message);
-      }
-    }
-    checkFriendShipStatus();
-  }, []);
-  useEffect(() => {
     if (messageSlice.messagesList.length !== 0)
-      ref.current?.scrollIntoView({
-        behavior: "instant",
-      });
-    if (elementIsVisibleInViewport(ref.current!) === false)
       ref.current?.scrollIntoView({
         behavior: "instant",
       });
@@ -74,7 +52,9 @@ export default function Chat() {
     onReadMessage(roomId);
 
     async function onMessageListner(data: any) {
-      if (data.roomId === roomId) dispatch(addMessage(data));
+      if (data.roomId === roomId) {
+        dispatch(updateMessage(data));
+      }
     }
     async function onMessageStatusListener() {
       dispatch(updateMessageStatusIntoSeenAction());
@@ -84,11 +64,18 @@ export default function Chat() {
       if (fId === friendId && roomId)
         dispatch(updateMessageStatusIntoDeliveredAction());
     }
+    const onError = (data: any) => {
+      toast(data.message);
+      console.log("on error ", data);
+    };
+
     socket.emitEvent(Event.JOINROOM, {
       roomId,
       userId: currentUserId,
       friendId,
     });
+
+    socket.subscribeOneEvent("error", onError);
     socket.subscribeOneEvent(Event.MESSAGE, onMessageListner);
     socket.subscribeOneEvent(
       Event.MESSAGE_STATUS_SEEN,
@@ -100,6 +87,7 @@ export default function Chat() {
       dispatch(getMessagesListThunk({ roomId, friendId }));
 
     return () => {
+      socket.unbSubcribeOneEvent("error", onError);
       socket.unbSubcribeOneEvent(Event.MESSAGE, onMessageListner);
       socket.unbSubcribeOneEvent(
         Event.MESSAGE_STATUS_SEEN,
@@ -119,7 +107,7 @@ export default function Chat() {
       <main
         id="messageBox"
         style={{ backgroundColor: "#18181f" }}
-        className="   pt-8 px-5 pb-8 w-full flex-1 overflow-y-scroll "
+        className="   pt-8 px-5 pb-8 w-full flex-1 overflow-y-scroll flex flex-col "
       >
         {isMessageRemaining && (
           <div
@@ -131,7 +119,9 @@ export default function Chat() {
             Load More
           </div>
         )}
-        {messageSlice.messagesList.length === 0 ? (
+        {messageSlice.error ? (
+          <h1>{messageSlice.message}</h1>
+        ) : messageSlice.messagesList.length === 0 ? (
           <h1>Start a conversation with your friend!</h1>
         ) : (
           <MessageList {...messageSlice} />

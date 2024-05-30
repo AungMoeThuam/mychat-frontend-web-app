@@ -5,6 +5,7 @@ import Modal from "../../global-components/modal/Modal";
 import { StoreDispatch } from "../../../redux/store/store";
 import { useState } from "react";
 import { cancelPendingAction } from "../../../redux/slices/pendingSlice";
+import toast from "react-hot-toast";
 
 type PendingActionDialog = {
   onClose: () => void;
@@ -29,20 +30,21 @@ export default function PendingActionDialog({
         id: friend.friendId,
         relationshipStatus: 0,
       });
-      if (result.status === "success") {
+      if (result.error !== null)
+        setOperation((prev) => ({
+          ...prev,
+          error: true,
+          loading: false,
+          message: result.error ? result.error : "unknown error",
+        }));
+      else {
         setOperation((prev) => ({
           ...prev,
           loading: false,
         }));
         dispatch(cancelPendingAction(friend.friendId));
+        toast("request has been canceled!");
         onClose();
-      } else {
-        setOperation((prev) => ({
-          ...prev,
-          error: true,
-          loading: false,
-          message: result.message,
-        }));
       }
     } catch (error: any) {
       setOperation((prev) => ({

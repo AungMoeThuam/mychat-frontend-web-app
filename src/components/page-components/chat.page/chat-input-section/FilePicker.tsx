@@ -18,8 +18,8 @@ export default function FilePicker({ setFile }: FilePickerProps) {
         onChange={(e) => {
           if (
             e.target.files &&
-            e.target.files[0] &&
-            e.target.files[0].size < 1e8
+            e.target.files[0]
+            // &&  e.target.files[0].size < 1e8
           ) {
             setFile(e.target.files[0]);
           } else alert("file too large");

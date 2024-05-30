@@ -29,15 +29,9 @@ interface Message {
   status: number;
 }
 
-interface HttpResponse {
-  status: string;
-  message: string;
-  data: any;
-}
-
 interface Result {
   data: null | any;
-  error: { message: string } | null;
+  error: string | null;
 }
 
 interface ProfilePhoto {
@@ -65,12 +59,28 @@ interface RegisterForm {
   confirmPassword: String;
 }
 
+interface People {
+  createdAt: string;
+  friendshipId: string;
+  name: string;
+  requester: string;
+  status: number | undefined;
+  __v: number;
+  _id: string;
+  profilePhoto?: {
+    createdAt: string;
+    mimetype: string;
+    path: string;
+    size: number;
+  };
+}
+
 export type {
   Friend,
   Message,
-  HttpResponse,
   User,
   ProfilePhoto,
   Result,
   RegisterForm,
+  People,
 };

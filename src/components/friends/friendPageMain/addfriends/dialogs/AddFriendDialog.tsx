@@ -1,13 +1,18 @@
-import { Dispatch, SetStateAction, useContext, useState } from "react";
+import { Dispatch, SetStateAction, useContext } from "react";
 import { User } from "../../../../../utils/types";
-import { useDispatch } from "react-redux";
-import { StoreDispatch } from "../../../../../redux/store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, StoreDispatch } from "../../../../../redux/store/store";
 import { FriendShipApi } from "../../../../../services/friendshipApi";
 import { searchfriendNameThunk } from "../../../../../redux/actions/searchFriendThunks";
 import Modal from "../../../../global-components/modal/Modal";
 import toast from "react-hot-toast";
 import { RelationshipActionDialogs } from "../AddFriendCard";
 import { SearchNameContext } from "../../../../../pages/addfriends/AddFriends.page";
+import {
+  operationError,
+  operationLoading,
+  operationSuccess,
+} from "../../../../../redux/slices/friendshipDialogSlice";
 
 export default function AddFriendDialog({
   people,
@@ -23,20 +28,17 @@ export default function AddFriendDialog({
   searchName: string | null;
 }) {
   const searchNameContextConsumer = useContext(SearchNameContext);
+  const operation = useSelector(
+    (state: RootState) => state.friendshipDialogSlice
+  );
   const dispatch = useDispatch<StoreDispatch>();
 
-  const [operation, setOperation] = useState({
-    error: false,
-    loading: false,
-    message: "",
-    success: false,
-  });
   const action = async (
     id: string,
     relationshipStatus: number = 0,
     process: "cancel" | "accept" = "accept"
   ) => {
-    setOperation((prev) => ({ ...prev, loading: true }));
+    dispatch(operationLoading());
     if (process === "cancel") return;
 
     try {
@@ -46,22 +48,21 @@ export default function AddFriendDialog({
         id,
         currentUserId,
       });
-      if (res.status === "success") {
+      if (res.error) {
+        toast.error(res.error, { duration: 4000 });
+        dispatch(operationError(res.error));
+      } else {
         toast("requested successfully!");
-        setOperation((prev) => ({ ...prev, loading: false, success: true }));
+        operationSuccess();
         setUnFriendShipActionDialog((prev) => ({
           ...prev,
           openAddFriendDialog: false,
         }));
         dispatch(searchfriendNameThunk(searchName ? searchName : ""));
-      } else {
-        toast.error(res.message + " ❌❌❌", { duration: 4000 });
-        setOperation((prev) => ({ ...prev, loading: false, error: true }));
       }
     } catch (error: any) {
-      console.error(error);
       toast.error(error.message + " ❌❌❌", { duration: 4000 });
-      setOperation((prev) => ({ ...prev, loading: false, error: true }));
+      operationError(error.message);
     }
   };
 

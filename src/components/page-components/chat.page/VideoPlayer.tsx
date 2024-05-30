@@ -17,6 +17,7 @@ export default function VideoPlayer({
   });
   return (
     <video
+      onBlur={(e) => e.currentTarget.pause()}
       ref={ref}
       className=" w-48 lg:w-64 rounded-lg"
       controls

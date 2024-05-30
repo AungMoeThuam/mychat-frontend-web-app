@@ -2,38 +2,13 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import socket from "../../services/socket";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { ProfilePhoto } from "../../utils/types";
+import authInitialState from "../stateTypes.ts/authState";
 
 const { getStorage, setStorage, removeStorage } = useLocalStorage("authToken");
-type AuthState = {
-  error: boolean;
-  success: boolean;
-  loading: boolean;
-  token: string | null;
-  message: string;
-  currentUserId: string;
-  profilePhoto: ProfilePhoto;
-};
-
-// {
-//   createdAt?: Date;
-//   path?: string;
-//   mimetype?: string;
-//   size?: number;
-// };
-
-const initialState: AuthState = {
-  error: false,
-  success: false,
-  loading: false,
-  token: null,
-  currentUserId: "",
-  profilePhoto: {},
-  message: "loading...",
-};
 
 const authSlice = createSlice({
   name: "authSlice",
-  initialState,
+  initialState: authInitialState,
   reducers: {
     updateProfileImage: (state, action: PayloadAction<ProfilePhoto>) => {
       state.profilePhoto = action.payload;
@@ -64,6 +39,7 @@ const authSlice = createSlice({
     },
     logout: (state) => {
       state.token = null;
+      state.success = false;
       // removeAuth();
       removeStorage();
     },
