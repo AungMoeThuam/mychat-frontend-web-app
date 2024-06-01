@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { FriendShipApi } from "../../../services/friendshipApi";
-import Modal from "../../global-components/modal/Modal";
+import { FriendShipApi } from "../../../service/friend-api-service";
+import Modal from "../../share-components/modal/Modal";
 import { useDispatch } from "react-redux";
 import { StoreDispatch } from "../../../redux/store/store";
-import { unFriendUpdate } from "../../../redux/slices/friendSlice";
+import { unFriend } from "../../../redux/features/friend/friendSlice";
 import toast from "react-hot-toast";
 
 interface UnFriendDialogProps {
@@ -25,7 +25,7 @@ export default function UnFriendDialog({
     success: false,
     message: "",
   });
-  const unFriend = async () => {
+  const unFriendAction = async () => {
     setOperation((prev) => ({ ...prev, loading: true }));
     try {
       const result = await FriendShipApi.unFriend({
@@ -42,7 +42,7 @@ export default function UnFriendDialog({
 
       toast("UnFriended! ✅");
       onClose();
-      dispatch(unFriendUpdate({ friendId }));
+      dispatch(unFriend({ friendId }));
     } catch (error) {
       setOperation((prev) => ({ ...prev, loading: false, error: true }));
     }
@@ -83,7 +83,7 @@ export default function UnFriendDialog({
             </div>
             <div className="flex gap-2">
               <button
-                onClick={unFriend}
+                onClick={unFriendAction}
                 className="btn btn-sm bg-teal-500 text-slate-950"
               >
                 Yes

@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import { UNKNOWN_ERROR } from "./constants/messages/errorMessages";
-import { Result } from "./types";
+import { Result } from "./constants/types";
 
 export const SuccessResult = (data: any): Result => ({
   error: null,

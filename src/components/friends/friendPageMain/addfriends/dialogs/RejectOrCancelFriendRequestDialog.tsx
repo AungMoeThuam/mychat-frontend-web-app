@@ -1,13 +1,13 @@
 import { Dispatch, SetStateAction, useContext, useState } from "react";
-import { User } from "../../../../../utils/types";
+import { User } from "../../../../../utils/constants/types";
 import { useDispatch } from "react-redux";
 import { StoreDispatch } from "../../../../../redux/store/store";
-import { FriendShipApi } from "../../../../../services/friendshipApi";
-import { searchfriendNameThunk } from "../../../../../redux/actions/searchFriendThunks";
-import Modal from "../../../../global-components/modal/Modal";
+import { FriendShipApi } from "../../../../../service/friend-api-service";
+import { searchfriendNameThunk } from "../../../../../redux/features/people/peopleThunks";
+import Modal from "../../../../share-components/modal/Modal";
 import toast from "react-hot-toast";
 import { RelationshipActionDialogs } from "../AddFriendCard";
-import { SearchNameContext } from "../../../../../pages/addfriends/AddFriends.page";
+import { SearchNameContext } from "../../../../../pages/search-people/SearchPeoplePage";
 
 export default function RejectOrCancelFriendRequestDialog({
   RejectOrCancelDialog,
@@ -54,7 +54,6 @@ export default function RejectOrCancelFriendRequestDialog({
         dispatch(searchfriendNameThunk(searchNameContextConsumer));
       }
     } catch (error: any) {
-      console.error(error);
       toast.error(error.message + " ❌❌❌", { duration: 4000 });
       setOperation((prev) => ({ ...prev, loading: false, error: true }));
     }

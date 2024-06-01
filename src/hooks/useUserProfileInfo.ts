@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { UserApi } from "../services/userApi";
+import { UserApi } from "../service/userApi";
 
 export default function useUserProfileInfo(currentUserId: string) {
   const [userInfo, setUserInfo] = useState({

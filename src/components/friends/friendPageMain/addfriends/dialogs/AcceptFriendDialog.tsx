@@ -5,17 +5,17 @@ import {
   useEffect,
   useState,
 } from "react";
-import { User } from "../../../../../utils/types";
+import { User } from "../../../../../utils/constants/types";
 import { useDispatch } from "react-redux";
 import { StoreDispatch } from "../../../../../redux/store/store";
-import { FriendShipApi } from "../../../../../services/friendshipApi";
-import { searchfriendNameThunk } from "../../../../../redux/actions/searchFriendThunks";
-import Modal from "../../../../global-components/modal/Modal";
+import { FriendShipApi } from "../../../../../service/friend-api-service";
+import { searchfriendNameThunk } from "../../../../../redux/features/people/peopleThunks";
+import Modal from "../../../../share-components/modal/Modal";
 import toast from "react-hot-toast";
 import { RelationshipActionDialogs } from "../AddFriendCard";
-import { SearchNameContext } from "../../../../../pages/addfriends/AddFriends.page";
-import { updateSearchFriends } from "../../../../../redux/slices/searchFriendSlice";
-import { getFriendsListAction } from "../../../../../redux/actions/friendThunks";
+import { SearchNameContext } from "../../../../../pages/search-people/SearchPeoplePage";
+import { updateSearchingPeopleResult } from "../../../../../redux/features/people/peopleSlice";
+import { fetchFriends } from "../../../../../redux/features/friend/friendThunks";
 
 export default function AcceptFriendDialog({
   people,
@@ -56,13 +56,13 @@ export default function AcceptFriendDialog({
           openAcceptFriendDialog: false,
         }));
         dispatch(
-          updateSearchFriends({
+          updateSearchingPeopleResult({
             receipent: currentUserId,
             requester: people._id,
             status: 3,
           })
         );
-        dispatch(getFriendsListAction());
+        dispatch(fetchFriends());
       }
     } catch (error: any) {
       toast(error.message + "❌");

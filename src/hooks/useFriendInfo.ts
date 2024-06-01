@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { ProfilePhoto } from "../utils/types";
-import { FriendShipApi } from "../services/friendshipApi";
+import { ProfilePhoto } from "../utils/constants/types";
+import { FriendShipApi } from "../service/friend-api-service";
 type FriendInfo = {
   name: string;
   profilePhoto: ProfilePhoto;
@@ -37,7 +37,7 @@ export default function useFriendInfo({
       }
     }
     checkFriendShipStatus();
-  }, []);
+  }, [roomId]);
 
   return friendInfo;
 }

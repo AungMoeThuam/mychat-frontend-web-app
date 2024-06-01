@@ -1,17 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
-import authSlice from "../slices/authSlice";
-import friendSlice from "../slices/friendSlice";
-import messageSlice from "../slices/messageSlice";
-import searchFriendSlice from "../slices/searchFriendSlice";
-import requestSlice from "../slices/requestSlice";
-import pendingSlice from "../slices/pendingSlice";
+import authSlice from "../features/user/userSlice";
+import friendSlice from "../features/friend/friendSlice";
+import messageSlice from "../features/message/messageSlice";
+import peopleSlice from "../features/people/peopleSlice";
+import requestSlice from "../features/friend-request/requestSlice";
+import pendingSlice from "../features/friend-pending/pendingSlice";
 import friendshipDialogSlice from "../slices/friendshipDialogSlice";
 
 const rootReducer = {
   authSlice,
   friendSlice,
   messageSlice,
-  searchFriendSlice,
+  peopleSlice,
   requestSlice,
   pendingSlice,
   friendshipDialogSlice,

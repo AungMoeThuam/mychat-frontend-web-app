@@ -1,13 +1,13 @@
 import { Dispatch, SetStateAction, useContext } from "react";
-import { User } from "../../../../../utils/types";
+import { User } from "../../../../../utils/constants/types";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, StoreDispatch } from "../../../../../redux/store/store";
-import { FriendShipApi } from "../../../../../services/friendshipApi";
-import { searchfriendNameThunk } from "../../../../../redux/actions/searchFriendThunks";
-import Modal from "../../../../global-components/modal/Modal";
+import { FriendShipApi } from "../../../../../service/friend-api-service";
+import { searchfriendNameThunk } from "../../../../../redux/features/people/peopleThunks";
+import Modal from "../../../../share-components/modal/Modal";
 import toast from "react-hot-toast";
 import { RelationshipActionDialogs } from "../AddFriendCard";
-import { SearchNameContext } from "../../../../../pages/addfriends/AddFriends.page";
+import { SearchNameContext } from "../../../../../pages/search-people/SearchPeoplePage";
 import {
   operationError,
   operationLoading,
@@ -18,14 +18,12 @@ export default function AddFriendDialog({
   people,
   setUnFriendShipActionDialog,
   currentUserId,
-  searchName,
 }: {
   people: User;
   setUnFriendShipActionDialog: Dispatch<
     SetStateAction<RelationshipActionDialogs>
   >;
   currentUserId: string;
-  searchName: string | null;
 }) {
   const searchNameContextConsumer = useContext(SearchNameContext);
   const operation = useSelector(
@@ -58,7 +56,11 @@ export default function AddFriendDialog({
           ...prev,
           openAddFriendDialog: false,
         }));
-        dispatch(searchfriendNameThunk(searchName ? searchName : ""));
+        dispatch(
+          searchfriendNameThunk(
+            searchNameContextConsumer ? searchNameContextConsumer : ""
+          )
+        );
       }
     } catch (error: any) {
       toast.error(error.message + " ❌❌❌", { duration: 4000 });

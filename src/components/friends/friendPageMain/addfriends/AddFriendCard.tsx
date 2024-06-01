@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { backendUrlWihoutApiEndpoint } from "../../../../utils/backendConfig";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store/store";
-import { User } from "../../../../utils/types";
-import { tempCatPhoto } from "../../../../utils/helper";
+import { User } from "../../../../utils/constants/types";
+import { tempCatPhoto } from "../../../../assets/temporaryProfilePhoto";
 import AddFriendDialog from "./dialogs/AddFriendDialog";
 import RejectOrCancelFriendRequestDialog from "./dialogs/RejectOrCancelFriendRequestDialog";
 import AcceptFriendDialog from "./dialogs/AcceptFriendDialog";
@@ -26,7 +26,6 @@ export default function AddFriendCard({ people }: { people: User }) {
   const currentUserId = useSelector(
     (state: RootState) => state.authSlice.currentUserId
   );
-  const [queryParams] = useSearchParams();
 
   return (
     <div className="flex  gap-2  justify-between p-1 rounded  items-center pr-4   hover:bg-teal-800">
@@ -46,6 +45,7 @@ export default function AddFriendCard({ people }: { people: User }) {
       </div>
       <div className="flex gap-2">
         {/* //if the person is the current user itself */}
+
         {people.status === 5 && (
           <Link className=" btn btn-sm bg-slate-950" to={"/profile"}>
             view your profile
@@ -114,6 +114,11 @@ export default function AddFriendCard({ people }: { people: User }) {
         )}
         {/* if the person is already friend with the current user */}
         {people.status === 3 && "Friend"}
+        {people.status !== 5 && (
+          <button className=" btn btn-sm    bg-red-500  text-slate-950">
+            Block
+          </button>
+        )}
       </div>
 
       {relationshipActionDialogs.openAddFriendDialog && (
@@ -121,7 +126,6 @@ export default function AddFriendCard({ people }: { people: User }) {
           people={people}
           currentUserId={currentUserId}
           setUnFriendShipActionDialog={setRelationshipActionDialogs}
-          searchName={queryParams.get("search")}
         />
       )}
       {relationshipActionDialogs.openRejectOrCancelFriendRequestDialog && (

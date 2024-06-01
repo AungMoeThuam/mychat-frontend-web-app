@@ -1,21 +1,23 @@
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import Chat from "./pages/chat/Chat.page.tsx";
-import HomePage from "./pages/home/Home.page.tsx";
-import ProfilePage from "./pages/profile/Profile.page.tsx";
-import LoginPage from "./pages/login/Login.page.tsx";
-import PrivateRoute from "./components/global-components/privateRoute/PrivateRoute.tsx";
+import Chat from "./pages/chat/ChatPage.tsx";
+import HomePage from "./pages/home/HomePage.tsx";
+
+import LoginPage from "./pages/login/LoginPage.tsx";
+import PrivateRoute from "./components/share-components/private-route/PrivateRoute.tsx";
 import { Provider } from "react-redux";
 import store from "./redux/store/store.ts";
-import FriendsPage from "./pages/friends/Friends.page.tsx";
-import RequestsPage from "./pages/requests/Requests.page.tsx";
+import FriendsPage from "./pages/friends/FriendsPage.tsx";
+import RequestsPage from "./pages/requests/RequestsPage.tsx";
 import FriendPageMain from "./components/friends/friendPageMain/FriendPageMain.tsx";
-import AddFriendsPage from "./pages/addfriends/AddFriends.page.tsx";
-import RegisterPage from "./pages/register/Register.page.tsx";
-import PendingsPage from "./pages/pendings/Pendings.page.tsx";
-import PublicRoute from "./components/global-components/publicRoute/PublicRoute.tsx";
-import ServerDownPage from "./pages/serverdown.page/ServerDown.page.tsx";
+import SearchPeoplePage from "./pages/search-people/SearchPeoplePage.tsx";
+import RegisterPage from "./pages/register/RegisterPage.tsx";
+import PendingsPage from "./pages/pendings/PendingsPage.tsx";
+import PublicRoute from "./components/share-components/public-route/PublicRoute.tsx";
+import ServerDownPage from "./pages/serverdown/ServerDownPage.tsx";
+import ProfilePage from "./pages/profile/ProfilePage.tsx";
+import BlocksPage from "./pages/blocks/BlocksPage.tsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -58,7 +60,11 @@ const router = createBrowserRouter([
           },
           {
             path: "addfriends",
-            element: <AddFriendsPage />,
+            element: <SearchPeoplePage />,
+          },
+          {
+            path: "blocks",
+            element: <BlocksPage />,
           },
         ],
       },
