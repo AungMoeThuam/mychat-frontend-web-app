@@ -12,12 +12,15 @@ const friendshipDialogSlice = createSlice({
     operationError: (state, action: PayloadAction<string>) => {
       state.error = true;
       state.message = action.payload;
+      state.loading = false;
     },
     operationSuccess: (state) => {
       state.success = true;
+      state.loading = false;
     },
     operationLoading: (state) => {
       state.loading = true;
+      (state.success = false), (state.error = false);
     },
   },
 });

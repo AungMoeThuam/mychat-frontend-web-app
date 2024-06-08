@@ -1,19 +1,20 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FriendShipApi } from "../../../service/friend-api-service";
 import { Friend } from "../../../utils/constants/types";
 import Modal from "../../share-components/modal/Modal";
-import { StoreDispatch } from "../../../redux/store/store";
-import { acceptRequestAction } from "../../../redux/features/friend-request/requestSlice";
+import { RootState, StoreDispatch } from "../../../redux/store/store";
 import { useState } from "react";
+import toast from "react-hot-toast";
+import { cancelBlockAction } from "../../../redux/features/friend-block/blockSlice";
 
-type RequestActionDialog = {
+type UnblockActionDialog = {
   onClose: () => void;
   friend: Friend;
 };
-export default function RequestActionDialog({
+export default function UnblockActionDialog({
   onClose,
   friend,
-}: RequestActionDialog) {
+}: UnblockActionDialog) {
   const dispatch = useDispatch<StoreDispatch>();
   const [operation, setOperation] = useState({
     loading: false,
@@ -21,26 +22,30 @@ export default function RequestActionDialog({
     success: false,
     message: "",
   });
-  const rejectRequest = async () => {
+  const currentUserId = useSelector(
+    (state: RootState) => state.authSlice.currentUserId
+  );
+  const removeBlock = async () => {
     try {
-      const result = await FriendShipApi.manageFriendShipStatus({
-        type: "reject",
-        currentUserId: friend.receipent,
-        friendId: friend.friendId,
-      });
-      if (result.error) {
+      const result = await FriendShipApi.unblock(
+        friend.friendshipId!,
+        currentUserId
+      );
+      if (result.error !== null)
         setOperation((prev) => ({
           ...prev,
           error: true,
           loading: false,
           message: result.error ? result.error : "unknown error",
         }));
-      } else {
+      else {
         setOperation((prev) => ({
           ...prev,
           loading: false,
         }));
-        dispatch(acceptRequestAction(friend.friendId));
+        dispatch(cancelBlockAction(friend.friendshipId!));
+        toast("unblock has been unblocked!");
+        onClose();
       }
     } catch (error: any) {
       setOperation((prev) => ({
@@ -71,9 +76,9 @@ export default function RequestActionDialog({
           <h1>{operation.message} </h1>
         ) : (
           <>
-            <h1>Are u sure to reject the request from {friend.name}?</h1>
+            <h1>Are u sure to unblock {friend.name}?</h1>
             <div className="flex justify-center gap-4 ">
-              <button onClick={rejectRequest} className="btn btn-sm btn-error">
+              <button onClick={removeBlock} className="btn btn-sm btn-error">
                 Yes
               </button>
               <button onClick={onClose} className="btn btn-sm  bg-slate-900">

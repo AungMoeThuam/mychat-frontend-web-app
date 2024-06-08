@@ -4,9 +4,11 @@ import { useState } from "react";
 import UnFriendDialog from "./UnFriendDialog";
 import { backendUrlWihoutApiEndpoint } from "../../../utils/backendConfig";
 import { tempCatPhoto } from "../../../assets/temporaryProfilePhoto";
+import BlockFriendDialog from "./addfriends/dialogs/BlockFriendDialog";
 
 export default function FriendCard({ friend }: { friend: Friend }) {
   const [unFriendDialog, setUnFriendDialog] = useState(false);
+  const [blockFriendDialog, setBlockFriendDialog] = useState(false);
   return (
     <div className="flex  gap-2  justify-between p-1 rounded  items-center pr-4   hover:bg-teal-800">
       <div className="flex gap-2">
@@ -25,7 +27,10 @@ export default function FriendCard({ friend }: { friend: Friend }) {
         </div>
       </div>
       <div className="flex gap-2">
-        <button className=" btn btn-sm    bg-red-500  text-slate-950">
+        <button
+          onClick={() => setBlockFriendDialog(true)}
+          className=" btn btn-sm    bg-red-500  text-slate-950"
+        >
           Block
         </button>
         <Link
@@ -51,6 +56,21 @@ export default function FriendCard({ friend }: { friend: Friend }) {
               : friend.requester
           }
           onClose={() => setUnFriendDialog(false)}
+        />
+      )}
+      {blockFriendDialog && (
+        <BlockFriendDialog
+          people={{
+            name: friend.name,
+            friendId: friend.friendId,
+            friendshipId: friend.roomId,
+          }}
+          currentUserId={
+            friend.requester === friend.friendId
+              ? friend.receipent
+              : friend.requester
+          }
+          setBlockFriendDialog={() => setBlockFriendDialog(false)}
         />
       )}
     </div>

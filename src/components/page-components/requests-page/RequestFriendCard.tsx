@@ -21,8 +21,7 @@ export default function RequestFriendCard({ friend }: { friend: Friend }) {
     try {
       const result = await FriendShipApi.manageFriendShipStatus({
         type: "accept",
-        relationshipStatus: 1,
-        id: friend.friendId,
+        friendId: friend.friendId,
         currentUserId: friend.receipent,
       });
       if (result.error)

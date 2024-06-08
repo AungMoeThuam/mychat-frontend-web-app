@@ -1,12 +1,10 @@
 import { Dispatch, SetStateAction, useContext } from "react";
-import { User } from "../../../../../utils/constants/types";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, StoreDispatch } from "../../../../../redux/store/store";
 import { FriendShipApi } from "../../../../../service/friend-api-service";
 import { searchfriendNameThunk } from "../../../../../redux/features/people/peopleThunks";
 import Modal from "../../../../share-components/modal/Modal";
 import toast from "react-hot-toast";
-import { RelationshipActionDialogs } from "../AddFriendCard";
 import { SearchNameContext } from "../../../../../pages/search-people/SearchPeoplePage";
 import {
   operationError,
@@ -14,15 +12,13 @@ import {
   operationSuccess,
 } from "../../../../../redux/slices/friendshipDialogSlice";
 
-export default function AddFriendDialog({
+export default function BlockFriendDialog({
   people,
-  setUnFriendShipActionDialog,
+  setBlockFriendDialog,
   currentUserId,
 }: {
-  people: User;
-  setUnFriendShipActionDialog: Dispatch<
-    SetStateAction<RelationshipActionDialogs>
-  >;
+  people: { friendshipId: string; friendId: string; name: string };
+  setBlockFriendDialog: Dispatch<SetStateAction<any>>;
   currentUserId: string;
 }) {
   const searchNameContextConsumer = useContext(SearchNameContext);
@@ -31,28 +27,25 @@ export default function AddFriendDialog({
   );
   const dispatch = useDispatch<StoreDispatch>();
 
-  const action = async (
-    id: string,
-    process: "cancel" | "accept" = "accept"
-  ) => {
+  const action = async (id: string) => {
     dispatch(operationLoading());
-    if (process === "cancel") return;
-
+    alert(people.friendshipId);
     try {
-      const res = await FriendShipApi.manageFriendShipStatus({
-        type: "request",
-        friendId: id,
+      let res = await FriendShipApi.block(
+        people.friendshipId,
         currentUserId,
-      });
+        people.friendId
+      );
+
       if (res.error) {
         toast.error(res.error, { duration: 4000 });
         dispatch(operationError(res.error));
       } else {
         toast("requested successfully!");
         operationSuccess();
-        setUnFriendShipActionDialog((prev) => ({
+        setBlockFriendDialog((prev: any) => ({
           ...prev,
-          openAddFriendDialog: false,
+          openBlockFriendDialog: false,
         }));
         dispatch(
           searchfriendNameThunk(
@@ -62,7 +55,7 @@ export default function AddFriendDialog({
       }
     } catch (error: any) {
       toast.error(error.message + " ❌❌❌", { duration: 4000 });
-      operationError(error.message);
+      dispatch(operationError(error.message));
     }
   };
 
@@ -74,9 +67,9 @@ export default function AddFriendDialog({
               return;
             }
           : () =>
-              setUnFriendShipActionDialog((prev) => ({
+              setBlockFriendDialog((prev: any) => ({
                 ...prev,
-                openAddFriendDialog: false,
+                openBlockFriendDialog: false,
               }))
       }
     >
@@ -94,9 +87,9 @@ export default function AddFriendDialog({
             <button
               onClick={() => {
                 dispatch(searchfriendNameThunk(searchNameContextConsumer));
-                setUnFriendShipActionDialog((prev) => ({
+                setBlockFriendDialog((prev: any) => ({
                   ...prev,
-                  openAddFriendDialog: false,
+                  openBlockFriendDialog: false,
                 }));
               }}
               className=" btn btn-sm bg-teal-500 text-slate-950"
@@ -106,11 +99,11 @@ export default function AddFriendDialog({
           </div>
         ) : (
           <>
-            <h1>Are u sure to add friend to {people.name}? </h1>
+            <h1>Are u sure to block {people.name}? </h1>
             <div className="flex  justify-center gap-5 ">
               <button
                 onClick={() => {
-                  action(people._id);
+                  action(people.friendId);
                 }}
                 className=" btn btn-sm bg-teal-500 text-slate-950"
               >
@@ -118,9 +111,9 @@ export default function AddFriendDialog({
               </button>
               <button
                 onClick={() => {
-                  setUnFriendShipActionDialog((prev) => ({
+                  setBlockFriendDialog((prev: any) => ({
                     ...prev,
-                    openAddFriendDialog: false,
+                    openBlockFriendDialog: false,
                   }));
                 }}
                 className="btn  btn-sm bg-slate-900"

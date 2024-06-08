@@ -27,8 +27,7 @@ export default function PendingActionDialog({
       const result = await FriendShipApi.manageFriendShipStatus({
         type: "reject",
         currentUserId: friend.requester,
-        id: friend.friendId,
-        relationshipStatus: 0,
+        friendId: friend.friendId,
       });
       if (result.error !== null)
         setOperation((prev) => ({

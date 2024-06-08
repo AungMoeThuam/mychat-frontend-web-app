@@ -8,11 +8,13 @@ import { tempCatPhoto } from "../../../../assets/temporaryProfilePhoto";
 import AddFriendDialog from "./dialogs/AddFriendDialog";
 import RejectOrCancelFriendRequestDialog from "./dialogs/RejectOrCancelFriendRequestDialog";
 import AcceptFriendDialog from "./dialogs/AcceptFriendDialog";
+import BlockFriendDialog from "./dialogs/BlockFriendDialog";
 
 export type RelationshipActionDialogs = {
   openAddFriendDialog: boolean;
   openRejectOrCancelFriendRequestDialog: boolean;
   openAcceptFriendDialog: boolean;
+  openBlockFriendDialog: boolean;
 };
 
 export default function AddFriendCard({ people }: { people: User }) {
@@ -21,6 +23,7 @@ export default function AddFriendCard({ people }: { people: User }) {
       openAddFriendDialog: false,
       openRejectOrCancelFriendRequestDialog: false,
       openAcceptFriendDialog: false,
+      openBlockFriendDialog: false,
     });
 
   const currentUserId = useSelector(
@@ -115,7 +118,15 @@ export default function AddFriendCard({ people }: { people: User }) {
         {/* if the person is already friend with the current user */}
         {people.status === 3 && "Friend"}
         {people.status !== 5 && (
-          <button className=" btn btn-sm    bg-red-500  text-slate-950">
+          <button
+            onClick={() =>
+              setRelationshipActionDialogs((prev) => ({
+                ...prev,
+                openBlockFriendDialog: true,
+              }))
+            }
+            className=" btn btn-sm    bg-red-500  text-slate-950"
+          >
             Block
           </button>
         )}
@@ -143,6 +154,17 @@ export default function AddFriendCard({ people }: { people: User }) {
           people={people}
           currentUserId={currentUserId}
           setOpenAcceptFriendDialog={setRelationshipActionDialogs}
+        />
+      )}
+      {relationshipActionDialogs.openBlockFriendDialog && (
+        <BlockFriendDialog
+          people={{
+            friendId: people._id,
+            friendshipId: people.friendshipId!,
+            name: people.name,
+          }}
+          currentUserId={currentUserId}
+          setBlockFriendDialog={setRelationshipActionDialogs}
         />
       )}
     </div>

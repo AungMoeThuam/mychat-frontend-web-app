@@ -67,19 +67,6 @@ export default function ChatInput(props: { friendId: any; roomId: any }) {
   };
 
   useEffect(() => {
-    const fi = sessionStorage.getItem(roomId);
-    if (fi) {
-      let a = fi.split(":")[0] === "blob";
-      if (a) fileDisplayRef!.current!.src = fi;
-    }
-
-    return () => {
-      if (fileDisplayRef && fileDisplayRef.current)
-        fileDisplayRef.current.src = "";
-    };
-  }, [roomId]);
-
-  useEffect(() => {
     let url: string;
 
     if (fileDisplayRef && fileDisplayRef.current && file !== null) {
@@ -93,8 +80,11 @@ export default function ChatInput(props: { friendId: any; roomId: any }) {
       }
     }
 
-    return () => URL.revokeObjectURL(url);
-  }, [file]);
+    return () => {
+      URL.revokeObjectURL(url);
+      if (file) setFile(null);
+    };
+  }, [file, roomId]);
 
   const recordVoice = async () => {
     if (file) setFile(null);

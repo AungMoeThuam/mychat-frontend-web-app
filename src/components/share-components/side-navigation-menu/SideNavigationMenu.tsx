@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState, StoreDispatch } from "../../../redux/store/store";
 import { logout } from "../../../redux/features/user/userSlice";
 import socket from "../../../service/socket";
+import { tempCatPhoto } from "../../../assets/temporaryProfilePhoto";
 
 export default function SideNavigationMenu() {
   const dispatch = useDispatch<StoreDispatch>();
@@ -24,7 +25,11 @@ export default function SideNavigationMenu() {
             <div className={` w-12 h-12 avatar `}>
               <img
                 className="rounded-full  w-full    "
-                src={`${backendUrlWihoutApiEndpoint}/resources/profiles/${profilePhoto.path}`}
+                src={
+                  profilePhoto.path
+                    ? `${backendUrlWihoutApiEndpoint}/resources/profiles/${profilePhoto.path}`
+                    : tempCatPhoto
+                }
               />
             </div>
           </Link>

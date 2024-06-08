@@ -29,9 +29,7 @@ const loginUser = createAsyncThunk(
     } catch (error: unknown) {
       if (error instanceof Error)
         return dispatch(loginError({ message: error.message }));
-      dispatch(loginError({ message: UNKNOWN_ERROR }));
-    } finally {
-      dispatch(loginLoading(false));
+      if (er) dispatch(loginError({ message: UNKNOWN_ERROR }));
     }
   }
 );

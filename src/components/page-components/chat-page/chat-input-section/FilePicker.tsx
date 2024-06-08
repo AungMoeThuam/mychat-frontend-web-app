@@ -34,10 +34,6 @@ const FilePicker = forwardRef<
             setFile(e.target.files[0]);
           } else alert("file too large");
 
-          sessionStorage.setItem(
-            roomId,
-            URL.createObjectURL(e.target.files![0])
-          );
           e.target.value = "";
           ref!.current!.focus();
         }}

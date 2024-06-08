@@ -15,6 +15,7 @@ interface Friend {
   active?: boolean;
   profilePhoto: ProfilePhoto;
   unreadMessageCount: number;
+  friendshipId?: string;
 }
 interface Message {
   senderId: string;

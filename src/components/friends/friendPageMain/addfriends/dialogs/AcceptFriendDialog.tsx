@@ -42,8 +42,7 @@ export default function AcceptFriendDialog({
     setOperation((prev) => ({ ...prev, loading: true }));
     try {
       const { error } = await FriendShipApi.manageFriendShipStatus({
-        relationshipStatus: people.status,
-        id: people._id,
+        friendId: people._id,
         currentUserId,
         type: "accept",
       });

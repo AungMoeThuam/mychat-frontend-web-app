@@ -10,6 +10,7 @@ import {
   UPLOAD_IMAGE_FILE_SIZE_WARNING,
 } from "../../../utils/constants/messages/errorMessages";
 import { allowUploadImageExtensionTypes } from "../../../utils/constants/allowImageUploadExtensionTypes";
+import { tempCatPhoto } from "../../../assets/temporaryProfilePhoto";
 
 export default function UserProfilePhotoDisplayer() {
   const dispatch = useDispatch<StoreDispatch>();
@@ -111,7 +112,11 @@ export default function UserProfilePhotoDisplayer() {
       <img
         ref={photoRef}
         className=" aspect-auto object-cover w-40 h-40 rounded-full"
-        src={`${backendUrlWihoutApiEndpoint}/resources/profiles/${currentUser.profilePhoto.path}`}
+        src={
+          currentUser.profilePhoto.path
+            ? `${backendUrlWihoutApiEndpoint}/resources/profiles/${currentUser.profilePhoto.path}`
+            : tempCatPhoto
+        }
         alt="profile"
       />
       <div>

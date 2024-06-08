@@ -1,7 +1,25 @@
 import { ErrorResult, SuccessResult } from "../utils/resultHelperFunctions";
 import { Result } from "../utils/constants/types";
 import API from "./api-setup";
+function receipentDetermintor(
+  type: "request" | "accept" | "cancelrequest" | "reject" | "block" | "unblock",
+  transactionIds: {
+    currentUserId: string;
+    friendId: string;
+  }
+) {
+  let currentUserIsTheReceivererActions = ["accept", "reject"];
 
+  if (currentUserIsTheReceivererActions.includes(type))
+    return {
+      receipentId: transactionIds.currentUserId,
+      requesterId: transactionIds.friendId,
+    };
+  return {
+    receipentId: transactionIds.friendId,
+    requesterId: transactionIds.currentUserId,
+  };
+}
 const FriendShipApi = {
   searchFriendsByName: async (
     peopleSearch: string,
@@ -21,19 +39,55 @@ const FriendShipApi = {
   },
 
   manageFriendShipStatus: async (friendshipInfo: {
-    relationshipStatus: number | undefined;
-    id: string;
-    type: "request" | "accept" | "cancelrequest" | "reject";
+    friendId: string;
+    type:
+      | "request"
+      | "accept"
+      | "cancelrequest"
+      | "reject"
+      | "block"
+      | "unblock";
     currentUserId: string;
   }): Promise<Result> => {
     try {
-      const { type, relationshipStatus, id, currentUserId } = friendshipInfo;
-      const mybody =
-        relationshipStatus === 1
-          ? { receipentId: currentUserId, requesterId: id }
-          : { receipentId: id, requesterId: currentUserId };
+      const { type, friendId, currentUserId } = friendshipInfo;
+
+      const mybody = receipentDetermintor(type, {
+        currentUserId,
+        friendId,
+      });
+
+      console.log(mybody);
 
       const { data } = await API.post(`/friends/${type}`, mybody);
+
+      return SuccessResult(data);
+    } catch (error) {
+      return ErrorResult(error);
+    }
+  },
+
+  block: async (
+    friendshipId: string,
+    currentUserId: string,
+    friendId: string
+  ): Promise<Result> => {
+    try {
+      const body = { friendshipId, currentUserId, friendId };
+      const { data } = await API.post("/friends/block", body);
+
+      return SuccessResult(data);
+    } catch (error) {
+      return ErrorResult(error);
+    }
+  },
+  unblock: async (
+    friendshipId: string,
+    currentUserId: string
+  ): Promise<Result> => {
+    try {
+      const body = { friendshipId, currentUserId };
+      const { data } = await API.post("/friends/unblock", body);
 
       return SuccessResult(data);
     } catch (error) {
@@ -57,6 +111,15 @@ const FriendShipApi = {
   getPendingsList: async (currentUserId: string): Promise<Result> => {
     try {
       const { data } = await API.get(`/friends/pendings/${currentUserId}`);
+      return SuccessResult(data);
+    } catch (error) {
+      return ErrorResult(error);
+    }
+  },
+  getBlocksList: async (currentUserId: string): Promise<Result> => {
+    try {
+      const { data } = await API.get(`/friends/blocks/${currentUserId}`);
+      console.log(data, "---");
       return SuccessResult(data);
     } catch (error) {
       return ErrorResult(error);
