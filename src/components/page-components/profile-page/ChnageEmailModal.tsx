@@ -4,7 +4,6 @@ import Modal from "../../share-components/modal/Modal";
 type ChangeInfo = {
   changePassword: boolean;
   changeEmail: boolean;
-  changePhoneNo: boolean;
 };
 
 export default function ChangeEmailModal({

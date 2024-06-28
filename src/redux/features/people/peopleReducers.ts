@@ -1,12 +1,15 @@
 import { PayloadAction } from "@reduxjs/toolkit";
 import { PeopleState } from "./peopleState";
-import { User } from "../../../utils/constants/types";
+import { Person } from "../../../lib/models/models";
 
 const peopleReducers = {
   searchPeopleLoading: (state: PeopleState) => {
     state.loading = true;
   },
-  searchPeopleSuccess: (state: PeopleState, action: PayloadAction<User[]>) => {
+  searchPeopleSuccess: (
+    state: PeopleState,
+    action: PayloadAction<Person[]>
+  ) => {
     state.poepleList = action.payload;
     state.loading = false;
   },
@@ -24,8 +27,8 @@ const peopleReducers = {
     }>
   ) => {
     state.poepleList = state.poepleList.map((person) => {
-      if (person.requester === action.payload.requester) {
-        person.status = action.payload.status;
+      if (person.friendshipInitiatorId === action.payload.requester) {
+        person.friendshipStatus = action.payload.status;
         return person;
       } else return person;
     });

@@ -1,5 +1,4 @@
 import { Dispatch, SetStateAction, useContext } from "react";
-import { User } from "../../../../../utils/constants/types";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, StoreDispatch } from "../../../../../redux/store/store";
 import { FriendShipApi } from "../../../../../service/friend-api-service";
@@ -13,13 +12,14 @@ import {
   operationLoading,
   operationSuccess,
 } from "../../../../../redux/slices/friendshipDialogSlice";
+import { Person } from "../../../../../lib/models/models";
 
 export default function AddFriendDialog({
   people,
   setUnFriendShipActionDialog,
   currentUserId,
 }: {
-  people: User;
+  people: Person;
   setUnFriendShipActionDialog: Dispatch<
     SetStateAction<RelationshipActionDialogs>
   >;
@@ -43,6 +43,7 @@ export default function AddFriendDialog({
         type: "request",
         friendId: id,
         currentUserId,
+        friendshipId: people.friendshipId!,
       });
       if (res.error) {
         toast.error(res.error, { duration: 4000 });
@@ -106,11 +107,11 @@ export default function AddFriendDialog({
           </div>
         ) : (
           <>
-            <h1>Are u sure to add friend to {people.name}? </h1>
+            <h1>Are u sure to add friend to {people.personName}? </h1>
             <div className="flex  justify-center gap-5 ">
               <button
                 onClick={() => {
-                  action(people._id);
+                  action(people.personId);
                 }}
                 className=" btn btn-sm bg-teal-500 text-slate-950"
               >

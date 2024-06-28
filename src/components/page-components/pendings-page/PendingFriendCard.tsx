@@ -2,9 +2,9 @@ import { useState } from "react";
 import { backendUrlWihoutApiEndpoint } from "../../../utils/backendConfig";
 import { tempCatPhoto } from "../../../assets/temporaryProfilePhoto";
 import PendingActionDialog from "./PendingActionDialog";
-import { Friend } from "../../../utils/constants/types";
+import { Person } from "../../../lib/models/models";
 
-export default function PendingFriendCard({ friend }: { friend: Friend }) {
+export default function PendingFriendCard({ person }: { person: Person }) {
   const [pendingActionDialog, setPendingActionDialog] = useState(false);
 
   return (
@@ -13,13 +13,13 @@ export default function PendingFriendCard({ friend }: { friend: Friend }) {
         <img
           className=" avatar w-10 h-10 rounded-full object-cover"
           src={
-            friend.profilePhoto
-              ? `${backendUrlWihoutApiEndpoint}/resources/profiles/${friend.profilePhoto.path}`
+            person.profilePhoto
+              ? `${backendUrlWihoutApiEndpoint}/resources/profiles/${person.profilePhoto.path}`
               : tempCatPhoto
           }
         />
 
-        <h1>{friend.name}</h1>
+        <h1>{person.personName}</h1>
       </div>
       <div className="flex gap-4">
         <button
@@ -31,7 +31,7 @@ export default function PendingFriendCard({ friend }: { friend: Friend }) {
       </div>
       {pendingActionDialog && (
         <PendingActionDialog
-          friend={friend}
+          person={person}
           onClose={() => setPendingActionDialog(false)}
         />
       )}

@@ -13,12 +13,10 @@ import UserProfilePhotoDisplayer from "../../components/page-components/profile-
 import ChangeableInfoList from "../../components/page-components/profile-page/ChangeableInfoList";
 import ChangePasswordModal from "../../components/page-components/profile-page/ChangePasswordModal";
 import ChangeEmailModal from "../../components/page-components/profile-page/ChnageEmailModal";
-import ChangePhoneModal from "../../components/page-components/profile-page/ChangePhoneModal";
 
 type ChangeInfo = {
   changePassword: boolean;
   changeEmail: boolean;
-  changePhoneNo: boolean;
 };
 
 export default function ProfilePage() {
@@ -39,7 +37,6 @@ export default function ProfilePage() {
   const [changeInfo, setChangeInfo] = useState<ChangeInfo>({
     changePassword: false,
     changeEmail: false,
-    changePhoneNo: false,
   });
 
   useEffect(() => {
@@ -88,18 +85,18 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
-      <Toaster position="bottom-center" />
+      <Toaster position="top-right" />
 
       {/* modal dialogs */}
 
       {changeInfo.changePassword && (
-        <ChangePasswordModal changeAction={setChangeInfo} />
+        <ChangePasswordModal
+          changeAction={setChangeInfo}
+          userId={currentUserId}
+        />
       )}
       {changeInfo.changeEmail && (
         <ChangeEmailModal changeAction={setChangeInfo} email={user.email} />
-      )}
-      {changeInfo.changePhoneNo && (
-        <ChangePhoneModal changeAction={setChangeInfo} phone={user.phone} />
       )}
     </div>
   );

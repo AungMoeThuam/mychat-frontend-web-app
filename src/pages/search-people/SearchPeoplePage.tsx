@@ -49,10 +49,13 @@ function AddFriendsPage() {
               poepleList.map((item) => {
                 return (
                   <AddFriendCard
-                    key={item._id}
+                    key={item.personId}
                     people={{
                       ...item,
-                      status: item._id === currentUserId ? 5 : item.status,
+                      friendshipStatus:
+                        item.personId === currentUserId
+                          ? 5
+                          : item.friendshipStatus,
                     }}
                   />
                 );

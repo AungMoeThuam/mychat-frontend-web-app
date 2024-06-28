@@ -55,7 +55,6 @@ interface User {
 interface RegisterForm {
   name: String;
   email: String;
-  phone: String;
   password: String;
   confirmPassword: String;
 }

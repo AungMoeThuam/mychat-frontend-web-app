@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import { ProfilePhoto } from "../utils/constants/types";
 import { FriendShipApi } from "../service/friend-api-service";
+
 type FriendInfo = {
   name: string;
   profilePhoto: ProfilePhoto;
+  friendId: string;
 };
 
 type useFriendInfoHookParams = {
-  friendId: string;
   roomId: string;
   currentUserId: string;
 };
 export default function useFriendInfo({
-  friendId,
   roomId,
   currentUserId,
 }: useFriendInfoHookParams) {
@@ -25,10 +25,10 @@ export default function useFriendInfo({
     async function checkFriendShipStatus() {
       try {
         const result = await FriendShipApi.checkFriendShipStatus(
-          friendId,
           roomId,
           currentUserId
         );
+        console.log(result.data);
 
         if (!result.error)
           return setFriendInfo((prev) => ({ ...prev, data: result.data }));

@@ -1,24 +1,23 @@
 import { ErrorResult, SuccessResult } from "../utils/resultHelperFunctions";
 import { Result } from "../utils/constants/types";
 import API from "./api-setup";
+import { AxiosError } from "axios";
 function receipentDetermintor(
-  type: "request" | "accept" | "cancelrequest" | "reject" | "block" | "unblock",
+  type: string,
   transactionIds: {
     currentUserId: string;
     friendId: string;
+    friendshipId: string;
   }
 ) {
-  let currentUserIsTheReceivererActions = ["accept", "reject"];
-
-  if (currentUserIsTheReceivererActions.includes(type))
+  if (type === "request")
     return {
-      receipentId: transactionIds.currentUserId,
-      requesterId: transactionIds.friendId,
+      receipentId: transactionIds.friendId,
+      requesterId: transactionIds.currentUserId,
+      friendshipId: transactionIds.friendshipId,
     };
-  return {
-    receipentId: transactionIds.friendId,
-    requesterId: transactionIds.currentUserId,
-  };
+
+  return { friendshipId: transactionIds.friendshipId };
 }
 const FriendShipApi = {
   searchFriendsByName: async (
@@ -40,29 +39,24 @@ const FriendShipApi = {
 
   manageFriendShipStatus: async (friendshipInfo: {
     friendId: string;
-    type:
-      | "request"
-      | "accept"
-      | "cancelrequest"
-      | "reject"
-      | "block"
-      | "unblock";
+    type: "request" | "accept" | "cancelrequest" | "reject";
     currentUserId: string;
+    friendshipId: string;
   }): Promise<Result> => {
     try {
-      const { type, friendId, currentUserId } = friendshipInfo;
+      const { type, friendId, currentUserId, friendshipId } = friendshipInfo;
 
       const mybody = receipentDetermintor(type, {
         currentUserId,
+        friendshipId,
         friendId,
       });
-
-      console.log(mybody);
 
       const { data } = await API.post(`/friends/${type}`, mybody);
 
       return SuccessResult(data);
     } catch (error) {
+      if (error instanceof AxiosError) console.log(error.response?.data);
       return ErrorResult(error);
     }
   },
@@ -95,13 +89,9 @@ const FriendShipApi = {
     }
   },
 
-  unFriend: async (friendshipInfo: {
-    id: string;
-    currentUserId: string;
-  }): Promise<Result> => {
+  unFriend: async (friendshipId: string): Promise<Result> => {
     try {
-      const { id, currentUserId } = friendshipInfo;
-      const mybody = { friendId: id, userId: currentUserId };
+      const mybody = { friendshipId };
       const { data } = await API.post(`/friends/unfriend`, mybody);
       return SuccessResult(data);
     } catch (error) {
@@ -141,20 +131,17 @@ const FriendShipApi = {
       return ErrorResult(error);
     }
   },
-  checkFriendShipStatus: async (
-    friendId: string,
-    roomId: string,
-    currentUserId: string
-  ) => {
+  checkFriendShipStatus: async (roomId: string, currentUserId: string) => {
     try {
       const { data } = await API.post(`/friends/check/friend`, {
-        friendId,
         roomId,
         currentUserId,
       });
+      console.log(data);
 
-      return SuccessResult(data);
+      return SuccessResult({ ...data, friendId: data._id });
     } catch (error) {
+      if (error instanceof AxiosError) console.log(error.response?.data);
       return ErrorResult(error);
     }
   },

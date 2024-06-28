@@ -1,18 +1,18 @@
 import { useDispatch } from "react-redux";
 import { FriendShipApi } from "../../../service/friend-api-service";
-import { Friend } from "../../../utils/constants/types";
 import Modal from "../../share-components/modal/Modal";
 import { StoreDispatch } from "../../../redux/store/store";
 import { acceptRequestAction } from "../../../redux/features/friend-request/requestSlice";
 import { useState } from "react";
+import { Person } from "../../../lib/models/models";
 
 type RequestActionDialog = {
   onClose: () => void;
-  friend: Friend;
+  person: Person;
 };
 export default function RequestActionDialog({
   onClose,
-  friend,
+  person,
 }: RequestActionDialog) {
   const dispatch = useDispatch<StoreDispatch>();
   const [operation, setOperation] = useState({
@@ -25,8 +25,9 @@ export default function RequestActionDialog({
     try {
       const result = await FriendShipApi.manageFriendShipStatus({
         type: "reject",
-        currentUserId: friend.receipent,
-        friendId: friend.friendId,
+        currentUserId: person.friendshipReceiverId!,
+        friendId: person.personId,
+        friendshipId: person.friendshipId!,
       });
       if (result.error) {
         setOperation((prev) => ({
@@ -40,7 +41,7 @@ export default function RequestActionDialog({
           ...prev,
           loading: false,
         }));
-        dispatch(acceptRequestAction(friend.friendId));
+        dispatch(acceptRequestAction(person.personId));
       }
     } catch (error: any) {
       setOperation((prev) => ({
@@ -71,7 +72,7 @@ export default function RequestActionDialog({
           <h1>{operation.message} </h1>
         ) : (
           <>
-            <h1>Are u sure to reject the request from {friend.name}?</h1>
+            <h1>Are u sure to reject the request from {person.personName}?</h1>
             <div className="flex justify-center gap-4 ">
               <button onClick={rejectRequest} className="btn btn-sm btn-error">
                 Yes

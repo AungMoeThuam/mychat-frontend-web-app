@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 
 import { NavLink } from "react-router-dom";
-import { Friend } from "../../../../utils/constants/types";
+
 import { backendUrlWihoutApiEndpoint } from "../../../../utils/backendConfig";
 import timeDurationFormatter from "../../../../utils/timeDurationFormatter";
+import { Friend } from "../../../../lib/models/models";
 const tempPhoto =
   "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 export default function Conversation({
@@ -13,52 +14,55 @@ export default function Conversation({
 }) {
   const [time, setTime] = useState<string>("");
   const {
-    roomId,
-    senderId,
-    name,
+    friendshipId,
+    lastMessageSenderId,
+    friendName,
     friendId,
-    messageCreatedAt,
-    active,
-    content,
+    lastMessageCreatedAt,
+    isActiveNow,
+    lastMessageContent,
     CurrentUserIsLastMessageSender,
-    type,
-    deletedByReceiver,
+    lastMessageType,
+    isTheLastMessageDeletedByReceiver,
     profilePhoto,
-    unreadMessageCount,
+    unreadMessagesCount,
   } = data;
 
   function displayMessage() {
-    if (type === undefined) return "no conversation yet!";
+    if (lastMessageType === undefined) return "no conversation yet!";
     let text = CurrentUserIsLastMessageSender === true ? "you: " : "";
 
-    if (senderId === friendId && deletedByReceiver === true) {
+    if (
+      lastMessageSenderId === friendId &&
+      isTheLastMessageDeletedByReceiver === true
+    ) {
       text += "deleted message";
       return text;
     }
 
-    if (type?.split("/")[0] == "image" && "sent a photo") {
+    if (lastMessageType?.split("/")[0] == "image" && "sent a photo") {
       text += "sent a photo";
       return text;
     }
 
-    if (type?.split("/")[0] == "video" && "sent a video") {
+    if (lastMessageType?.split("/")[0] == "video" && "sent a video") {
       text += "sent a video";
       return text;
     }
 
     if (
-      type?.split("/")[0] !== "image" &&
-      type?.split("/")[0] !== "video" &&
-      type !== "text" &&
+      lastMessageType?.split("/")[0] !== "image" &&
+      lastMessageType?.split("/")[0] !== "video" &&
+      lastMessageType !== "text" &&
       "sent a file"
     ) {
       text += "sent a file";
       return text;
     }
-    if (content === undefined) return "no message yet!";
-    if (content.length <= 10) return (text += content);
+    if (lastMessageContent === undefined) return "no message yet!";
+    if (lastMessageContent.length <= 10) return (text += lastMessageContent);
     else {
-      let a = content
+      let a = lastMessageContent
         .split("")
         .filter((_: any, index: number) => index <= 10)
         .join("");
@@ -71,22 +75,21 @@ export default function Conversation({
   });
 
   useEffect(() => {
-    if (!messageCreatedAt) return;
-    setTime(timeDurationFormatter(new Date(messageCreatedAt).getTime()));
+    if (!lastMessageCreatedAt) return;
+    setTime(timeDurationFormatter(new Date(lastMessageCreatedAt).getTime()));
     let id = setInterval(() => {
       setTime((prev: string) => {
-        prev = timeDurationFormatter(new Date(messageCreatedAt).getTime());
+        prev = timeDurationFormatter(new Date(lastMessageCreatedAt).getTime());
         return prev;
       });
     }, 60000);
 
     return () => clearInterval(id);
-  }, [messageCreatedAt, time]);
+  }, [lastMessageCreatedAt, time]);
 
   return (
     <NavLink
-      to={"/messages/" + roomId + "/" + friendId}
-      state={{ friendId, friendName: name, profilePhoto }}
+      to={"/messages/" + friendshipId + "/" + friendId}
       id="f"
       className={({ isActive }) =>
         isActive
@@ -94,7 +97,9 @@ export default function Conversation({
           : " flex items-center h-16 rounded-md cursor-pointer  gap-3 mb-2  text-white  hover:bg-teal-950"
       }
     >
-      <div className={` w-12 h-12 avatar ${active ? "online" : "offline"}`}>
+      <div
+        className={` w-12 h-12 avatar ${isActiveNow ? "online" : "offline"}`}
+      >
         <img
           className="rounded-full  avatar h-10 w-10 "
           src={
@@ -107,7 +112,7 @@ export default function Conversation({
 
       <div className=" hidden md:hidden lg:flex flex-1  justify-between items-center  ">
         <div>
-          <h2 className=" font-semibold">{name}</h2>
+          <h2 className=" font-semibold">{friendName}</h2>
           <p
             style={{
               fontSize: "0.8rem",
@@ -122,12 +127,12 @@ export default function Conversation({
           <p style={{ fontSize: "0.7rem" }} className="  text-slate-500">
             {time}
           </p>
-          {unreadMessageCount !== 0 && !CurrentUserIsLastMessageSender && (
+          {unreadMessagesCount !== 0 && !CurrentUserIsLastMessageSender && (
             <p
               style={{ fontSize: "0.7rem" }}
               className=" bg-red-400 rounded-full w-4 h-4 flex justify-center"
             >
-              {unreadMessageCount}
+              {unreadMessagesCount}
             </p>
           )}
         </div>

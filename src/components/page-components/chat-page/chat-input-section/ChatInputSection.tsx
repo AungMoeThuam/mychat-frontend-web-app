@@ -29,7 +29,6 @@ export default function ChatInput(props: { friendId: any; roomId: any }) {
   const sendMessage = async (e: FormEvent) => {
     e.preventDefault();
     console.log(file);
-    // if (!textInputRef.current?.value.trim() && !file) return;
     if (!content.trim() && !file) return;
 
     let temporaryMessageId = "-temp" + Math.round(Math.random() * 1000000);
@@ -40,11 +39,10 @@ export default function ChatInput(props: { friendId: any; roomId: any }) {
         type: file ? file.type : "text",
         senderId: currentUserId,
         receiverId: props.friendId,
-        roomId: props.roomId,
-        status: 9,
+        friendshipId: props.roomId,
+        deliveryStatus: 9,
         createdAt: new Date().toLocaleString(),
-        deletedBySender: false,
-        deletedByReceiver: false,
+        isDeletedByReceiver: false,
       })
     );
 
@@ -56,12 +54,15 @@ export default function ChatInput(props: { friendId: any; roomId: any }) {
       type: f ? f.type : "text",
       senderId: currentUserId,
       receiverId: props.friendId,
-      roomId: props.roomId,
+      friendshipId: props.roomId,
       file: f,
     });
     if (result.error) {
       toast("failed to send!");
     }
+
+    setContent("");
+    sessionStorage.removeItem(roomId);
     console.log("result ", result);
     if (file != null) setFile(null);
   };

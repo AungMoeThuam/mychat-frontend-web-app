@@ -18,6 +18,8 @@ const MessageApi = {
         friendId,
       });
 
+      console.log("me - ", res.data);
+
       return SuccessResult(res.data);
     } catch (error) {
       return ErrorResult(error);
@@ -58,7 +60,7 @@ const MessageApi = {
     type: string;
     senderId: string;
     receiverId: string;
-    roomId: string;
+    friendshipId: string;
     file?: File | null;
   }) => {
     try {

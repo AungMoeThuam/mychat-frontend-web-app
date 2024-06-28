@@ -1,12 +1,26 @@
 import { useEffect, useState } from "react";
 import { UserApi } from "../service/userApi";
+import { User } from "../lib/models/models";
 
-export default function useUserProfileInfo(currentUserId: string) {
-  const [userInfo, setUserInfo] = useState({
+type UserState = {
+  loading: boolean;
+  error: boolean;
+  message: string;
+  data: User;
+};
+export default function useUserProfileInfo(currentUserId: string): UserState {
+  const [userInfo, setUserInfo] = useState<UserState>({
     loading: false,
     error: false,
     message: "",
-    data: { name: "", email: "", _id: "", phone: "" },
+    data: {
+      name: "",
+      email: "",
+      id: "",
+      isActiveNow: false,
+      profilePhoto: null,
+      phone: "",
+    },
   });
   useEffect(() => {
     async function fetchUserInfo() {
@@ -20,7 +34,6 @@ export default function useUserProfileInfo(currentUserId: string) {
             error: true,
             message: result.error ? result.error : "Unknown Error!",
           }));
-
         return setUserInfo((prev) => ({
           ...prev,
           loading: false,
@@ -35,6 +48,7 @@ export default function useUserProfileInfo(currentUserId: string) {
         }));
       }
     }
+
     fetchUserInfo();
   }, []);
   return {

@@ -1,6 +1,6 @@
 import { PayloadAction } from "@reduxjs/toolkit";
-import { Message } from "../../../utils/constants/types";
 import { MessageState } from "./messageState";
+import { Message } from "../../../lib/models/models";
 
 const messageReducers = {
   fetchMessagesError: (
@@ -44,23 +44,20 @@ const messageReducers = {
     state.messagesList.push(tempMsg);
   },
   updateMessageStatusIntoSeenAction: (state: MessageState) => {
-    let noNeedUpdate = state.messagesList.filter(
-      (m) => m.status !== 0 && m.status !== 1
-    );
+    let noNeedUpdate = state.messagesList.filter((m) => m.deliveryStatus == 2);
     let needUpdate = state.messagesList.filter(
-      (m) => m.status === 1 || m.status === 0
+      (m) => m.deliveryStatus === 1 || m.deliveryStatus === 0
     );
     needUpdate = needUpdate.map((e) => {
-      e.status = 2;
+      e.deliveryStatus = 2;
       return e;
     });
 
     state.messagesList = [...noNeedUpdate, ...needUpdate];
-    console.log(state);
   },
   updateMessageStatusIntoDeliveredAction: (state: MessageState) => {
     state.messagesList.forEach((message) => {
-      if (message.status === 0) message.status = 1;
+      if (message.deliveryStatus === 0) message.deliveryStatus = 1;
     });
   },
   deleteMessageSuccess: (
@@ -77,7 +74,7 @@ const messageReducers = {
     } else {
       state.messagesList = state.messagesList.map((message: Message) => {
         if (message.messageId === action.payload.messageId) {
-          message.deletedByReceiver = true;
+          message.isDeletedByReceiver = true;
           return message;
         } else return message;
       });

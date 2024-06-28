@@ -5,7 +5,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import { User } from "../../../../../utils/constants/types";
 import { useDispatch } from "react-redux";
 import { StoreDispatch } from "../../../../../redux/store/store";
 import { FriendShipApi } from "../../../../../service/friend-api-service";
@@ -16,13 +15,14 @@ import { RelationshipActionDialogs } from "../AddFriendCard";
 import { SearchNameContext } from "../../../../../pages/search-people/SearchPeoplePage";
 import { updateSearchingPeopleResult } from "../../../../../redux/features/people/peopleSlice";
 import { fetchFriends } from "../../../../../redux/features/friend/friendThunks";
+import { Person } from "../../../../../lib/models/models";
 
 export default function AcceptFriendDialog({
   people,
   setOpenAcceptFriendDialog,
   currentUserId,
 }: {
-  people: User;
+  people: Person;
   setOpenAcceptFriendDialog: Dispatch<
     SetStateAction<RelationshipActionDialogs>
   >;
@@ -42,9 +42,10 @@ export default function AcceptFriendDialog({
     setOperation((prev) => ({ ...prev, loading: true }));
     try {
       const { error } = await FriendShipApi.manageFriendShipStatus({
-        friendId: people._id,
+        friendId: people.personId,
         currentUserId,
         type: "accept",
+        friendshipId: people.friendshipId!,
       });
       if (error) {
         setOperation((prev) => ({ ...prev, loading: false, error: true }));
@@ -57,7 +58,7 @@ export default function AcceptFriendDialog({
         dispatch(
           updateSearchingPeopleResult({
             receipent: currentUserId,
-            requester: people._id,
+            requester: people.personId,
             status: 3,
           })
         );

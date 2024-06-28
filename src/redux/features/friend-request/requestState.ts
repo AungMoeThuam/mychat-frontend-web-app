@@ -1,10 +1,10 @@
-import { Friend } from "../../../utils/constants/types";
+import { Person } from "../../../lib/models/models";
 
 type RequestState = {
   error: boolean;
   success: boolean;
   loading: boolean;
-  requestsList: Friend[];
+  requestsList: Person[];
   message: string;
 };
 

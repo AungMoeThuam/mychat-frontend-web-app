@@ -18,6 +18,7 @@ import PublicRoute from "./components/share-components/public-route/PublicRoute.
 import ServerDownPage from "./pages/serverdown/ServerDownPage.tsx";
 import ProfilePage from "./pages/profile/ProfilePage.tsx";
 import BlocksPage from "./pages/blocks/BlocksPage.tsx";
+import Setting from "./pages/Setting.tsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -39,7 +40,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/setting",
-        element: <div>Setting</div>,
+        element: <Setting />,
       },
       {
         path: "/friends",

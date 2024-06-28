@@ -22,8 +22,10 @@ export default function RequestsPage() {
       {requestsList.length === 0 ? (
         <h1>no requests yet!</h1>
       ) : (
-        requestsList.map((friend) => {
-          return <RequestFriendCard key={friend.friendId} friend={friend} />;
+        requestsList.map((person) => {
+          return (
+            <RequestFriendCard key={person.friendshipId} person={person} />
+          );
         })
       )}
     </div>

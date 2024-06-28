@@ -1,4 +1,7 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
+import API from "../../../service/api-setup";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store/store";
 
 export default function NameInput({
   name,
@@ -9,49 +12,81 @@ export default function NameInput({
   initValue: string;
   type: string;
 }) {
-  const [value, setValue] = useState(initValue);
+  const [username, setUsername] = useState(initValue);
   const [edit, setEdit] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const userId = useSelector(
+    (state: RootState) => state.authSlice.currentUserId
+  );
+  const isUsernameNoNeedUpdate =
+    username === initValue || username.trim() === "";
 
-  const action = (e: ChangeEvent<HTMLInputElement>) => {
-    setValue(e.currentTarget.value);
+  const action = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const res = await API.put("/user/name/update", {
+        userId,
+        newUsername: username,
+      });
+      const { name: updatedUsername } = await res.data;
+      setUsername(updatedUsername);
+      setEdit(false);
+    } catch (error) {
+      console.log("error - ", error);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const onchangeHandler = (e: ChangeEvent<HTMLInputElement>) =>
+    setUsername(e.target.value);
+
   return (
     <div className="flex items-center  justify-between    ">
       {edit ? (
-        <form className="w-full">
+        <form onSubmit={action} className="w-full">
           <input
-            onChange={action}
+            onChange={onchangeHandler}
             style={{
               backgroundColor: "#121318",
             }}
             name={name}
-            value={value}
+            value={username}
             type={type}
             placeholder="Type here"
             className="input input-bordered w-full mb-1"
           />
           <div className="flex  justify-end gap-2">
-            <button onClick={() => setEdit(false)} className="btn btn-sm">
+            <button
+              type="reset"
+              onClick={() => {
+                setUsername(initValue);
+                setEdit(false);
+              }}
+              className="btn btn-sm"
+            >
               Cancel
             </button>
             <button
-              onClick={() => console.log(action)}
-              disabled={
-                value === initValue || value.trim() === "" ? true : false
-              }
+              type="submit"
+              disabled={isUsernameNoNeedUpdate || loading}
               className={` btn-sm ${
-                value === initValue || value.trim() === ""
-                  ? ""
-                  : "bg-teal-500 text-slate-950 btn border-none"
+                !isUsernameNoNeedUpdate &&
+                "bg-teal-500 text-slate-950 btn border-none"
               }`}
             >
-              Save
+              {loading ? (
+                <span className="loading loading-spinner loading-sm"></span>
+              ) : (
+                "Update"
+              )}
             </button>
           </div>
         </form>
       ) : (
         <>
-          <p className=" text-slate-500 ">{initValue}</p>
+          <p className=" text-slate-500 ">{username}</p>
           <button onClick={() => setEdit(true)} className=" btn btn-sm ">
             Edit
           </button>

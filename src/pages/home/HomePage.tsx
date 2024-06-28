@@ -70,7 +70,7 @@ export default function HomePage() {
       <main className=" flex-1">
         <Outlet />
       </main>
-      <Toaster />
+      <Toaster position="top-right" />
     </div>
   );
 }

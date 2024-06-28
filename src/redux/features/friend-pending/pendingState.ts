@@ -1,10 +1,10 @@
-import { Friend } from "../../../utils/constants/types";
+import { Person } from "../../../lib/models/models";
 
 type PendingState = {
   error: boolean;
   success: boolean;
   loading: boolean;
-  pendingsList: Friend[];
+  pendingsList: Person[];
   message: string;
 };
 

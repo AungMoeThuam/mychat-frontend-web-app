@@ -5,17 +5,14 @@ import { useDispatch } from "react-redux";
 import { StoreDispatch } from "../../../redux/store/store";
 import { unFriend } from "../../../redux/features/friend/friendSlice";
 import toast from "react-hot-toast";
+import { Friend } from "../../../lib/models/models";
 
 interface UnFriendDialogProps {
-  friendName: string;
-  friendId: string;
-  userId: string;
+  friend: Friend;
   onClose: () => void;
 }
 export default function UnFriendDialog({
-  friendName,
-  friendId,
-  userId,
+  friend,
   onClose,
 }: UnFriendDialogProps) {
   const dispatch = useDispatch<StoreDispatch>();
@@ -28,10 +25,7 @@ export default function UnFriendDialog({
   const unFriendAction = async () => {
     setOperation((prev) => ({ ...prev, loading: true }));
     try {
-      const result = await FriendShipApi.unFriend({
-        id: friendId,
-        currentUserId: userId,
-      });
+      const result = await FriendShipApi.unFriend(friend.friendshipId);
       if (result.error)
         return setOperation((prev) => ({
           ...prev,
@@ -42,7 +36,7 @@ export default function UnFriendDialog({
 
       toast("UnFriended! ✅");
       onClose();
-      dispatch(unFriend({ friendId }));
+      dispatch(unFriend({ friendId: friend.friendId }));
     } catch (error) {
       setOperation((prev) => ({ ...prev, loading: false, error: true }));
     }
@@ -78,7 +72,7 @@ export default function UnFriendDialog({
             <h1>UnFriend</h1>
             <div>
               <p>
-                Are u sure to unfriend <b>{friendName}</b> ?
+                Are u sure to unfriend <b>{friend.friendName}</b> ?
               </p>
             </div>
             <div className="flex gap-2">

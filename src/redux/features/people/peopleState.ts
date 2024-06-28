@@ -1,10 +1,10 @@
-import { User } from "../../../utils/constants/types";
+import { Person } from "../../../lib/models/models";
 
 export type PeopleState = {
   error: boolean;
   success: boolean;
   loading: boolean;
-  poepleList: User[];
+  poepleList: Person[];
   message: string;
 };
 

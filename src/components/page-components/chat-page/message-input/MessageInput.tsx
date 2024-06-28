@@ -82,15 +82,13 @@ export default function MessageInput(props: MessageInputProps) {
     }
 
     // Cleanup: Remove data when the tab is closed
-    window.addEventListener("beforeunload", () => {
+    const a = () => {
       sessionStorage.removeItem(roomId);
-    });
+    };
+    window.addEventListener("beforeunload", a);
 
     return () => {
-      setContent("");
-      window.removeEventListener("beforeunload", () => {
-        sessionStorage.removeItem(roomId);
-      });
+      window.removeEventListener("beforeunload", a);
     };
   }, [roomId]);
 

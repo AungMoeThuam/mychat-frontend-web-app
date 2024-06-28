@@ -17,7 +17,6 @@ export default function RegisterPage() {
   const [form, setForm] = useState<RegisterForm>({
     name: "",
     email: "",
-    phone: "",
     password: "",
     confirmPassword: "",
   });
@@ -81,15 +80,6 @@ export default function RegisterPage() {
               name="email"
               id="email"
               placeholder="example@email.com"
-              onChange={onChange}
-            />{" "}
-            <label htmlFor="phone">Phone</label>
-            <input
-              className="border p-2 bg-slate-100"
-              type="text"
-              name="phone"
-              id="phone"
-              placeholder="+959901291211"
               onChange={onChange}
             />{" "}
             <label htmlFor="password">Password</label>

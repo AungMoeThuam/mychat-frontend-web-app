@@ -1,5 +1,4 @@
 import { Dispatch, SetStateAction, useContext, useState } from "react";
-import { User } from "../../../../../utils/constants/types";
 import { useDispatch } from "react-redux";
 import { StoreDispatch } from "../../../../../redux/store/store";
 import { FriendShipApi } from "../../../../../service/friend-api-service";
@@ -8,6 +7,7 @@ import Modal from "../../../../share-components/modal/Modal";
 import toast from "react-hot-toast";
 import { RelationshipActionDialogs } from "../AddFriendCard";
 import { SearchNameContext } from "../../../../../pages/search-people/SearchPeoplePage";
+import { Person } from "../../../../../lib/models/models";
 
 export default function RejectOrCancelFriendRequestDialog({
   RejectOrCancelDialog,
@@ -16,7 +16,7 @@ export default function RejectOrCancelFriendRequestDialog({
   currentUserId,
 }: {
   RejectOrCancelDialog: "cancel" | "reject";
-  people: User;
+  people: Person;
   setRejectOrCancelFriendRequestDialog: Dispatch<
     SetStateAction<RelationshipActionDialogs>
   >;
@@ -36,8 +36,9 @@ export default function RejectOrCancelFriendRequestDialog({
     try {
       const res = await FriendShipApi.manageFriendShipStatus({
         type: "reject",
-        friendId: people._id,
+        friendId: people.personId,
         currentUserId,
+        friendshipId: people.friendshipId!,
       });
       if (res.error) {
         toast.error(res.error + " ❌❌❌", { duration: 4000 });
@@ -101,8 +102,8 @@ export default function RejectOrCancelFriendRequestDialog({
             <h1>
               Are u sure to{" "}
               {RejectOrCancelDialog === "cancel"
-                ? `cancel a friend request to ${people.name}`
-                : ` reject friend request from ${people.name}`}
+                ? `cancel a friend request to ${people.personName}`
+                : ` reject friend request from ${people.personName}`}
               ?
             </h1>
             <div className="flex  justify-center gap-5 ">

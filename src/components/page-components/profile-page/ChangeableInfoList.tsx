@@ -2,7 +2,6 @@ import { Dispatch, SetStateAction } from "react";
 type ChangeInfo = {
   changePassword: boolean;
   changeEmail: boolean;
-  changePhoneNo: boolean;
 };
 
 const buttonClassName =
@@ -35,17 +34,6 @@ export default function ChangeableInfoList({
         className={buttonClassName}
       >
         Change Email
-      </button>
-      <button
-        style={{
-          backgroundColor: "#121318",
-        }}
-        onClick={() =>
-          setChangeInfo((prev) => ({ ...prev, changePhoneNo: true }))
-        }
-        className={buttonClassName}
-      >
-        Change Phone No
       </button>
     </>
   );

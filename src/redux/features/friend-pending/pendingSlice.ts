@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Friend } from "../../../utils/constants/types";
 import pendingInitialState from "./pendingState";
+import { Person } from "../../../lib/models/models";
 
 const pendingSlice = createSlice({
   name: "pendingSlice",
@@ -16,7 +16,7 @@ const pendingSlice = createSlice({
     },
     fetchPendingsListSuccess: (
       state,
-      action: PayloadAction<{ data: Friend[]; message: string }>
+      action: PayloadAction<{ data: Person[]; message: string }>
     ) => {
       state.loading = false;
       state.success = true;
@@ -29,7 +29,7 @@ const pendingSlice = createSlice({
 
     cancelPendingAction: (state, action: PayloadAction<string>) => {
       state.pendingsList = state.pendingsList.filter(
-        (pending) => pending.friendId !== action.payload
+        (pending) => pending.personId !== action.payload
       );
     },
   },

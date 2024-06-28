@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Friend } from "../../../utils/constants/types";
 import requestInitialState from "./requestState";
+import { Person } from "../../../lib/models/models";
 
 const requestSlice = createSlice({
   name: "requestSlice",
@@ -16,7 +16,7 @@ const requestSlice = createSlice({
     },
     fetchRequestsListSuccess: (
       state,
-      action: PayloadAction<{ data: Friend[]; message: string }>
+      action: PayloadAction<{ data: Person[]; message: string }>
     ) => {
       state.loading = false;
       state.success = true;
@@ -28,12 +28,12 @@ const requestSlice = createSlice({
     },
     acceptRequestAction: (state, action: PayloadAction<string>) => {
       state.requestsList = state.requestsList.filter(
-        (request) => request.friendId !== action.payload
+        (request) => request.personId !== action.payload
       );
     },
     rejectRequestAction: (state, action: PayloadAction<string>) => {
       state.requestsList = state.requestsList.filter(
-        (request) => request.friendId !== action.payload
+        (request) => request.personId !== action.payload
       );
     },
   },

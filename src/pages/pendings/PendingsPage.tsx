@@ -23,8 +23,10 @@ export default function PendingsPage() {
       {pendingsList.length === 0 ? (
         <h1>no requests yet!</h1>
       ) : (
-        pendingsList.map((friend) => {
-          return <PendingFriendCard key={friend.friendId} friend={friend} />;
+        pendingsList.map((person) => {
+          return (
+            <PendingFriendCard key={person.friendshipId} person={person} />
+          );
         })
       )}
     </div>

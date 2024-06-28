@@ -1,4 +1,4 @@
-import { Message } from "../../../utils/constants/types";
+import { Message } from "../../../lib/models/models";
 
 export type MessageState = {
   error: boolean;

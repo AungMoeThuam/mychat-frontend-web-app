@@ -25,7 +25,6 @@ export default function Chat() {
   const { roomId, friendId } = useParams();
   const [isMessageRemaining, setisMessageRemaining] = useState(false);
   const { data: friendInfo } = useFriendInfo({
-    friendId: friendId!,
     currentUserId: currentUserId,
     roomId: roomId!,
   });
@@ -44,6 +43,11 @@ export default function Chat() {
   }, [messageSlice.messagesList]);
 
   useEffect(() => {
+    socket.emitEvent(Event.JOINROOM, {
+      roomId,
+      userId: currentUserId,
+      friendId,
+    });
     const onReadMessage = (data: any) => {
       dispatch(clearUnreadMessageCount(data));
     };
@@ -51,11 +55,14 @@ export default function Chat() {
     onReadMessage(roomId);
 
     async function onMessageListner(data: any) {
-      if (data.roomId === roomId) {
+      console.log(data);
+
+      if (data.friendshipId === roomId) {
         dispatch(updateMessageSuccess(data));
       }
     }
     async function onMessageStatusListener() {
+      console.log("seen event");
       dispatch(updateMessageStatusIntoSeenAction());
     }
     async function OnTest(data: { friendId: string }) {
@@ -65,14 +72,7 @@ export default function Chat() {
     }
     const onError = (data: any) => {
       toast(data.message);
-      console.log("on error ", data);
     };
-
-    socket.emitEvent(Event.JOINROOM, {
-      roomId,
-      userId: currentUserId,
-      friendId,
-    });
 
     socket.subscribeOneEvent("error", onError);
     socket.subscribeOneEvent(Event.MESSAGE, onMessageListner);
@@ -82,7 +82,7 @@ export default function Chat() {
     );
     socket.subscribeOneEvent(Event.MESSAGE_STATUS_DELIVERED, OnTest);
 
-    if (roomId && friendId) dispatch(fetchMessages({ roomId, friendId }));
+    if (roomId) dispatch(fetchMessages({ roomId, friendId: friendId! }));
 
     return () => {
       socket.unbSubcribeOneEvent("error", onError);
@@ -94,7 +94,7 @@ export default function Chat() {
       socket.unbSubcribeOneEvent(Event.MESSAGE_STATUS_DELIVERED, OnTest);
       socket.leaveRoom(roomId!);
     };
-  }, [roomId]);
+  }, [roomId, friendInfo]);
 
   return (
     <div className="h-full w-full flex flex-col">
@@ -128,7 +128,7 @@ export default function Chat() {
         <div ref={ref} key={"##1"}></div>
       </main>
       {friendInfo ? (
-        <ChatInputSection friendId={friendId} roomId={roomId} />
+        <ChatInputSection friendId={friendInfo.friendId} roomId={roomId} />
       ) : (
         <div className=" row-span-1 shadow-lg   h-fit  p-2 w-full flex justify-between items-center   px-2">
           <h1>only friend can have conversation!</h1>

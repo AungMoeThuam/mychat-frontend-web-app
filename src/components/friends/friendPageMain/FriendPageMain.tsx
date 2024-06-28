@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store/store";
-import { Friend } from "../../../utils/constants/types";
 import FriendCard from "./FriendCard";
+import { Friend } from "../../../lib/models/models";
 
 export default function FriendPageMain() {
   const { friendsList, loading, error, message } = useSelector(

@@ -1,19 +1,19 @@
 import { useDispatch } from "react-redux";
 import { FriendShipApi } from "../../../service/friend-api-service";
-import { Friend } from "../../../utils/constants/types";
 import Modal from "../../share-components/modal/Modal";
 import { StoreDispatch } from "../../../redux/store/store";
 import { useState } from "react";
 import { cancelPendingAction } from "../../../redux/features/friend-pending/pendingSlice";
 import toast from "react-hot-toast";
+import { Person } from "../../../lib/models/models";
 
 type PendingActionDialog = {
   onClose: () => void;
-  friend: Friend;
+  person: Person;
 };
 export default function PendingActionDialog({
   onClose,
-  friend,
+  person,
 }: PendingActionDialog) {
   const dispatch = useDispatch<StoreDispatch>();
   const [operation, setOperation] = useState({
@@ -26,8 +26,9 @@ export default function PendingActionDialog({
     try {
       const result = await FriendShipApi.manageFriendShipStatus({
         type: "reject",
-        currentUserId: friend.requester,
-        friendId: friend.friendId,
+        currentUserId: person.friendshipInitiatorId!,
+        friendId: person.personId,
+        friendshipId: person.friendshipId!,
       });
       if (result.error !== null)
         setOperation((prev) => ({
@@ -41,7 +42,7 @@ export default function PendingActionDialog({
           ...prev,
           loading: false,
         }));
-        dispatch(cancelPendingAction(friend.friendId));
+        dispatch(cancelPendingAction(person.personId));
         toast("request has been canceled!");
         onClose();
       }
@@ -74,7 +75,7 @@ export default function PendingActionDialog({
           <h1>{operation.message} </h1>
         ) : (
           <>
-            <h1>Are u sure to cancel the request to {friend.name}?</h1>
+            <h1>Are u sure to cancel the request to {person.personName}?</h1>
             <div className="flex justify-center gap-4 ">
               <button onClick={rejectRequest} className="btn btn-sm btn-error">
                 Yes

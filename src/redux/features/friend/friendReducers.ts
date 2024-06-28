@@ -1,6 +1,7 @@
 import { PayloadAction } from "@reduxjs/toolkit";
-import { Friend, Message } from "../../../utils/constants/types";
+import { Message } from "../../../utils/constants/types";
 import { FriendState } from "./friendState";
+import { Friend } from "../../../lib/models/models";
 
 const frinedReducers = {
   fetchFriendsError: (
@@ -38,33 +39,33 @@ const frinedReducers = {
     let temp: Friend;
     state.friendsList = state.friendsList
       .map((item: Friend) => {
-        if (item.roomId === action.payload.roomId) {
-          item.messageCreatedAt = action.payload.createdAt;
-          item.content = action.payload.content;
-          item.senderId = action.payload.senderId;
-          item.type = action.payload.type;
-          item.unreadMessageCount += 1;
+        if (item.friendshipId === action.payload.roomId) {
+          item.lastMessageCreatedAt = action.payload.createdAt;
+          item.lastMessageContent = action.payload.content;
+          item.lastMessageSenderId = action.payload.senderId;
+          item.lastMessageType = action.payload.type;
+          item.unreadMessagesCount += 1;
           temp = item;
           return item;
         } else return item;
       })
-      .filter((item) => item.roomId !== action.payload.roomId);
+      .filter((item) => item.friendshipId !== action.payload.roomId);
     state.friendsList.unshift(temp!); // temporarary code need to be fixed next
   },
   addNewMessage: (state: FriendState, action: PayloadAction<Message>) => {
     let temp: Friend;
     state.friendsList = state.friendsList
       .map((item: Friend) => {
-        if (item.roomId === action.payload.roomId) {
-          item.messageCreatedAt = action.payload.createdAt;
-          item.content = action.payload.content;
-          item.senderId = action.payload.senderId;
-          item.type = action.payload.type;
+        if (item.friendId === action.payload.roomId) {
+          item.lastMessageCreatedAt = action.payload.createdAt;
+          item.lastMessageContent = action.payload.content;
+          item.lastMessageSenderId = action.payload.senderId;
+          item.lastMessageType = action.payload.type;
           temp = item;
           return item;
         } else return item;
       })
-      .filter((item) => item.roomId !== action.payload.roomId);
+      .filter((item) => item.friendshipId !== action.payload.roomId);
     state.friendsList.unshift(temp!); // temporarary code need to be fixed next
   },
   updateOnlineStatus: (
@@ -73,7 +74,7 @@ const frinedReducers = {
   ) => {
     state.friendsList = state.friendsList.map((item: Friend) => {
       if (item.friendId === action.payload.userId) {
-        item.active = action.payload.active;
+        item.isActiveNow = action.payload.active;
         return item;
       }
       return item;
@@ -84,8 +85,8 @@ const frinedReducers = {
     action: PayloadAction<string>
   ) => {
     state.friendsList = state.friendsList.map((item) => {
-      if (item.roomId === action.payload) {
-        item.unreadMessageCount = 0;
+      if (item.friendshipId === action.payload) {
+        item.unreadMessagesCount = 0;
         return item;
       }
       return item;

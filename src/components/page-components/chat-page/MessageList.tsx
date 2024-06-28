@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
-import { Message } from "../../../utils/constants/types";
 import { RootState } from "../../../redux/store/store";
 import MessageCard from "./message/Message";
+import { Message } from "../../../lib/models/models";
 
 type MessageListProps = {
   error: boolean;
@@ -22,37 +22,29 @@ function MessageList(props: MessageListProps) {
       <>
         {messagesList
           .filter((item: Message) => {
-            if (item.receiverId === currentUserId) {
+            if (item.isDeletedByReceiver) {
               /*
             if the current user is the receiver of that message and it is deleted by him,
             then exclude that message
             */
 
-              return item.deletedByReceiver !== true;
+              return item.receiverId !== currentUserId;
             }
             //otherwises display the message
             else return true;
           })
 
-          .map((item: Message, index: number) => {
+          .map((msg: Message, index: number) => {
             return (
               <MessageCard
-                key={item.messageId}
-                message={{
-                  status: item.status,
-                  friendId:
-                    item.senderId === currentUserId
-                      ? item.receiverId
-                      : item.senderId,
-                  messageId: item.messageId,
-                  currentUserIsSender: item.senderId === currentUserId,
-                  content: item.content,
-                  type: item.type,
-                  createdAt: item.createdAt,
-                  previousMessageDate: messagesList[index - 1]
+                key={msg.messageId}
+                message={msg}
+                currentUserId={currentUserId}
+                previousMessageDate={
+                  messagesList[index - 1]
                     ? messagesList[index - 1].createdAt
-                    : null,
-                }}
+                    : null
+                }
               />
             );
           })}

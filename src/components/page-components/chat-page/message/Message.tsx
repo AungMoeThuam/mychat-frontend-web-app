@@ -13,32 +13,33 @@ import { deleteMessage } from "../../../../redux/features/message/messageThunks"
 import AudioMessageDisplay from "./audio-message-display/AudioMessageDisplay";
 import VideoMessageDisplay from "./VideoMessageDisplay";
 import TextMessageDisplay from "./TextMessageDisplay";
+import { Message as MSG } from "../../../../lib/models/models";
 
 function isItAFile(type: any) {
   const t = ["video", "image", "text", "audio"];
   return !t.includes(type.split("/")[0]);
 }
 type MessageProps = {
-  messageId: string;
-  currentUserIsSender: boolean;
-  content: string;
-  type?: string;
-  friendId: string;
-  createdAt: string;
-  status: number;
-  previousMessageDate: string | null;
+  message: MSG;
+  currentUserId: string;
+  previousMessageDate: null | string;
 };
-function Message(props: { message: MessageProps }) {
+function Message({
+  message,
+  currentUserId,
+  previousMessageDate,
+}: MessageProps) {
   const {
-    currentUserIsSender,
     messageId,
     type,
     content,
-    friendId,
     createdAt,
-    status,
-    previousMessageDate,
-  } = props.message;
+    deliveryStatus,
+    senderId,
+    receiverId,
+  } = message;
+  const isCurrentUserTheSender = senderId === currentUserId;
+  const friendId = isCurrentUserTheSender ? receiverId : senderId;
   const [deleteMessageDialog, setDeleteMessageDialog] = useState(false);
   const openDeleteMessageDialog = () => setDeleteMessageDialog(true);
   const dispatch = useDispatch<StoreDispatch>();
@@ -47,7 +48,7 @@ function Message(props: { message: MessageProps }) {
       deleteMessage({
         messageId,
         friendId,
-        bySender: currentUserIsSender,
+        bySender: isCurrentUserTheSender,
       })
     );
   };
@@ -60,18 +61,18 @@ function Message(props: { message: MessageProps }) {
       data-id={messageId}
       id="message"
       className={` chat  my-1 relative flex flex-col  ${
-        currentUserIsSender ? "chat-end" : "chat-start"
+        isCurrentUserTheSender ? "chat-end" : "chat-start"
       }  `}
     >
-      {status !== 9 ? (
+      {deliveryStatus !== 9 ? (
         <div
           className={`flex flex-col justify-center w-full ${
-            currentUserIsSender ? "items-end " : "items-start"
+            isCurrentUserTheSender ? "items-end " : "items-start"
           }  `}
         >
           <div
             className={`chat-bubble shadow-lg max-w-xs lg:max-w-2xl text-sm text-white  break-words ${
-              !currentUserIsSender && "bg-teal-700 relative"
+              !isCurrentUserTheSender && "bg-teal-700 relative"
             } `}
           >
             {type?.includes("audio") && (
@@ -98,7 +99,7 @@ function Message(props: { message: MessageProps }) {
             <menu
               id="menu"
               style={
-                currentUserIsSender
+                isCurrentUserTheSender
                   ? {
                       left: "-8dvh",
                       top: "50%",
@@ -151,8 +152,12 @@ function Message(props: { message: MessageProps }) {
           {prev !== cur && new Date(createdAt).toLocaleString()}
         </span>
         <span className=" self-end">
-          {currentUserIsSender &&
-            (status === 0 ? "sent" : status === 1 ? "delivered" : "seen")}
+          {isCurrentUserTheSender &&
+            (deliveryStatus === 0
+              ? "sent"
+              : deliveryStatus === 1
+              ? "delivered"
+              : "seen")}
         </span>
       </small>
     </div>

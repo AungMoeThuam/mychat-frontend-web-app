@@ -6,11 +6,11 @@ import {
   fetchFriends,
 } from "../../../../redux/features/friend/friendThunks";
 import { RootState, StoreDispatch } from "../../../../redux/store/store";
-import { Friend } from "../../../../utils/constants/types";
 import socket from "../../../../service/socket";
 import { Event } from "../../../../utils/constants/socketEvents";
 import { updateOnlineStatus } from "../../../../redux/features/friend/friendSlice";
 import { deleteMessageSuccess } from "../../../../redux/features/message/messageSlice";
+import { Friend } from "../../../../lib/models/models";
 
 export default function ConversationList() {
   const { friendsList, error, loading, message } = useSelector(
@@ -80,18 +80,18 @@ export default function ConversationList() {
           <h1>no conversation yet!</h1>
         ) : (
           friendsList
-            .filter((e) => e.name.includes(search))
+            .filter((e) => e.friendName.includes(search))
             .map((item: Friend) => {
               return (
                 <Conversation
-                  key={item.roomId}
+                  key={item.friendshipId}
                   data={{
                     ...item,
-                    unreadMessageCount: item.unreadMessageCount
-                      ? item.unreadMessageCount
+                    unreadMessagesCount: item.unreadMessagesCount
+                      ? item.unreadMessagesCount
                       : 0,
                     CurrentUserIsLastMessageSender:
-                      item.senderId === item.friendId ? false : true, // if the last message senderid is the currentuserId, then true
+                      item.lastMessageSenderId === item.friendId ? false : true, // if the last message senderid is the currentuserId, then true
                   }}
                 />
               );

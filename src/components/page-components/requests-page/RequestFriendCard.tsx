@@ -7,9 +7,9 @@ import { backendUrlWihoutApiEndpoint } from "../../../utils/backendConfig";
 import { tempCatPhoto } from "../../../assets/temporaryProfilePhoto";
 import { acceptRequestAction } from "../../../redux/features/friend-request/requestSlice";
 import { fetchFriends } from "../../../redux/features/friend/friendThunks";
-import { Friend } from "../../../utils/constants/types";
+import { Person } from "../../../lib/models/models";
 
-export default function RequestFriendCard({ friend }: { friend: Friend }) {
+export default function RequestFriendCard({ person }: { person: Person }) {
   const [requestActionDialog, setRequestActionDialog] = useState(false);
   const [operation, setOperation] = useState({
     loading: false,
@@ -21,13 +21,14 @@ export default function RequestFriendCard({ friend }: { friend: Friend }) {
     try {
       const result = await FriendShipApi.manageFriendShipStatus({
         type: "accept",
-        friendId: friend.friendId,
-        currentUserId: friend.receipent,
+        friendId: person.personId,
+        currentUserId: person.friendshipReceiverId!,
+        friendshipId: person.friendshipId!,
       });
       if (result.error)
         setOperation((prev) => ({ ...prev, loading: false, error: true }));
       else {
-        dispatch(acceptRequestAction(friend.friendId));
+        dispatch(acceptRequestAction(person.personId));
         dispatch(fetchFriends());
       }
     } catch (error: unknown) {
@@ -40,13 +41,13 @@ export default function RequestFriendCard({ friend }: { friend: Friend }) {
         <img
           className=" avatar w-10 h-10 rounded-full object-cover"
           src={
-            friend.profilePhoto
-              ? `${backendUrlWihoutApiEndpoint}/resources/profiles/${friend.profilePhoto.path}`
+            person.profilePhoto
+              ? `${backendUrlWihoutApiEndpoint}/resources/profiles/${person.profilePhoto.path}`
               : tempCatPhoto
           }
         />
 
-        <h1>{friend.name}</h1>
+        <h1>{person.personName}</h1>
       </div>
       <div className="flex gap-4">
         <button
@@ -65,7 +66,7 @@ export default function RequestFriendCard({ friend }: { friend: Friend }) {
       </div>
       {requestActionDialog && (
         <RequestActionDialog
-          friend={friend}
+          person={person}
           onClose={() => setRequestActionDialog(false)}
         />
       )}

@@ -17,6 +17,7 @@ const getRequestsListThunk = createAsyncThunk(
       if (result.error)
         return dispatch(fetchRequestsListError({ message: result.error }));
 
+      console.log(result.data);
       return dispatch(
         fetchRequestsListSuccess({
           data: result.data,
