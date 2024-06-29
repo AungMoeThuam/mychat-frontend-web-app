@@ -71,8 +71,10 @@ function Message({
           }  `}
         >
           <div
-            className={`chat-bubble shadow-lg max-w-xs lg:max-w-2xl text-sm text-white  break-words ${
-              !isCurrentUserTheSender && "bg-teal-700 relative"
+            className={`chat-bubble shadow-lg max-w-xs lg:max-w-2xl text-sm text-white   break-words ${
+              !isCurrentUserTheSender
+                ? "bg-gradient-to-r from-pink-500 to-yellow-500"
+                : " bg-zinc-800"
             } `}
           >
             {type?.includes("audio") && (

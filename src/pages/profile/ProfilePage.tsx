@@ -96,7 +96,11 @@ export default function ProfilePage() {
         />
       )}
       {changeInfo.changeEmail && (
-        <ChangeEmailModal changeAction={setChangeInfo} email={user.email} />
+        <ChangeEmailModal
+          changeAction={setChangeInfo}
+          email={user.email}
+          userId={currentUserId}
+        />
       )}
     </div>
   );

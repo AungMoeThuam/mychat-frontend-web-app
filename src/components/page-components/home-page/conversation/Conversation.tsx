@@ -91,10 +91,11 @@ export default function Conversation({
     <NavLink
       to={"/messages/" + friendshipId + "/" + friendId}
       id="f"
+      // style={{ backgroundColor: "#FF2CDF" }}
       className={({ isActive }) =>
         isActive
-          ? " flex items-center h-16 rounded-md cursor-pointer  gap-3 mb-2  text-white bg-teal-950 hover:bg-teal-950"
-          : " flex items-center h-16 rounded-md cursor-pointer  gap-3 mb-2  text-white  hover:bg-teal-950"
+          ? " flex px-2 items-center h-16  cursor-pointer  gap-3 mb-2  text-white  bg-zinc-800 hover:bg-zinc-800"
+          : " flex px-2 items-center h-16  cursor-pointer  gap-3 mb-2   text-white  hover:bg-zinc-800"
       }
     >
       <div

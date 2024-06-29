@@ -73,7 +73,7 @@ export default function ConversationList() {
       </div>
       <div
         style={{ height: "92%" }}
-        className=" overflow-y-scroll px-2 py-2 "
+        className=" overflow-y-scroll py-2 "
         id="conversationList"
       >
         {friendsList.length === 0 ? (
