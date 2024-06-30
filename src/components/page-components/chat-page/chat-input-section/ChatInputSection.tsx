@@ -160,7 +160,7 @@ export default function ChatInput(props: { friendId: any; roomId: any }) {
         )}
       </div>
 
-      <button ref={submitBtnRef} type="submit" className="text-teal-500 mr-2">
+      <button ref={submitBtnRef} type="submit" className="text-lime-500 mr-2">
         <IoSendSharp size={25} />
       </button>
     </form>

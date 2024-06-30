@@ -23,7 +23,7 @@ export default function UserIdDisplayer(props: { currentUserId: string }) {
             })
           );
         }}
-        className="btn btn-sm bg-teal-800"
+        className="btn btn-sm text-zinc-900 bg-gradient-to-r from-lime-500 to-teal-500"
       >
         copy id
       </button>

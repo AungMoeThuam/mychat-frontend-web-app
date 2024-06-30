@@ -148,7 +148,7 @@ export default function UserProfilePhotoDisplayer() {
       ) : (
         <label
           htmlFor="dropzone-file"
-          className=" btn btn-sm flex flex-col items-center justify-center border-2 border-gray-300  border-hidden rounded-lg cursor-pointer "
+          className=" btn btn-sm flex flex-col text-zinc-900 bg-gradient-to-r from-lime-500 to-teal-500 items-center justify-center border-2 border-gray-300  border-hidden rounded-lg cursor-pointer "
         >
           Change Photo
           <input

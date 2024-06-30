@@ -15,16 +15,23 @@ export default function VideoPlayer({
       ref.current.load();
     }
   });
+  
   return (
-    <video
-      onBlur={(e) => e.currentTarget.pause()}
-      ref={ref}
-      className=" w-48 lg:w-64 rounded-lg"
-      controls
-      muted
-      controlsList="nodownload"
-    >
-      <source src={src} type={type}></source>
+    // <video
+    //   playsInline
+    //   onBlur={(e) => e.currentTarget.pause()}
+    //   ref={ref}
+    //   className=" w-48 lg:w-64 rounded-lg"
+    //   controls
+    //   muted
+    //   controlsList="nodownload"
+    
+    // >
+    //   <source src={src} type={type}></source>
+    // </video>
+    <video className=" w-48 lg:w-64 rounded-lg" ref={ref} src={src} preload="auto" controls playsInline>
+      <source src={"http://localhost:4000/resources/chats/1719728681914.MOV"} />
+      not supported 
     </video>
   );
 }

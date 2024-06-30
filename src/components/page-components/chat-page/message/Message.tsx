@@ -66,14 +66,16 @@ function Message({
     >
       {deliveryStatus !== 9 ? (
         <div
-          className={`flex flex-col justify-center w-full ${
+          className={`flex flex-col justify-center w-full  ${
             isCurrentUserTheSender ? "items-end " : "items-start"
           }  `}
         >
           <div
             className={`chat-bubble shadow-lg max-w-xs lg:max-w-2xl text-sm text-white   break-words ${
               !isCurrentUserTheSender
-                ? "bg-gradient-to-r from-pink-500 to-yellow-500"
+            
+                // ? "bg-gradient-to-r from-pink-500 to-yellow-500"
+                ? "bg-gradient-to-r from-lime-500 to-teal-500 "
                 : " bg-zinc-800"
             } `}
           >
@@ -115,7 +117,7 @@ function Message({
               }
               className="absolute  text-teal-500 opacity-50"
             >
-              <div className="flex flex-col justify-center items-center cursor-pointer  gap-3 ">
+              <div className="flex flex-col justify-center items-center cursor-pointer  text-lime-500 gap-3 ">
                 <BsTrashFill onClick={openDeleteMessageDialog} size={20} />
                 {!type?.includes("text") && (
                   <BsSaveFill

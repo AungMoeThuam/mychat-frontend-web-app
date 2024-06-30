@@ -78,7 +78,7 @@ export default function ProfilePage() {
             <ChangeableInfoList setChangeInfo={setChangeInfo} />
             <button
               onClick={loggingOut}
-              className="btn  bg-teal-900 border-none w-full "
+              className="btn text-zinc-900 bg-gradient-to-r from-lime-500 to-teal-500  border-none w-full "
             >
               Logout
             </button>

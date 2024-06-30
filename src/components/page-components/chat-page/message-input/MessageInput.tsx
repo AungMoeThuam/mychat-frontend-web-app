@@ -124,7 +124,7 @@ export default function MessageInput(props: MessageInputProps) {
         )}
 
         <div style={{ color: "#68686E" }} onClick={() => setEmojiPicker(true)}>
-          <ImSmile className="text-teal-500" />
+          <ImSmile className="text-lime-500" />
         </div>
       </div>
     </>

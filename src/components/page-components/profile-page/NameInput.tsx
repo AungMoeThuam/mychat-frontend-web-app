@@ -64,7 +64,7 @@ export default function NameInput({
                 setUsername(initValue);
                 setEdit(false);
               }}
-              className="btn btn-sm"
+              className="btn btn-sm bg-zinc-700"
             >
               Cancel
             </button>
@@ -73,7 +73,7 @@ export default function NameInput({
               disabled={isUsernameNoNeedUpdate || loading}
               className={` btn-sm ${
                 !isUsernameNoNeedUpdate &&
-                "bg-teal-500 text-slate-950 btn border-none"
+                " bg-gradient-to-r from-lime-500 to-teal-500 text-slate-950 btn border-none"
               }`}
             >
               {loading ? (
@@ -87,7 +87,7 @@ export default function NameInput({
       ) : (
         <>
           <p className=" text-slate-500 ">{username}</p>
-          <button onClick={() => setEdit(true)} className=" btn btn-sm ">
+          <button onClick={() => setEdit(true)} className=" text-zinc-900 btn btn-sm bg-gradient-to-r from-lime-500 to-teal-500">
             Edit
           </button>
         </>

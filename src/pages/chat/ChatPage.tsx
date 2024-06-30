@@ -96,6 +96,7 @@ export default function Chat() {
     };
   }, [roomId, friendInfo]);
 
+
   return (
     <div className="h-full w-full flex flex-col">
       <ChatHeader

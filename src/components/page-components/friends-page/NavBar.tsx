@@ -8,7 +8,7 @@ export default function NavBar() {
         to={"/friends"}
         className={({ isActive }) => {
           return isActive
-            ? " bg-teal-600  text-slate-950 py-2 px-5  rounded-lg"
+            ? " bg-gradient-to-r from-lime-500 to-teal-500   text-slate-950 py-2 px-5  rounded-lg"
             : "py-2 px-5";
         }}
       >
@@ -18,7 +18,7 @@ export default function NavBar() {
         to={"/friends/addfriends"}
         className={({ isActive }) => {
           return isActive
-            ? " bg-teal-600  text-slate-950 py-2 px-5  rounded-lg"
+            ? " bg-gradient-to-r from-lime-500 to-teal-500   text-slate-950 py-2 px-5  rounded-lg"
             : "py-2 px-5";
         }}
       >
@@ -28,7 +28,7 @@ export default function NavBar() {
         to={"/friends/requests"}
         className={({ isActive }) => {
           return isActive
-            ? " bg-teal-600  text-slate-950 py-2 px-5  rounded-lg"
+            ? " bg-gradient-to-r from-lime-500 to-teal-500 text-slate-950 py-2 px-5  rounded-lg"
             : "py-2 px-5";
         }}
       >
@@ -38,7 +38,7 @@ export default function NavBar() {
         to={"/friends/pendings"}
         className={({ isActive }) => {
           return isActive
-            ? " bg-teal-600  text-slate-950 py-2 px-5  rounded-lg"
+            ? " bg-gradient-to-r from-lime-500 to-teal-500  text-slate-950 py-2 px-5  rounded-lg"
             : "py-2 px-5";
         }}
       >
@@ -48,7 +48,7 @@ export default function NavBar() {
         to={"/friends/blocks"}
         className={({ isActive }) => {
           return isActive
-            ? " bg-teal-600  text-slate-950 py-2 px-5  rounded-lg"
+            ? " bg-gradient-to-r from-lime-500 to-teal-500  text-slate-950 py-2 px-5  rounded-lg"
             : "py-2 px-5";
         }}
       >

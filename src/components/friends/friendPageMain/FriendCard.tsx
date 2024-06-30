@@ -15,7 +15,7 @@ export default function FriendCard({ friend }: { friend: Friend }) {
     (state: RootState) => state.authSlice.currentUserId
   );
   return (
-    <div className="flex  gap-2  justify-between p-1 rounded  items-center pr-4   hover:bg-teal-800">
+    <div className="flex gap-2 justify-between p-1 rounded  items-center pr-4 bg-gradient-to-r  hover:text-zinc-900 hover:from-lime-500 hover:to-teal-500">
       <div className="flex gap-2">
         <img
           className=" avatar w-10 h-10 rounded-full object-cover"
@@ -26,8 +26,8 @@ export default function FriendCard({ friend }: { friend: Friend }) {
           }
         />
 
-        <div>
-          <h1>{friend.friendName}</h1>
+        <div className=" ">
+          <h1 >{friend.friendName}</h1>
           <small>{friend.isActiveNow ? "active" : "offline"}</small>
         </div>
       </div>

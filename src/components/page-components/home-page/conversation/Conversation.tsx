@@ -113,7 +113,7 @@ export default function Conversation({
 
       <div className=" hidden md:hidden lg:flex flex-1  justify-between items-center  ">
         <div>
-          <h2 className=" font-semibold">{friendName}</h2>
+          <h2 className=" font-semibold bg-clip-text text-transparent bg-gradient-to-r from-lime-500 to-teal-500 ">{friendName}</h2>
           <p
             style={{
               fontSize: "0.8rem",

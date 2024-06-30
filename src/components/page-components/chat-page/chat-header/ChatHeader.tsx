@@ -24,7 +24,7 @@ export default function ChatHeader(props: {
           }
           alt="profile"
         />
-        <div className="flex flex-col text-lg font-bold">
+        <div className="flex flex-col text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-lime-500 to-teal-500 ">
           {friendName}
           <span className=" text-sm font-normal">1 minute ago</span>
         </div>
@@ -34,10 +34,10 @@ export default function ChatHeader(props: {
         className="flex gap-4 items-center pr-4 "
       >
         <li onClick={() => alert("this feature is not available yet!")}>
-          <AiFillPhone className=" text-teal-500" size={25} />
+          <AiFillPhone className=" text-lime-600 " size={25} />
         </li>
         <li className=" ">
-          <HiDotsVertical className="text-teal-500" size={25} />
+          <HiDotsVertical className="text-lime-600" size={25} />
         </li>
       </ul>
     </header>

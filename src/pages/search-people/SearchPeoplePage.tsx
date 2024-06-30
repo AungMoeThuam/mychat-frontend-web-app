@@ -29,7 +29,7 @@ function AddFriendsPage() {
     <>
       <form className="px-4 flex gap-2 items-center " onSubmit={searchPeople}>
         <input
-          onChange={(e) => setSearchName(e.target.value)}
+          onChange={(e) => setSearchName(e.target.value.trim())}
           className="input input-sm input-bordered w-full  "
           placeholder="search..."
           type="search"

@@ -7,7 +7,7 @@ export default function Setting() {
           <h2 className="text-lg font-semibold">Color Mode</h2>
           <div className="flex gap-3">
             <p>Dark</p>
-            <input type="checkbox" className="toggle" />
+            <input type="checkbox" className="toggle bg-lime-500" />
             <p>Light</p>
           </div>
         </div>
