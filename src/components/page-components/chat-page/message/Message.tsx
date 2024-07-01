@@ -1,5 +1,5 @@
 import "./style.css";
-import { useState } from "react";
+import { memo, useState } from "react";
 import DeleteMessageDialog from "../delete-message-dialog/DeleteMessageDialog";
 import ImageMessageDisplay from "./ImageMessageDisplay";
 import { BsSaveFill, BsTrashFill } from "react-icons/bs";
@@ -24,6 +24,7 @@ type MessageProps = {
   currentUserId: string;
   previousMessageDate: null | string;
 };
+const M = memo(Message);
 function Message({
   message,
   currentUserId,
@@ -73,9 +74,8 @@ function Message({
           <div
             className={`chat-bubble shadow-lg max-w-xs lg:max-w-2xl text-sm text-white   break-words ${
               !isCurrentUserTheSender
-            
-                // ? "bg-gradient-to-r from-pink-500 to-yellow-500"
-                ? "bg-gradient-to-r from-lime-500 to-teal-500 "
+                ? // ? "bg-gradient-to-r from-pink-500 to-yellow-500"
+                  "bg-gradient-to-r from-lime-500 to-teal-500 "
                 : " bg-zinc-800"
             } `}
           >
@@ -86,7 +86,7 @@ function Message({
               <ImageMessageDisplay content={content} />
             )}
             {type?.includes("video") && (
-              <VideoMessageDisplay content={content} />
+              <VideoMessageDisplay content={content} type={type} />
             )}
             {type?.includes("text") && <TextMessageDisplay content={content} />}
             {isItAFile(type) && <FileMessageDisplay content={content} />}
@@ -168,4 +168,4 @@ function Message({
   );
 }
 
-export default Message;
+export default M;
