@@ -94,8 +94,8 @@ export default function Conversation({
       // style={{ backgroundColor: "#FF2CDF" }}
       className={({ isActive }) =>
         isActive
-          ? " flex px-2 items-center h-16  cursor-pointer  gap-3 mb-2  text-white  bg-zinc-800 hover:bg-zinc-800"
-          : " flex px-2 items-center h-16  cursor-pointer  gap-3 mb-2   text-white  hover:bg-zinc-800"
+          ? " flex px-2 items-center h-16  cursor-pointer  gap-3 mb-2  text-lime-500  bg-zinc-800 hover:text-lime-500 hover:bg-zinc-800"
+          : " flex px-2 items-center h-16  cursor-pointer  gap-3 mb-2  text-zinc-900 dark:text-lime-500  hover:bg-zinc-900  hover:text-lime-500"
       }
     >
       <div
@@ -113,7 +113,7 @@ export default function Conversation({
 
       <div className=" hidden md:hidden lg:flex flex-1  justify-between items-center  ">
         <div>
-          <h2 className=" font-semibold bg-clip-text text-transparent bg-gradient-to-r from-lime-500 to-teal-500 ">{friendName}</h2>
+          <h2 className=" font-semibold   ">{friendName}</h2>
           <p
             style={{
               fontSize: "0.8rem",

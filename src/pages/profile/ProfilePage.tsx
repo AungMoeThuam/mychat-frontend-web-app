@@ -51,23 +51,20 @@ export default function ProfilePage() {
   if (error) return <h1>{message}</h1>;
   return (
     <div
-      style={{ backgroundColor: "#18191d", height: "100dvh" }}
-      className=" relative  flex flex-col items-center  justify-start text-white"
+      style={{ height: "100dvh" }}
+      className=" relative dark:bg-zinc-900 bg-white  flex flex-col items-center  justify-start text-white"
     >
       <button
         onClick={() => {
           if (history) navigate(-1);
           navigate("/");
         }}
-        className=" absolute right-0 top-0 m-2 text-teal-500 hover:text-teal-900  flex flex-col  gap-1 items-center"
+        className=" absolute right-0 top-0 m-2   text-zinc-950 dark:text-lime-500  flex flex-col  gap-1 items-center"
       >
         <ImCross /> Back
       </button>
       <h1 className=" py-2 text-left font-bold text-lg">My Profile</h1>
-      <div
-        style={{ backgroundColor: "#18181f" }}
-        className=" flex lg:flex-row flex-col  gap-4 p-2 rounded-md  w-96"
-      >
+      <div className=" flex lg:flex-row flex-col  gap-4 p-2 rounded-md  w-96">
         <div className="flex  flex-col gap-3 w-full ">
           <div className="flex flex-col justify-center items-center gap-2 ">
             <UserProfilePhotoDisplayer />

@@ -61,22 +61,21 @@ function Message({
     <div
       data-id={messageId}
       id="message"
-      className={` chat  my-1 relative flex flex-col  ${
+      className={` chat  my-1 relative flex flex-col   ${
         isCurrentUserTheSender ? "chat-end" : "chat-start"
       }  `}
     >
       {deliveryStatus !== 9 ? (
         <div
-          className={`flex flex-col justify-center w-full  ${
+          className={`flex flex-col justify-center w-full   ${
             isCurrentUserTheSender ? "items-end " : "items-start"
           }  `}
         >
           <div
-            className={`chat-bubble shadow-lg max-w-xs lg:max-w-2xl text-sm text-white   break-words ${
+            className={`chat-bubble shadow-lg max-w-xs lg:max-w-2xl text-sm  bg-teal-500  break-words ${
               !isCurrentUserTheSender
-                ? // ? "bg-gradient-to-r from-pink-500 to-yellow-500"
-                  "bg-gradient-to-r from-lime-500 to-teal-500 "
-                : " bg-zinc-800"
+                ? " bg-zinc-800 text-white dark:bg-zinc-800"
+                : "  bg-gradient-to-r from-lime-500 to-teal-500 text-slate-950 "
             } `}
           >
             {type?.includes("audio") && (

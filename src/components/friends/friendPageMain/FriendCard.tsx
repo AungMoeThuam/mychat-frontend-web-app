@@ -7,6 +7,8 @@ import BlockFriendDialog from "./addfriends/dialogs/BlockFriendDialog";
 import { Friend } from "../../../lib/models/models";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store/store";
+import { BsPersonFillDash, BsPersonFillSlash } from "react-icons/bs";
+import { BiSolidMessageSquareDetail } from "react-icons/bi";
 
 export default function FriendCard({ friend }: { friend: Friend }) {
   const [unFriendDialog, setUnFriendDialog] = useState(false);
@@ -15,7 +17,7 @@ export default function FriendCard({ friend }: { friend: Friend }) {
     (state: RootState) => state.authSlice.currentUserId
   );
   return (
-    <div className="flex gap-2 justify-between p-1 rounded  items-center pr-4 bg-gradient-to-r  hover:text-zinc-900 hover:from-lime-500 hover:to-teal-500">
+    <div className="flex gap-2 justify-between p-1 rounded  items-center pr-4 text-zinc-900 dark:text-lime-500 hover:text-lime-500 bg-gradient-to-r  hover:bg-zinc-900  dark:hover:text-zinc-900 dark:hover:from-lime-500 dark:hover:to-teal-500">
       <div className="flex gap-2">
         <img
           className=" avatar w-10 h-10 rounded-full object-cover"
@@ -27,29 +29,32 @@ export default function FriendCard({ friend }: { friend: Friend }) {
         />
 
         <div className=" ">
-          <h1 >{friend.friendName}</h1>
+          <h1>{friend.friendName}</h1>
           <small>{friend.isActiveNow ? "active" : "offline"}</small>
         </div>
       </div>
       <div className="flex gap-2">
         <button
           onClick={() => setBlockFriendDialog(true)}
-          className=" btn btn-sm    bg-red-500  text-slate-950"
+          className="tooltip tooltip-left"
+          data-tip="Block"
         >
-          Block
+          <BsPersonFillSlash size={24} />
+        </button>
+        <button
+          onClick={() => setUnFriendDialog(true)}
+          className="tooltip tooltip-left"
+          data-tip="Un Friend"
+        >
+          <BsPersonFillDash size={24} />
         </button>
         <Link
           to={`/messages/${friend.friendshipId}/${friend.friendId}`}
-          className="btn  btn-sm hover:text-slate-400  bg-teal-500 text-black"
+          className="tooltip tooltip-left"
+          data-tip="Message"
         >
-          message
+          <BiSolidMessageSquareDetail size={24} />
         </Link>
-        <button
-          onClick={() => setUnFriendDialog(true)}
-          className="btn btn-sm   bg-slate-950"
-        >
-          Unfriend
-        </button>
       </div>
       {unFriendDialog && (
         <UnFriendDialog

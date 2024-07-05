@@ -9,6 +9,7 @@ import RejectOrCancelFriendRequestDialog from "./dialogs/RejectOrCancelFriendReq
 import AcceptFriendDialog from "./dialogs/AcceptFriendDialog";
 import BlockFriendDialog from "./dialogs/BlockFriendDialog";
 import { Person } from "../../../../lib/models/models";
+import { BsPersonFillAdd, BsPersonFillSlash } from "react-icons/bs";
 
 export type RelationshipActionDialogs = {
   openAddFriendDialog: boolean;
@@ -31,7 +32,7 @@ export default function AddFriendCard({ people }: { people: Person }) {
   );
 
   return (
-    <div className="flex  gap-2  justify-between p-1 rounded  items-center pr-4   hover:bg-teal-800">
+    <div className="flex  gap-2  justify-between p-1 rounded  items-center pr-4 text-zinc-900 dark:text-lime-500 hover:text-lime-500 dark:hover:text-zinc-900  hover:bg-zinc-900 dark:bg-gradient-to-r dark:hover:from-lime-500 dark:hover:to-teal-500">
       <div className="flex gap-2 items-center">
         <img
           className=" avatar w-10 h-10 rounded-full object-cover"
@@ -50,8 +51,8 @@ export default function AddFriendCard({ people }: { people: Person }) {
         {/* //if the person is the current user itself */}
 
         {people.friendshipStatus === 5 && (
-          <Link className=" btn btn-sm bg-slate-950" to={"/profile"}>
-            view your profile
+          <Link className=" btn btn-sm text-lime-500" to={"/profile"}>
+            view profile
           </Link>
         )}
         {/* if the person does not have any relation status or the status is 4 then it
@@ -64,9 +65,9 @@ export default function AddFriendCard({ people }: { people: Person }) {
                 openAddFriendDialog: true,
               }))
             }
-            className="btn  btn-sm hover:text-slate-400  bg-teal-500 text-black"
+            className=" hover:text-slate-400  "
           >
-            Add Friend
+            <BsPersonFillAdd size={24} />
           </button>
         )}
         {/* if the person status 1 and requester in that relation is the current */}
@@ -80,7 +81,7 @@ export default function AddFriendCard({ people }: { people: Person }) {
                   openRejectOrCancelFriendRequestDialog: true,
                 }));
               }}
-              className=" btn btn-sm   bg-slate-700"
+              className="btn btn-sm text-lime-500"
             >
               cancel request
             </button>
@@ -118,7 +119,7 @@ export default function AddFriendCard({ people }: { people: Person }) {
             </div>
           )}
         {/* if the person is already friend with the current user */}
-        {people.friendshipStatus === 3 && "Friend"}
+        {/* {people.friendshipStatus === 3 && <BsPersonFillCheck size={24} />} */}
         {people.friendshipStatus !== 5 && (
           <button
             onClick={() =>
@@ -127,9 +128,8 @@ export default function AddFriendCard({ people }: { people: Person }) {
                 openBlockFriendDialog: true,
               }))
             }
-            className=" btn btn-sm    bg-red-500  text-slate-950"
           >
-            Block
+            <BsPersonFillSlash size={24} />
           </button>
         )}
       </div>

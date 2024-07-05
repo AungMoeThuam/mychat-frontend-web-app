@@ -25,24 +25,26 @@ export default function VoiceRecorder({
     };
   }, [time]);
   return (
-    <div className=" flex-1 mx-20   bg-teal-950 rounded-lg flex items-center  justify-between">
-      <div className="flex-1 flex items-center gap-2 pr-2 py-1">
+    <div className=" flex-1 mx-20   bg-zinc-950 dark:bg-lime-500 rounded-lg flex items-center  justify-between">
+      <div className="flex-1 flex items-center  gap-2 pr-2 py-1">
         <ImCross
           onClick={removeFile}
           size={20}
-          className=" text-slate-950 bg-teal-500 p-1 cursor-pointer  rounded-full "
+          className=" text-zinc-950 p-1 ml-2 bg-lime-500 dark:bg-zinc-950 dark:text-lime-500 cursor-pointer  rounded-full "
         />
 
         <progress
-          className="progress   progress-success flex-1 h-6"
+          className="progress  progress-success   flex-1 h-6 bg-slate-200 dark:bg-zinc-900"
           value={time}
           max={60000}
         ></progress>
-        <small>{Math.round(time / 1000)}s</small>
+        <small className=" text-lime-500 dark:text-zinc-950  font-bold">
+          {Math.round(time / 1000)} s
+        </small>
       </div>
 
       <FaStopCircle
-        className="text-red-500 bg-white rounded-full cursor-pointer "
+        className=" text-lime-500 dark:text-zinc-950 mr-2  rounded-full cursor-pointer "
         size={25}
         onClick={stopRecording}
       />

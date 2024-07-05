@@ -2,7 +2,6 @@ import "./style.css";
 import { Outlet, useSearchParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { StoreDispatch } from "../../redux/store/store";
-import { backgroundColor1 } from "../../style/style";
 import { useEffect } from "react";
 import socket from "../../service/socket";
 import { Event } from "../../utils/constants/socketEvents";
@@ -43,6 +42,11 @@ export default function HomePage() {
     socket.subscribeOneEvent(Event.ACCEPT, listenerForRequest);
     socket.subscribeOneEvent(Event.REQUEST, listenerForRequest);
     socket.subscribeOneEvent(Event.REJECT, listenerForReject);
+
+    let savedMode = localStorage.getItem("mode");
+    if (savedMode)
+      return document.body.querySelector("#root")?.classList.add("dark");
+
     return () => {
       socket.unbSubcribeOneEvent(Event.REQUEST, listenerForRequest);
       socket.unbSubcribeOneEvent(Event.ACCEPT, listenerForRequest);
@@ -57,13 +61,15 @@ export default function HomePage() {
       style={{
         height: "100dvh",
         width: "100dvw",
-        backgroundColor: backgroundColor1,
       }}
-      className="flex"
+      className="flex dark:bg-zinc-900 bg-white"
     >
       <SideNavigationMenu />
 
-      <section style={{ width: "20%" }}>
+      <section
+        style={{ width: "20%" }}
+        className=" border-r-8 border-slate-100 dark:border-zinc-950"
+      >
         <ConversationList />
       </section>
 

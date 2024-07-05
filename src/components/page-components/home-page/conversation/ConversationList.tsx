@@ -55,7 +55,6 @@ export default function ConversationList() {
       <div
         style={{
           height: "8%",
-          borderRight: "5px solid #0a0a0a",
         }}
         className=" p-2 "
       >

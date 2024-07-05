@@ -45,7 +45,7 @@ export default function NameInput({
   return (
     <div className="flex items-center  justify-between    ">
       {edit ? (
-        <form onSubmit={action} className="w-full">
+        <form onSubmit={action} className="w-full ">
           <input
             onChange={onchangeHandler}
             style={{
@@ -71,9 +71,9 @@ export default function NameInput({
             <button
               type="submit"
               disabled={isUsernameNoNeedUpdate || loading}
-              className={` btn-sm ${
+              className={` btn btn-sm text-zinc-950 ${
                 !isUsernameNoNeedUpdate &&
-                " bg-gradient-to-r from-lime-500 to-teal-500 text-slate-950 btn border-none"
+                " bg-gradient-to-r from-lime-500 to-teal-500  btn border-none"
               }`}
             >
               {loading ? (
@@ -86,8 +86,13 @@ export default function NameInput({
         </form>
       ) : (
         <>
-          <p className=" text-slate-500 ">{username}</p>
-          <button onClick={() => setEdit(true)} className=" text-zinc-900 btn btn-sm bg-gradient-to-r from-lime-500 to-teal-500">
+          <p className=" text-slate-500 dark:text-zinc-900 font-semibold ">
+            {username}
+          </p>
+          <button
+            onClick={() => setEdit(true)}
+            className=" text-zinc-900 btn btn-sm bg-gradient-to-r from-lime-500 to-teal-500 dark:from-zinc-900 dark:to-zinc-900 dark:text-white"
+          >
             Edit
           </button>
         </>

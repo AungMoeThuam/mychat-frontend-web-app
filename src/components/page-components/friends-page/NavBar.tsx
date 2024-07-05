@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 
 export default function NavBar() {
   return (
-    <nav className=" flex gap-4 px-10 py-3">
+    <nav className=" flex gap-4 px-10 py-3 mb-2 text-zinc-900 dark:text-lime-500">
       <NavLink
         end
         to={"/friends"}

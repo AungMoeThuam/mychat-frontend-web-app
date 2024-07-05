@@ -36,7 +36,7 @@ export default function RequestFriendCard({ person }: { person: Person }) {
     }
   };
   return (
-    <div className="flex  gap-2  justify-between p-2 rounded  items-center pr-4 hover:bg-teal-900">
+    <div className="flex  gap-2  justify-between p-2 rounded  items-center pr-4 text-zinc-900 dark:text-lime-500 hover:text-lime-500 dark:hover:text-zinc-950 hover:bg-zinc-900 dark:bg-gradient-to-r dark:hover:from-lime-500 dark:hover:to-teal-500">
       <div className="flex gap-2 items-center">
         <img
           className=" avatar w-10 h-10 rounded-full object-cover"
@@ -53,13 +53,13 @@ export default function RequestFriendCard({ person }: { person: Person }) {
         <button
           disabled={operation.loading ? true : false}
           onClick={acceptRequest}
-          className=" btn btn-sm bg-teal-500 border-none text-black"
+          className=" btn btn-sm bg-gradient-to-r from-lime-500 to-teal-500 border-none text-zinc-950 "
         >
           {operation.loading ? "...loading" : "Accept"}
         </button>
         <button
           onClick={() => setRequestActionDialog(true)}
-          className=" btn btn-sm  bg-slate-950 border-none text-slate-400"
+          className=" btn btn-sm   bg-zinc-950 border-none text-lime-500"
         >
           Reject
         </button>

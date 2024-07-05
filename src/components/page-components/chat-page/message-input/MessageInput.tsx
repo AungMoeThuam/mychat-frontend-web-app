@@ -102,7 +102,7 @@ export default function MessageInput(props: MessageInputProps) {
         onBlur={handleBlur}
         onChange={handleChange}
         placeholder="type here..."
-        className="textarea  w-full"
+        className="textarea  w-full bg-slate-200 text-zinc-900 dark:bg-zinc-800 dark:text-white"
         value={content}
       />
 
@@ -124,7 +124,7 @@ export default function MessageInput(props: MessageInputProps) {
         )}
 
         <div style={{ color: "#68686E" }} onClick={() => setEmojiPicker(true)}>
-          <ImSmile className="text-lime-500" />
+          <ImSmile className="dark:text-lime-500 text-zinc-900" />
         </div>
       </div>
     </>

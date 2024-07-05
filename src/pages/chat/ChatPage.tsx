@@ -96,9 +96,8 @@ export default function Chat() {
     };
   }, [roomId, friendInfo]);
 
-
   return (
-    <div className="h-full w-full flex flex-col">
+    <div className="h-full w-full flex flex-col ">
       <ChatHeader
         profilePhotoFilePath={friendInfo?.profilePhoto?.path}
         friendName={friendInfo?.name}
@@ -106,7 +105,7 @@ export default function Chat() {
       <main
         id="messageBox"
         // style={{ backgroundColor: "#18181f" }}
-        className="   bg-zinc-900  pt-8 px-5 pb-8 w-full flex-1 overflow-y-scroll flex flex-col "
+        className="   dark:bg-zinc-900 bg-slate-100  pt-8 px-5 pb-8 w-full flex-1 overflow-y-scroll flex flex-col "
       >
         {isMessageRemaining && (
           <div

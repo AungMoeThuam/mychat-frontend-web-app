@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState, StoreDispatch } from "../../../../redux/store/store";
 import { MdKeyboardVoice } from "react-icons/md";
 import voiceRecorderService from "../../../../utils/voiceRecorder";
-
 import FilePicker from "./FilePicker";
 import SelectedFileDisplayer from "./SelectFileDisplay";
 import VoiceRecorder from "./VoiceRecorderDisplay";
@@ -28,7 +27,6 @@ export default function ChatInput(props: { friendId: any; roomId: any }) {
   const dispatch = useDispatch<StoreDispatch>();
   const sendMessage = async (e: FormEvent) => {
     e.preventDefault();
-    console.log(file);
     if (!content.trim() && !file) return;
 
     let temporaryMessageId = "-temp" + Math.round(Math.random() * 1000000);
@@ -63,7 +61,6 @@ export default function ChatInput(props: { friendId: any; roomId: any }) {
 
     setContent("");
     sessionStorage.removeItem(roomId);
-    console.log("result ", result);
     if (file != null) setFile(null);
   };
 
@@ -84,6 +81,7 @@ export default function ChatInput(props: { friendId: any; roomId: any }) {
     return () => {
       URL.revokeObjectURL(url);
       if (file) setFile(null);
+      if (voiceRecorder) stopRecording();
     };
   }, [file, roomId]);
 
@@ -114,8 +112,7 @@ export default function ChatInput(props: { friendId: any; roomId: any }) {
   return (
     <form
       onSubmit={sendMessage}
-      style={{ backgroundColor: "#121318" }}
-      className=" row-span-1 shadow-lg   h-fit  p-2 w-full flex justify-between items-center   px-2"
+      className=" row-span-1 shadow-lg border-t-4 border-slate-100 dark:border-zinc-950   h-fit  p-2 w-full flex justify-between items-center  dark:bg-zinc-900  px-2"
     >
       <div className="flex-1 flex justify-center">
         {file === null ? (
@@ -134,7 +131,11 @@ export default function ChatInput(props: { friendId: any; roomId: any }) {
                 ref={submitBtnRef}
                 setFile={setFile}
               />
-              <MdKeyboardVoice onClick={recordVoice} size={20} />
+              <MdKeyboardVoice
+                className="text-zinc-950 dark:text-lime-500"
+                onClick={recordVoice}
+                size={20}
+              />
               <MessageInput
                 content={content}
                 setContent={setContent}
@@ -160,7 +161,11 @@ export default function ChatInput(props: { friendId: any; roomId: any }) {
         )}
       </div>
 
-      <button ref={submitBtnRef} type="submit" className="text-lime-500 mr-2">
+      <button
+        ref={submitBtnRef}
+        type="submit"
+        className="dark:text-lime-500 text-zinc-900 mr-2"
+      >
         <IoSendSharp size={25} />
       </button>
     </form>

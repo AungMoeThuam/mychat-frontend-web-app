@@ -15,11 +15,11 @@ export default function SideNavigationMenu() {
   );
   const location = useLocation();
   return (
-    <aside style={{ borderRight: `3px solid #0a0a0a` }} className=" py-2 px-2 ">
+    <aside className=" py-2 px-2 border-slate-100 dark:border-zinc-950  border-r-8  text-zinc-900 dark:text-lime-500  ">
       <Link to={"/"}>
-        <h1 className="  bg-clip-text text-transparent bg-gradient-to-r from-lime-500 to-teal-500   font-bold mb-3 "> MyChat</h1>
+        <h1 className="  bg-clip-text     font-bold mb-3 "> MyChat</h1>
       </Link>
-      <ul className="flex  flex-col  items-center gap-5  text-lime-500">
+      <ul className="flex  flex-col  items-center gap-5  ">
         <li>
           <Link to={"/profile?history=" + location.pathname}>
             <div className={` w-12 h-12 avatar `}>
@@ -35,8 +35,8 @@ export default function SideNavigationMenu() {
           </Link>
         </li>
         <li>
-          <Link to={"/"} >
-            <BsChatTextFill  size={20} />
+          <Link to={"/"}>
+            <BsChatTextFill size={20} />
           </Link>
         </li>
         <li>
@@ -55,7 +55,7 @@ export default function SideNavigationMenu() {
               dispatch(logout());
               socket.disconnect();
             }}
-            className=" btn btn-sm text-zinc-900 bg-gradient-to-r from-lime-500 to-teal-500 "
+            className=" btn btn-sm text-white bg-gradient-to-r from-zinc-900  dark:text-zinc-900  dark:from-lime-500 dark:to-teal-500  "
           >
             Logout
           </button>

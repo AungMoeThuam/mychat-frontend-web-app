@@ -30,7 +30,7 @@ export default function RecordedAudioDisplayer({
     };
   }, []);
   return (
-    <div className="flex items-center rounded-md  px-5">
+    <div className="flex items-center rounded-md  px-5 bg-zinc-950 dark:bg-gradient-to-r  dark:from-lime-500 dark:to-teal-500">
       {/* <BsTrashFill
         className="text-red-500  cursor-pointer"
         size={20}
@@ -55,7 +55,7 @@ export default function RecordedAudioDisplayer({
         </audio>
         <small
           style={{ top: "50%", transform: "translateY(-50%)" }}
-          className="absolute right-0 lg:right-3 "
+          className="absolute right-0 lg:right-3 font-bold text-lime-500 dark:text-white"
         >
           {duration}
         </small>

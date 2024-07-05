@@ -132,13 +132,13 @@ export default function UserProfilePhotoDisplayer() {
             <>
               <button
                 onClick={cancelSelectedImage}
-                className=" btn btn-sm btn-error "
+                className=" btn btn-sm border-none bg-zinc-900 "
               >
                 cancel
               </button>
               <button
                 onClick={uploadProfilePhoto}
-                className="btn btn-sm btn-success"
+                className="btn btn-sm border-none bg-lime-500 text-zinc-950"
               >
                 Save
               </button>
@@ -148,7 +148,7 @@ export default function UserProfilePhotoDisplayer() {
       ) : (
         <label
           htmlFor="dropzone-file"
-          className=" btn btn-sm flex flex-col text-zinc-900 bg-gradient-to-r from-lime-500 to-teal-500 items-center justify-center border-2 border-gray-300  border-hidden rounded-lg cursor-pointer "
+          className=" btn btn-sm flex flex-col  text-slate-100 dark:text-zinc-900 bg-gradient-to-r dark:from-lime-500 dark:to-teal-500 items-center justify-center border-2 border-gray-300  border-hidden rounded-lg cursor-pointer "
         >
           Change Photo
           <input

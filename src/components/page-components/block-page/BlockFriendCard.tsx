@@ -8,7 +8,7 @@ export default function BlockFriendCard({ friend }: { friend: Friend }) {
   const [blockActionDialog, setBlockActionDialog] = useState(false);
 
   return (
-    <div className="flex  gap-2  justify-between p-2 rounded  items-center pr-4 hover:bg-teal-900">
+    <div className="flex  gap-2  justify-between p-2 rounded  items-center pr-4  text-zinc-900 dark:text-lime-500 hover:text-lime-500 dark:hover:text-zinc-950 hover:bg-zinc-900 dark:bg-gradient-to-r dark:hover:from-lime-500 dark:hover:to-teal-500">
       <div className="flex gap-2 items-center">
         <img
           className=" avatar w-10 h-10 rounded-full object-cover"
@@ -24,7 +24,7 @@ export default function BlockFriendCard({ friend }: { friend: Friend }) {
       <div className="flex gap-4">
         <button
           onClick={() => setBlockActionDialog(true)}
-          className=" btn btn-sm  bg-slate-950 border-none text-slate-400"
+          className=" btn btn-sm text-lime-500"
         >
           unblock
         </button>
