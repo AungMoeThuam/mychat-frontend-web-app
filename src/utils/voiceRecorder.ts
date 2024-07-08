@@ -3,40 +3,39 @@ class VoiceRecorder {
   private mediaRecorder: null | MediaRecorder = null;
   private streamBeingCaptured: null | MediaStream = null;
 
-  start(): Promise<any> {
+  async start(): Promise<any> {
     if (!navigator.mediaDevices.getUserMedia) {
       return Promise.reject(
         "mediaDevices API or getUserMedia method is not supported in this browser."
       );
     }
 
-    return (
-      navigator.mediaDevices
-        .getUserMedia({ audio: true } /*of type MediaStreamConstraints*/)
-        //returns a promise that resolves to the audio stream
-        .then((stream) /*of type MediaStream*/ => {
-          //save the reference of the stream to be able to stop it when necessary
-          this.streamBeingCaptured = stream;
+    try {
+      const permission = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+      }); /*of type MediaStreamConstraints*/
+      //returns a promise that resolves to the audio stream
 
-          //create a media recorder instance by passing that stream into the MediaRecorder constructor
-          this.mediaRecorder = new MediaRecorder(
-            stream
-          ); /*the MediaRecorder interface of the MediaStream Recording
-                    API provides functionality to easily record media*/
+      //save the reference of the stream to be able to stop it when necessary
+      this.streamBeingCaptured = permission;
 
-          //clear previously saved audio Blobs, if any
-          this.audioBlobs = [];
+      //create a media recorder instance by passing that stream into the MediaRecorder constructor
+      this.mediaRecorder = new MediaRecorder(permission);
 
-          //add a dataavailable event listener in order to store the audio data Blobs when recording
-          this.mediaRecorder.addEventListener("dataavailable", (event) => {
-            //store audio Blob object
-            this.audioBlobs.push(event.data);
-          });
+      //clear previously saved audio Blobs, if any
+      this.audioBlobs = [];
 
-          //start the recording by calling the start method on the media recorder
-          this.mediaRecorder.start();
-        })
-    );
+      //add a dataavailable event listener in order to store the audio data Blobs when recording
+      this.mediaRecorder.addEventListener("dataavailable", (event) => {
+        //store audio Blob object
+        this.audioBlobs.push(event.data);
+      });
+
+      //start the recording by calling the start method on the media recorder
+      this.mediaRecorder.start();
+    } catch (error) {
+      return false;
+    }
   }
 
   stop(): Promise<any> {

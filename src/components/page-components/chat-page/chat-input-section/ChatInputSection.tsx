@@ -87,9 +87,14 @@ export default function ChatInput(props: { friendId: any; roomId: any }) {
 
   const recordVoice = async () => {
     if (file) setFile(null);
-    setVoiceRecoder(true);
 
-    voiceRecorderService.start();
+    voiceRecorderService.start().then((res) => {
+      if (res === false) {
+        toast("audio permission is disabled! please enable to record voice! ");
+        return setVoiceRecoder(false);
+      }
+      setVoiceRecoder(true);
+    });
   };
   const stopRecording = () => {
     voiceRecorderService.stop().then((value: Blob) => {

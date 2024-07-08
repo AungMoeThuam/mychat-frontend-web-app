@@ -48,7 +48,8 @@ export default function RecordedAudioDisplayer({
             src={
               flag
                 ? content
-                : `${backendUrlWihoutApiEndpoint}/resources/chats/${content}`
+                : 
+                `${backendUrlWihoutApiEndpoint}/resources/chats/${content}`
             }
           />
           not supported
