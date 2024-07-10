@@ -99,6 +99,7 @@ export default function Chat() {
   return (
     <div className="h-full w-full flex flex-col ">
       <ChatHeader
+        friendId={friendId}
         profilePhotoFilePath={friendInfo?.profilePhoto?.path}
         friendName={friendInfo?.name}
       />

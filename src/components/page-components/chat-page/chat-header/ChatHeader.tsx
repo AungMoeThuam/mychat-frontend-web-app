@@ -5,8 +5,9 @@ import { tempCatPhoto } from "../../../../assets/temporaryProfilePhoto";
 export default function ChatHeader(props: {
   profilePhotoFilePath: string | undefined;
   friendName: string | undefined;
+  friendId?: string;
 }) {
-  const { profilePhotoFilePath, friendName } = props;
+  const { profilePhotoFilePath, friendName, friendId } = props;
   return (
     <header className="  shadow-lg   h-20 px-4 py-2 border-b-4 border-slate-100 dark:border-zinc-950 w-full flex justify-between items-center gap-2 text-zinc-900 dark:text-lime-500">
       <div className="flex justify-center items-center">
@@ -25,9 +26,15 @@ export default function ChatHeader(props: {
         </div>
       </div>
       <ul className="flex gap-4 items-center pr-4 ">
-        <li onClick={() => alert("this feature is not available yet!")}>
-          <AiFillPhone size={25} />
-        </li>
+        <a
+          href={`/videocall/request/${friendId}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <li>
+            <AiFillPhone size={25} />
+          </li>
+        </a>
       </ul>
     </header>
   );

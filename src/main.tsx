@@ -3,7 +3,6 @@ import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Chat from "./pages/chat/ChatPage.tsx";
 import HomePage from "./pages/home/HomePage.tsx";
-
 import LoginPage from "./pages/login/LoginPage.tsx";
 import PrivateRoute from "./components/share-components/private-route/PrivateRoute.tsx";
 import { Provider } from "react-redux";
@@ -19,6 +18,8 @@ import ServerDownPage from "./pages/serverdown/ServerDownPage.tsx";
 import ProfilePage from "./pages/profile/ProfilePage.tsx";
 import BlocksPage from "./pages/blocks/BlocksPage.tsx";
 import Setting from "./pages/Setting.tsx";
+import CallRequestedPage from "./pages/CallRequested.tsx";
+import CallAcceptedPage from "./pages/CallAccepted.tsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -78,6 +79,22 @@ const router = createBrowserRouter([
     element: (
       <PrivateRoute>
         <ProfilePage />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/videocall/request/:friendId",
+    element: (
+      <PrivateRoute>
+        <CallRequestedPage />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/videocall/accept/:friendId",
+    element: (
+      <PrivateRoute>
+        <CallAcceptedPage />
       </PrivateRoute>
     ),
   },
