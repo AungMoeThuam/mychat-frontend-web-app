@@ -86,7 +86,7 @@ export default function NameInput({
         </form>
       ) : (
         <>
-          <p className=" text-slate-500 dark:text-zinc-900 font-semibold ">
+          <p className=" text-zinc-950 dark:text-lime-500 font-semibold ">
             {username}
           </p>
           <button

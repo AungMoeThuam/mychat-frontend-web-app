@@ -145,10 +145,6 @@ export default function HomePage() {
     socket.subscribeOneEvent(Event.REQUEST, listenerForRequest);
     socket.subscribeOneEvent(Event.REJECT, listenerForReject);
 
-    let savedMode = localStorage.getItem("mode");
-    if (savedMode)
-      return document.body.querySelector("#root")?.classList.add("dark");
-
     return () => {
       socket.unbSubcribeOneEvent(Event.REQUEST, listenerForRequest);
       socket.unbSubcribeOneEvent(Event.ACCEPT, listenerForRequest);

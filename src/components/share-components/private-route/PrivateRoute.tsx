@@ -28,6 +28,10 @@ export default function PrivateRoute({ children }: { children: ReactNode }) {
       if (!res) navigate("/serverdown");
     }
 
+    let savedMode = localStorage.getItem("mode");
+    if (savedMode === "dark")
+      return document.body.querySelector("#root")?.classList.add("dark");
+
     isServerActive();
 
     if (token === null) dispatch(checkLoginStatus());
