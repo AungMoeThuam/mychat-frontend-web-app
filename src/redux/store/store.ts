@@ -7,6 +7,7 @@ import requestSlice from "../features/friend-request/requestSlice";
 import pendingSlice from "../features/friend-pending/pendingSlice";
 import friendshipDialogSlice from "../slices/friendshipDialogSlice";
 import blockSlice from "../features/friend-block/blockSlice";
+import callSlice from "../features/call/callSlice";
 
 const rootReducer = {
   authSlice,
@@ -17,6 +18,7 @@ const rootReducer = {
   pendingSlice,
   friendshipDialogSlice,
   blockSlice,
+  callSlice,
 };
 const store = configureStore({
   reducer: rootReducer,

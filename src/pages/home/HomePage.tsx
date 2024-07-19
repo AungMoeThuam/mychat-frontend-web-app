@@ -1,7 +1,7 @@
 import "./style.css";
 import { Outlet, useSearchParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { StoreDispatch } from "../../redux/store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, StoreDispatch } from "../../redux/store/store";
 import { useEffect, useMemo, useRef, useState } from "react";
 import socket from "../../service/socket";
 import { Event } from "../../utils/constants/socketEvents";
@@ -13,8 +13,8 @@ import SideNavigationMenu from "../../components/share-components/side-navigatio
 import componentRenderInspector from "../../utils/test/componentRenderInspector";
 import ConversationList from "../../components/page-components/home-page/conversation/ConversationList";
 import Modal from "../../components/share-components/modal/Modal";
-import { FaVideo } from "react-icons/fa";
-import { createWebRtc } from "../CallRequested";
+import CallPage from "../Call";
+import { endCall } from "../../redux/features/call/callSlice";
 
 export default function HomePage() {
   const [queryParams] = useSearchParams();
@@ -23,8 +23,19 @@ export default function HomePage() {
   const rtcPeerConnection = useRef<null | RTCPeerConnection>(null);
   const remoteRef = useRef<HTMLVideoElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const aRef = useRef<HTMLVideoElement>(null);
   let remoteStream = useRef<MediaStream | null>(null);
   let videoStream = useRef<MediaStream | null>(null);
+  const { isCallExist, minimize } = useSelector(
+    (state: RootState) => state.callSlice
+  );
+
+  useEffect(() => {
+    if (remoteRef.current && videoRef.current) {
+      remoteRef.current.srcObject = remoteStream.current;
+      videoRef.current.srcObject = videoStream.current;
+    }
+  }, [call]);
 
   useEffect(() => {
     function listenerForReject(data: any) {
@@ -53,81 +64,20 @@ export default function HomePage() {
     function callHandler(data) {
       const { callerId, calleeId, offer } = data;
       setCall("accept-call");
-      console.log(data);
-
+      localStorage.setItem("offer", JSON.stringify(offer));
       toast((t) => (
         <span>
           Moe is calling ! <br></br>
           <button
             className=" bg-lime-500 text-black py-1 px-2 rounded-lg border-none "
             onClick={async () => {
-              console.log("offer ", offer);
+              toast.remove(t.id);
 
-              videoStream.current = await navigator.mediaDevices.getUserMedia({
-                video: true,
-                audio: true,
-              });
-
-              if (videoRef.current) {
-                videoRef.current.srcObject = videoStream.current;
-              }
-
-              rtcPeerConnection.current = new RTCPeerConnection({
-                iceServers: [
-                  {
-                    urls: ["stun:stun.l.google.com:19302"],
-                  },
-                  {
-                    urls: "turn:numb.viagenie.ca",
-                    credential: "muazkh",
-                    username: "webrtc@live.com",
-                  },
-                ],
-              });
-
-              rtcPeerConnection.current.oniceconnectionstatechange = () => {
-                console.log(
-                  `ICE connection state: ${rtcPeerConnection.current?.iceConnectionState}`
-                );
-                if (
-                  rtcPeerConnection.current?.iceConnectionState ===
-                    "connected" ||
-                  rtcPeerConnection.current?.iceConnectionState === "completed"
-                ) {
-                  console.log("Peers are connected");
-                }
-              };
-
-              rtcPeerConnection.current.ontrack = (e) => {
-                console.log("remote track in calleev ", e.streams[0]);
-
-                if (remoteRef.current) {
-                  remoteRef.current.srcObject = e.streams[0];
-                }
-                // e.streams[0].getTracks().forEach((track) => {
-                //   // remoteStream.current = new MediaStream();
-                //   remoteStream.current?.addTrack(track);
-                // });
-              };
-
-              rtcPeerConnection.current.onicecandidate = (e) => {
-                console.log(" icecandidate in callee ", e.candidate);
-
-                if (!e.candidate) {
-                  let answer = rtcPeerConnection.current?.localDescription;
-                  socket.emitEvent("answer", { callerId, calleeId, answer });
-                }
-              };
-              videoStream.current
-                ?.getTracks()
-                .forEach((e) =>
-                  rtcPeerConnection.current?.addTrack(e, videoStream.current!)
-                );
-
-              await rtcPeerConnection.current.setRemoteDescription(offer);
-
-              let answer = await rtcPeerConnection.current.createAnswer();
-              await rtcPeerConnection.current.setLocalDescription(answer);
+              window.open(
+                `/videocall/accept/${callerId}/${calleeId}`,
+                "",
+                "popup"
+              );
             }}
           >
             accept
@@ -136,11 +86,7 @@ export default function HomePage() {
       ));
     }
 
-    const exchangeCandidateHandler = async ({ sdp }) => {
-      rtcPeerConnection.current?.addIceCandidate(sdp);
-    };
     socket.subscribeOneEvent("call", callHandler);
-    socket.subscribeOneEvent("exchange-candidate", exchangeCandidateHandler);
     socket.subscribeOneEvent(Event.ACCEPT, listenerForRequest);
     socket.subscribeOneEvent(Event.REQUEST, listenerForRequest);
     socket.subscribeOneEvent(Event.REJECT, listenerForReject);
@@ -155,6 +101,7 @@ export default function HomePage() {
   function handup() {
     rtcPeerConnection.current?.close();
     videoStream.current?.getTracks().forEach((e) => e.stop());
+    setCall("none");
   }
   componentRenderInspector("home");
 
@@ -185,51 +132,17 @@ export default function HomePage() {
     );
   }, []);
 
+  useEffect(() => {
+    console.log(videoStream.current);
+    if (aRef.current) aRef.current.srcObject = videoStream.current;
+  }, [minimize, aRef]);
   return (
     <>
       {memorize}
-      {(call == "minimize") === true && (
-        <button className=" absolute z-50 bg-red-500 left-5 bottom-5 flex  justify-center items-center rounded-full w-16 h-16">
-          <FaVideo size={25} />
-        </button>
-      )}
-      {call === "accept-call" && (
-        <Modal onClose={() => setCall("none")}>
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className=" flex flex-col justify-center "
-          >
-            <h1>Friend is calling !</h1>
-            <video
-              className=" w-96 h-96 border"
-              ref={videoRef}
-              controls
-              autoPlay
-            ></video>
-            <video
-              className=" w-96 h-96 border"
-              ref={remoteRef}
-              controls
-              autoPlay
-            ></video>
-            <div className="flex">
-              <button
-                onClick={handup}
-                className="bg-red-500 text-white px-3 py-2"
-              >
-                {" "}
-                Hand up
-              </button>
-              <button
-                onClick={() => {
-                  setCall("minimize");
-                }}
-                className=" p-2 bg-lime-500 text-zinc-950"
-              >
-                minimize
-              </button>
-            </div>
-          </div>
+
+      {isCallExist && (
+        <Modal onClose={() => dispatch(endCall())}>
+          <CallPage myref={videoRef} userStream={videoStream.current} />
         </Modal>
       )}
     </>

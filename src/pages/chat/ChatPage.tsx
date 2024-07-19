@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { RefObject, useEffect, useRef, useState } from "react";
+import { Outlet, useParams } from "react-router-dom";
 import MessageList from "../../components/page-components/chat-page/MessageList";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, StoreDispatch } from "../../redux/store/store";

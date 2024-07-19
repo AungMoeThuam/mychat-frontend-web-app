@@ -20,6 +20,7 @@ import BlocksPage from "./pages/blocks/BlocksPage.tsx";
 import Setting from "./pages/Setting.tsx";
 import CallRequestedPage from "./pages/CallRequested.tsx";
 import CallAcceptedPage from "./pages/CallAccepted.tsx";
+import CallPage from "./pages/Call.tsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -39,10 +40,12 @@ const router = createBrowserRouter([
         path: "/messages/:roomId/:friendId",
         element: <Chat />,
       },
+
       {
         path: "/setting",
         element: <Setting />,
       },
+
       {
         path: "/friends",
         element: <FriendsPage />,
@@ -90,14 +93,16 @@ const router = createBrowserRouter([
       </PrivateRoute>
     ),
   },
+
   {
-    path: "/videocall/accept/:friendId",
+    path: "/videocall/accept/:callerId/:calleeId",
     element: (
       <PrivateRoute>
         <CallAcceptedPage />
       </PrivateRoute>
     ),
   },
+
   {
     path: "/login",
     element: (
