@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-
 import { NavLink } from "react-router-dom";
-
 import { backendUrlWihoutApiEndpoint } from "../../../../utils/backendConfig";
 import timeDurationFormatter from "../../../../utils/timeDurationFormatter";
 import { Friend } from "../../../../lib/models/models";
@@ -95,7 +93,7 @@ export default function Conversation({
       className={({ isActive }) =>
         isActive
           ? " flex px-2 items-center h-16  cursor-pointer  gap-3 mb-2  text-lime-500  bg-zinc-800 hover:text-lime-500 hover:bg-zinc-800"
-          : " flex px-2 items-center h-16  cursor-pointer  gap-3 mb-2  text-zinc-900 dark:text-lime-500  hover:bg-zinc-900  hover:text-lime-500"
+          : " flex px-2 items-center h-16  cursor-pointer  gap-3 mb-2  text-zinc-900 dark:text-lime-500   hover:bg-zinc-900  hover:text-lime-500"
       }
     >
       <div

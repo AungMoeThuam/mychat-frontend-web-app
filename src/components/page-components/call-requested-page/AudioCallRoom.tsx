@@ -5,15 +5,15 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store/store";
 import { IoPersonCircle } from "react-icons/io5";
-import { BsMicMuteFill } from "react-icons/bs";
+import { BsMicFill, BsMicMuteFill } from "react-icons/bs";
 import sound from "../../../assets/audios/video-calling-sound.mp3";
 export default function AudioCallRoom() {
   const { friendId } = useParams();
   const userId = useSelector(
     (state: RootState) => state.authSlice.currentUserId
   );
-  const localAudioRef = useRef<HTMLVideoElement>(null);
-  const remoteAudioRef = useRef<HTMLVideoElement>(null);
+  const localAudioRef = useRef<HTMLAudioElement>(null);
+  const remoteAudioRef = useRef<HTMLAudioElement>(null);
   const localAudioStream = useRef<MediaStream | null>(new MediaStream());
   const remoteAudioStream = useRef<MediaStream | null>(new MediaStream());
   const soundRef = useRef<HTMLAudioElement>(null);
@@ -21,11 +21,27 @@ export default function AudioCallRoom() {
   let timeoutId = useRef<any>();
   let timeoutId2 = useRef<any>();
   const [loading, setLoading] = useState(true);
+  const [localAudio, setLocalAudio] = useState(true);
   function handup() {
     setLoading(false);
     localAudioStream.current?.getTracks().forEach((e) => e.stop());
     rtcPeerConnection.current?.close();
     window.close();
+  }
+
+  async function toggleLocalAudio() {
+    if (localAudioStream.current) {
+      let a = localAudioStream.current
+        .getTracks()
+        .find((e) => e.kind === "audio");
+      if (a?.enabled) {
+        a.enabled = false;
+        setLocalAudio(false);
+      } else {
+        a!.enabled = true;
+        setLocalAudio(true);
+      }
+    }
   }
   async function audioCallHandler() {
     timeoutId2.current = setInterval(() => soundRef.current?.play(), 1000);
@@ -35,12 +51,17 @@ export default function AudioCallRoom() {
     });
     if (localAudioRef.current)
       localAudioRef.current.srcObject = localAudioStream.current;
+
     rtcPeerConnection.current = createWebRtc();
     rtcPeerConnection.current.ontrack = (e) => {
       if (remoteAudioRef.current) {
-        remoteAudioStream.current = e.streams[0];
         remoteAudioRef.current.srcObject = remoteAudioStream.current;
       }
+      setInterval(() => console.log(e.streams), 2000);
+
+      e.streams[0]
+        .getTracks()
+        .forEach((e) => remoteAudioStream.current?.addTrack(e));
     };
     rtcPeerConnection.current.onicecandidate = (e) => {
       if (!e.candidate) {
@@ -71,12 +92,19 @@ export default function AudioCallRoom() {
     };
     localAudioStream.current
       .getTracks()
-      .forEach((e) => rtcPeerConnection.current?.addTrack(e));
+      .forEach((e) =>
+        rtcPeerConnection.current?.addTrack(e, localAudioStream.current!)
+      );
 
     const offer = await rtcPeerConnection.current.createOffer();
     await rtcPeerConnection.current?.setLocalDescription(offer);
   }
-
+  useEffect(() => {
+    if (localAudioRef.current && remoteAudioRef.current) {
+      localAudioRef.current.srcObject = localAudioStream.current;
+      remoteAudioRef.current.srcObject = remoteAudioStream.current;
+    }
+  }, [loading, localAudio]);
   useEffect(() => {
     const answerHandler = async ({ answer }: { answer: any }) => {
       clearTimeout(timeoutId.current);
@@ -106,8 +134,16 @@ export default function AudioCallRoom() {
             <IoPersonCircle size={200} />
             <h1>Aung Aung </h1>
             <TimeDuration />
-            <video ref={localAudioRef} autoPlay></video>
-            <video ref={remoteAudioRef} autoPlay></video>
+            <audio
+              ref={localAudioRef}
+              className=" w-40 h-40 border-8"
+              autoPlay
+            ></audio>
+            <audio
+              ref={remoteAudioRef}
+              className=" w-40 h-40 border-8"
+              autoPlay
+            ></audio>
           </>
         )}
       </div>
@@ -118,8 +154,11 @@ export default function AudioCallRoom() {
         >
           End call
         </button>
-        <button className="bg-zinc-950 text-lime-500 btn border-none">
-          <BsMicMuteFill size={20} />
+        <button
+          onClick={toggleLocalAudio}
+          className="bg-zinc-950 text-lime-500 btn border-none"
+        >
+          {localAudio ? <BsMicFill size={20} /> : <BsMicMuteFill size={20} />}
         </button>
       </footer>
     </div>
