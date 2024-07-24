@@ -61,7 +61,7 @@ export default function HomePage() {
       } else toast("Received a friend request!");
     }
 
-    function callHandler(data) {
+    function callHandler(data: any) {
       const { callerId, calleeId, offer } = data;
       setCall("accept-call");
       localStorage.setItem("offer", JSON.stringify(offer));
@@ -73,11 +73,18 @@ export default function HomePage() {
             onClick={async () => {
               toast.remove(t.id);
 
-              window.open(
-                `/videocall/accept/${callerId}/${calleeId}`,
-                "",
-                "popup"
-              );
+              if (data.type === "video")
+                window.open(
+                  `/call-room-type=video:initiate=false/${callerId}/${calleeId}`,
+                  "",
+                  "popup"
+                );
+              else
+                window.open(
+                  `/call-room-type=audio:initiate=false/${callerId}/${calleeId}`,
+                  "",
+                  "popup"
+                );
             }}
           >
             accept

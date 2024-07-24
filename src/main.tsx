@@ -86,7 +86,15 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/videocall/request/:friendId",
+    path: "/call-room-type=audio:initiate=true/:friendId",
+    element: (
+      <PrivateRoute>
+        <CallRequestedPage callRoomType="audio" />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/call-room-type=video:initiate=true/:friendId",
     element: (
       <PrivateRoute>
         <CallRequestedPage />
@@ -95,10 +103,18 @@ const router = createBrowserRouter([
   },
 
   {
-    path: "/videocall/accept/:callerId/:calleeId",
+    path: "/call-room-type=video:initiate=false/:callerId/:calleeId",
     element: (
       <PrivateRoute>
         <CallAcceptedPage />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/call-room-type=audio:initiate=false/:callerId/:calleeId",
+    element: (
+      <PrivateRoute>
+        <CallAcceptedPage callRoomType="audio" />
       </PrivateRoute>
     ),
   },

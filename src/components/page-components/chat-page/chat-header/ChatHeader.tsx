@@ -1,4 +1,4 @@
-import { AiFillPhone } from "react-icons/ai";
+import { AiFillPhone, AiFillVideoCamera } from "react-icons/ai";
 import { backendUrlWihoutApiEndpoint } from "../../../../utils/backendConfig";
 import { tempCatPhoto } from "../../../../assets/temporaryProfilePhoto";
 import { Link, useParams } from "react-router-dom";
@@ -36,24 +36,29 @@ export default function ChatHeader(props: {
       </div>
       <ul className="flex gap-4 items-center pr-4 ">
         <a
-          // href={`/videocall/request/${friendId}`}
-          // target="_blank"
-          // rel="noopener noreferrer"
           onClick={(e) => {
             e.preventDefault();
-            window.open(`/videocall/request/${friendId}`, "", "popup");
+            window.open(
+              `/call-room-type=audio:initiate=true/${friendId}`,
+              "",
+              "popup"
+            );
           }}
         >
-          {/* <Link to={`call`} rel="noopener noreferrer"> */}
-          <li
-          // onClick={() =>
-          //   dispatch(startCall({ calleeId: friendId!, callerId: userId }))
-          // }
-          >
-            <AiFillPhone size={25} />
-          </li>
+          <AiFillPhone size={25} />
         </a>
-        {/* </Link> */}
+        <a
+          onClick={(e) => {
+            e.preventDefault();
+            window.open(
+              `/call-room-type=video:initiate=true/${friendId}`,
+              "",
+              "popup"
+            );
+          }}
+        >
+          <AiFillVideoCamera size={25} />
+        </a>
       </ul>
     </header>
   );
