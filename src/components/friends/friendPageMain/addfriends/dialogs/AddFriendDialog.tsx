@@ -113,7 +113,7 @@ export default function AddFriendDialog({
                 onClick={() => {
                   action(people.personId);
                 }}
-                className=" btn btn-sm bg-teal-500 text-slate-950"
+                className=" btn btn-sm bg-red-500 text-zinc-950"
               >
                 Yes
               </button>
@@ -124,7 +124,7 @@ export default function AddFriendDialog({
                     openAddFriendDialog: false,
                   }));
                 }}
-                className="btn  btn-sm bg-slate-900"
+                className="btn  btn-sm bg-lime-500 text-zinc-950"
               >
                 No
               </button>

@@ -15,9 +15,15 @@ export default function Modal({ children, onClose }: ModalProps) {
         <div
           onClick={onClose}
           style={{ zIndex: 15 }}
-          className="absolute bottom-0  bg-opacity-70  left-0 right-0 top-0 flex flex-col justify-center items-center  p-2  bg-slate-900"
+          className="absolute bottom-0  bg-opacity-70  left-0 right-0 top-0 flex flex-col justify-center items-center  p-2  bg-zinc-900"
         >
-          {children}
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{ zIndex: 100 }}
+            className="  text-lime-500 rounded-md  bg-zinc-950 p-6"
+          >
+            {children}
+          </div>
         </div>,
         portal
       )

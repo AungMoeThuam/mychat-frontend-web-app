@@ -152,7 +152,7 @@ export default function VideoCallRoom() {
       videoRef.current.srcObject = videoStream.current;
       remoteRef.current.srcObject = remoteStream.current;
     }
-  }, [isCallAcceptedByCallee, remoteVideoOn, localVideoOn]);
+  }, [isCallAcceptedByCallee, remoteVideoOn, localVideoOn, loading]);
   useEffect(() => {
     let a = setTimeout(videoCallHandler, 2000);
 

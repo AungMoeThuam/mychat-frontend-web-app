@@ -14,7 +14,6 @@ type MessageListProps = {
 function MessageList(props: MessageListProps) {
   const { error, message, messagesList, loading, success } = props;
   const { currentUserId } = useSelector((state: RootState) => state.authSlice);
-  console.log(messagesList);
   if (loading) return <h1>{message}</h1>;
   if (error) return <h1>{message}</h1>;
   if (success)

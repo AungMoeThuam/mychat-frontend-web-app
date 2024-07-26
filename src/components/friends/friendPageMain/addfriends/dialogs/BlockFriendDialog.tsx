@@ -73,10 +73,7 @@ export default function BlockFriendDialog({
               }))
       }
     >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className="flex flex-col py-3 px-5 gap-10 bg-slate-950 rounded-lg shadow-lg"
-      >
+      <div className="flex flex-col py-3 px-5 gap-10 rounded-lg shadow-lg">
         {operation.loading ? (
           <h1>Loading...</h1>
         ) : operation.error ? (
@@ -105,7 +102,7 @@ export default function BlockFriendDialog({
                 onClick={() => {
                   action(people.friendId);
                 }}
-                className=" btn btn-sm bg-teal-500 text-slate-950"
+                className=" btn btn-sm bg-red-500 text-black"
               >
                 Yes
               </button>
@@ -116,7 +113,7 @@ export default function BlockFriendDialog({
                     openBlockFriendDialog: false,
                   }));
                 }}
-                className="btn  btn-sm bg-slate-900"
+                className="btn  btn-sm bg-lime-500 text-zinc-900"
               >
                 No
               </button>

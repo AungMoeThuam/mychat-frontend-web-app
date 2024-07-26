@@ -1,5 +1,5 @@
 import "./style.css";
-import { memo, useState } from "react";
+import { Children, memo, ReactNode, RefObject, useRef, useState } from "react";
 import DeleteMessageDialog from "../delete-message-dialog/DeleteMessageDialog";
 import ImageMessageDisplay from "./ImageMessageDisplay";
 import { BsSaveFill, BsTrashFill } from "react-icons/bs";
@@ -57,13 +57,12 @@ function Message({
     ? new Date(previousMessageDate).toLocaleString().split(",")[0]
     : null;
   let cur = new Date(createdAt).toLocaleString().split(",")[0];
+  let dialog = useRef<HTMLDialogElement>(null);
   return (
     <div
       data-id={messageId}
       id="message"
-      className={` chat  my-1 relative flex flex-col   ${
-        isCurrentUserTheSender ? "chat-end" : "chat-start"
-      }  `}
+      className={isCurrentUserTheSender ? "send-message" : "receive-message"}
     >
       {deliveryStatus !== 9 ? (
         <div
@@ -89,7 +88,7 @@ function Message({
             )}
             {type?.includes("text") && <TextMessageDisplay content={content} />}
             {isItAFile(type) && <FileMessageDisplay content={content} />}
-
+            {}
             {deleteMessageDialog && (
               <DeleteMessageDialog
                 deleteMessageAction={deleteMessageAction}
@@ -98,7 +97,26 @@ function Message({
                 onClose={setDeleteMessageDialog}
               />
             )}
-
+            <Dialog dialogRef={dialog}>
+              Are u sure to delete this message?
+              <div className="flex  items-center justify-center gap-4 my-2">
+                <button
+                  onClick={() => {
+                    deleteMessageAction();
+                    dialog.current?.close();
+                  }}
+                  className="btn-cancel"
+                >
+                  Yes
+                </button>
+                <button
+                  onClick={() => dialog.current?.close()}
+                  className=" px-4 py-2 rounded-md  bg-lime-500 text-zinc-950"
+                >
+                  No
+                </button>
+              </div>
+            </Dialog>
             <menu
               id="menu"
               style={
@@ -117,7 +135,14 @@ function Message({
               className="absolute  text-teal-500 opacity-50"
             >
               <div className="flex flex-col justify-center items-center cursor-pointer  text-lime-500 gap-3 ">
-                <BsTrashFill onClick={openDeleteMessageDialog} size={20} />
+                <BsTrashFill
+                  onClick={() => {
+                    dialog.current?.showModal();
+                  }}
+                  // onClick={openDeleteMessageDialog}
+                  size={20}
+                />
+
                 {!type?.includes("text") && (
                   <BsSaveFill
                     onClick={async (e) => {
@@ -164,6 +189,23 @@ function Message({
         </span>
       </small>
     </div>
+  );
+}
+
+function Dialog({
+  dialogRef,
+  children,
+}: {
+  dialogRef: RefObject<HTMLDialogElement>;
+  children: ReactNode;
+}) {
+  return (
+    <dialog ref={dialogRef} id="my_modal_2" className="modal">
+      <div className="modal-box">{children}</div>
+      <form method="dialog" className=" modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
   );
 }
 

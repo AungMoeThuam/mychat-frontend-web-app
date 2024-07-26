@@ -51,10 +51,7 @@ export default function UnFriendDialog({
           : onClose
       }
     >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className=" bg-slate-950 px-10 py-5 rounded-md shadow-lg flex flex-col justify-center items-center gap-5"
-      >
+      <div className="  px-10 py-5 rounded-md shadow-lg flex flex-col justify-center items-center gap-5">
         {operation.loading ? (
           <h1>loading...</h1>
         ) : operation.error ? (
@@ -78,11 +75,14 @@ export default function UnFriendDialog({
             <div className="flex gap-2">
               <button
                 onClick={unFriendAction}
-                className="btn btn-sm bg-teal-500 text-slate-950"
+                className="px-4 py-2 rounded-lg bg-red-500 text-zinc-950"
               >
                 Yes
               </button>
-              <button onClick={onClose} className="btn btn-sm bg-slate-900">
+              <button
+                onClick={onClose}
+                className=" px-4 py-2 rounded-lg bg-lime-500 text-zinc-900"
+              >
                 No
               </button>
             </div>

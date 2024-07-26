@@ -55,7 +55,7 @@ export default function SideNavigationMenu() {
               dispatch(logout());
               socket.disconnect();
             }}
-            className=" btn btn-sm text-white bg-gradient-to-r from-zinc-900  dark:text-zinc-900  dark:from-lime-500 dark:to-teal-500  "
+            className=" accent-dark-btn "
           >
             Logout
           </button>
