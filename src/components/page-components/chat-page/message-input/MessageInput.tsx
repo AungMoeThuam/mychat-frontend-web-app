@@ -6,7 +6,6 @@ import {
   KeyboardEvent,
   SetStateAction,
   useEffect,
-  useState,
 } from "react";
 import "./style.css";
 import socket from "../../../../service/socket";
@@ -76,7 +75,6 @@ export default function MessageInput(props: MessageInputProps) {
   useEffect(() => {
     // Load content from sessionStorage for this tab
     const savedContent = sessionStorage.getItem(roomId);
-
     if (savedContent) {
       setContent(savedContent);
     }
@@ -88,6 +86,7 @@ export default function MessageInput(props: MessageInputProps) {
     window.addEventListener("beforeunload", a);
 
     return () => {
+      setContent("");
       window.removeEventListener("beforeunload", a);
     };
   }, [roomId]);
