@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useRef } from "react";
 import UnFriendDialog from "./UnFriendDialog";
 import { backendUrlWihoutApiEndpoint } from "../../../utils/backendConfig";
 import { tempCatPhoto } from "../../../assets/temporaryProfilePhoto";
@@ -11,8 +11,8 @@ import { BsPersonFillDash, BsPersonFillSlash } from "react-icons/bs";
 import { BiSolidMessageSquareDetail } from "react-icons/bi";
 
 export default function FriendCard({ friend }: { friend: Friend }) {
-  const [unFriendDialog, setUnFriendDialog] = useState(false);
-  const [blockFriendDialog, setBlockFriendDialog] = useState(false);
+  const blockDialog = useRef<HTMLDialogElement>(null);
+  const unFriendDialog = useRef<HTMLDialogElement>(null);
   const currentUserId = useSelector(
     (state: RootState) => state.authSlice.currentUserId
   );
@@ -35,14 +35,14 @@ export default function FriendCard({ friend }: { friend: Friend }) {
       </div>
       <div className="flex gap-2">
         <button
-          onClick={() => setBlockFriendDialog(true)}
+          onClick={() => blockDialog.current?.showModal()}
           className="tooltip tooltip-left"
           data-tip="Block"
         >
           <BsPersonFillSlash size={24} />
         </button>
         <button
-          onClick={() => setUnFriendDialog(true)}
+          onClick={() => unFriendDialog.current?.showModal()}
           className="tooltip tooltip-left"
           data-tip="Un Friend"
         >
@@ -56,23 +56,18 @@ export default function FriendCard({ friend }: { friend: Friend }) {
           <BiSolidMessageSquareDetail size={24} />
         </Link>
       </div>
-      {unFriendDialog && (
-        <UnFriendDialog
-          friend={friend}
-          onClose={() => setUnFriendDialog(false)}
-        />
-      )}
-      {blockFriendDialog && (
-        <BlockFriendDialog
-          people={{
-            name: friend.friendName,
-            friendId: friend.friendId,
-            friendshipId: friend.friendshipId,
-          }}
-          currentUserId={currentUserId}
-          setBlockFriendDialog={() => setBlockFriendDialog(false)}
-        />
-      )}
+
+      <UnFriendDialog dialogRef={unFriendDialog} friend={friend} />
+
+      <BlockFriendDialog
+        people={{
+          name: friend.friendName,
+          friendId: friend.friendId,
+          friendshipId: friend.friendshipId,
+        }}
+        currentUserId={currentUserId}
+        dialogRef={blockDialog}
+      />
     </div>
   );
 }

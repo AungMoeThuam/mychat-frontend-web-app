@@ -1,11 +1,9 @@
-import { Dispatch, SetStateAction, useContext } from "react";
+import { RefObject, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, StoreDispatch } from "../../../../../redux/store/store";
 import { FriendShipApi } from "../../../../../service/friend-api-service";
 import { searchfriendNameThunk } from "../../../../../redux/features/people/peopleThunks";
-import Modal from "../../../../share-components/modal/Modal";
 import toast from "react-hot-toast";
-import { RelationshipActionDialogs } from "../AddFriendCard";
 import { SearchNameContext } from "../../../../../pages/search-people/SearchPeoplePage";
 import {
   operationError,
@@ -13,16 +11,15 @@ import {
   operationSuccess,
 } from "../../../../../redux/slices/friendshipDialogSlice";
 import { Person } from "../../../../../lib/models/models";
+import Dialog from "../../../../share-components/Dialog";
 
 export default function AddFriendDialog({
   people,
-  setUnFriendShipActionDialog,
+  dialogRef,
   currentUserId,
 }: {
   people: Person;
-  setUnFriendShipActionDialog: Dispatch<
-    SetStateAction<RelationshipActionDialogs>
-  >;
+  dialogRef: RefObject<HTMLDialogElement>;
   currentUserId: string;
 }) {
   const searchNameContextConsumer = useContext(SearchNameContext);
@@ -51,10 +48,7 @@ export default function AddFriendDialog({
       } else {
         toast("requested successfully!");
         operationSuccess();
-        setUnFriendShipActionDialog((prev) => ({
-          ...prev,
-          openAddFriendDialog: false,
-        }));
+        dialogRef.current?.close();
         dispatch(
           searchfriendNameThunk(
             searchNameContextConsumer ? searchNameContextConsumer : ""
@@ -68,70 +62,51 @@ export default function AddFriendDialog({
   };
 
   return (
-    <Modal
-      onClose={
+    <Dialog
+      dialogRef={dialogRef}
+      CloseToClickOutside={
         operation.loading === true || operation.error === true
-          ? () => {
-              return;
-            }
-          : () =>
-              setUnFriendShipActionDialog((prev) => ({
-                ...prev,
-                openAddFriendDialog: false,
-              }))
       }
     >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className="flex flex-col py-3 px-5 gap-10 bg-slate-950 rounded-lg shadow-lg"
-      >
-        {operation.loading ? (
-          <h1>Loading...</h1>
-        ) : operation.error ? (
+      {operation.loading ? (
+        <h1>Loading...</h1>
+      ) : operation.error ? (
+        <div className="flex  justify-center gap-5 ">
+          <h1>
+            There is a conflict concurrent request at the moment! try refresh
+          </h1>
+          <button
+            onClick={() => {
+              dispatch(searchfriendNameThunk(searchNameContextConsumer));
+
+              dialogRef.current?.close();
+            }}
+            className=" btn btn-sm bg-teal-500 text-slate-950"
+          >
+            Refresh
+          </button>
+        </div>
+      ) : (
+        <>
+          <h1>Are u sure to add friend to {people.personName}? </h1>
           <div className="flex  justify-center gap-5 ">
-            <h1>
-              There is a conflict concurrent request at the moment! try refresh
-            </h1>
             <button
               onClick={() => {
-                dispatch(searchfriendNameThunk(searchNameContextConsumer));
-                setUnFriendShipActionDialog((prev) => ({
-                  ...prev,
-                  openAddFriendDialog: false,
-                }));
+                action(people.personId);
               }}
-              className=" btn btn-sm bg-teal-500 text-slate-950"
+              className=" btn btn-sm bg-red-500 text-zinc-950"
             >
-              Refresh
+              Yes
+            </button>
+            <button
+              onClick={() => dialogRef.current?.close()}
+              className="btn  btn-sm bg-lime-500 text-zinc-950"
+            >
+              No
             </button>
           </div>
-        ) : (
-          <>
-            <h1>Are u sure to add friend to {people.personName}? </h1>
-            <div className="flex  justify-center gap-5 ">
-              <button
-                onClick={() => {
-                  action(people.personId);
-                }}
-                className=" btn btn-sm bg-red-500 text-zinc-950"
-              >
-                Yes
-              </button>
-              <button
-                onClick={() => {
-                  setUnFriendShipActionDialog((prev) => ({
-                    ...prev,
-                    openAddFriendDialog: false,
-                  }));
-                }}
-                className="btn  btn-sm bg-lime-500 text-zinc-950"
-              >
-                No
-              </button>
-            </div>
-          </>
-        )}
-      </div>
-    </Modal>
+        </>
+      )}
+    </Dialog>
   );
 }

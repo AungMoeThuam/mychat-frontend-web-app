@@ -1,6 +1,5 @@
 import "./style.css";
-import { Children, memo, ReactNode, RefObject, useRef, useState } from "react";
-import DeleteMessageDialog from "../delete-message-dialog/DeleteMessageDialog";
+import { memo, useRef } from "react";
 import ImageMessageDisplay from "./ImageMessageDisplay";
 import { BsSaveFill, BsTrashFill } from "react-icons/bs";
 import { useDispatch } from "react-redux";
@@ -14,6 +13,7 @@ import AudioMessageDisplay from "./audio-message-display/AudioMessageDisplay";
 import VideoMessageDisplay from "./VideoMessageDisplay";
 import TextMessageDisplay from "./TextMessageDisplay";
 import { Message as MSG } from "../../../../lib/models/models";
+import Dialog from "../../../share-components/Dialog";
 
 function isItAFile(type: any) {
   const t = ["video", "image", "text", "audio"];
@@ -41,8 +41,6 @@ function Message({
   } = message;
   const isCurrentUserTheSender = senderId === currentUserId;
   const friendId = isCurrentUserTheSender ? receiverId : senderId;
-  const [deleteMessageDialog, setDeleteMessageDialog] = useState(false);
-  const openDeleteMessageDialog = () => setDeleteMessageDialog(true);
   const dispatch = useDispatch<StoreDispatch>();
   const deleteMessageAction = () => {
     dispatch(
@@ -88,30 +86,22 @@ function Message({
             )}
             {type?.includes("text") && <TextMessageDisplay content={content} />}
             {isItAFile(type) && <FileMessageDisplay content={content} />}
-            {}
-            {deleteMessageDialog && (
-              <DeleteMessageDialog
-                deleteMessageAction={deleteMessageAction}
-                messageId={messageId}
-                open={deleteMessageDialog}
-                onClose={setDeleteMessageDialog}
-              />
-            )}
+
             <Dialog dialogRef={dialog}>
               Are u sure to delete this message?
-              <div className="flex  items-center justify-center gap-4 my-2">
+              <div className="flex  items-center justify-center gap-4 ">
                 <button
                   onClick={() => {
                     deleteMessageAction();
                     dialog.current?.close();
                   }}
-                  className="btn-cancel"
+                  className="btn-warning"
                 >
                   Yes
                 </button>
                 <button
                   onClick={() => dialog.current?.close()}
-                  className=" px-4 py-2 rounded-md  bg-lime-500 text-zinc-950"
+                  className="  btn-success"
                 >
                   No
                 </button>
@@ -139,7 +129,6 @@ function Message({
                   onClick={() => {
                     dialog.current?.showModal();
                   }}
-                  // onClick={openDeleteMessageDialog}
                   size={20}
                 />
 
@@ -189,23 +178,6 @@ function Message({
         </span>
       </small>
     </div>
-  );
-}
-
-function Dialog({
-  dialogRef,
-  children,
-}: {
-  dialogRef: RefObject<HTMLDialogElement>;
-  children: ReactNode;
-}) {
-  return (
-    <dialog ref={dialogRef} id="my_modal_2" className="modal">
-      <div className="modal-box">{children}</div>
-      <form method="dialog" className=" modal-backdrop">
-        <button>close</button>
-      </form>
-    </dialog>
   );
 }
 

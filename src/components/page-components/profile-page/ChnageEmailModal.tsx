@@ -5,7 +5,7 @@ import {
   ChangeEvent,
   useState,
 } from "react";
-import Modal from "../../share-components/modal/Modal";
+import Modal from "../../share-components/Modal";
 import API from "../../../service/api-setup";
 import { AxiosError } from "axios";
 import toast from "react-hot-toast";

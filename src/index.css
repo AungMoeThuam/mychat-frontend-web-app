@@ -29,11 +29,11 @@
     @apply bg-lime-500;
   }
 
-  .btn-cancel {
-    @apply bg-red-500 text-zinc-950 px-2 py-1 rounded-md;
+  .btn-warning {
+    @apply bg-red-500 py-2 px-4 rounded-md font-bold;
   }
-  .cancel-btn {
-    @apply bg-red-500 text-zinc-950 px-10 py-2 rounded-md;
+  .btn-success {
+    @apply bg-lime-500 py-2 px-4 rounded-md font-bold;
   }
 
   .accent-dark-btn {

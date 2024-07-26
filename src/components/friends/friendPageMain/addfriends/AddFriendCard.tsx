@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { backendUrlWihoutApiEndpoint } from "../../../../utils/backendConfig";
 import { useSelector } from "react-redux";
@@ -11,25 +11,16 @@ import BlockFriendDialog from "./dialogs/BlockFriendDialog";
 import { Person } from "../../../../lib/models/models";
 import { BsPersonFillAdd, BsPersonFillSlash } from "react-icons/bs";
 
-export type RelationshipActionDialogs = {
-  openAddFriendDialog: boolean;
-  openRejectOrCancelFriendRequestDialog: boolean;
-  openAcceptFriendDialog: boolean;
-  openBlockFriendDialog: boolean;
-};
-
 export default function AddFriendCard({ people }: { people: Person }) {
-  const [relationshipActionDialogs, setRelationshipActionDialogs] =
-    useState<RelationshipActionDialogs>({
-      openAddFriendDialog: false,
-      openRejectOrCancelFriendRequestDialog: false,
-      openAcceptFriendDialog: false,
-      openBlockFriendDialog: false,
-    });
-
+  const blockDialog = useRef<HTMLDialogElement>(null);
+  const addFriendDialog = useRef<HTMLDialogElement>(null);
+  const rejectOrCancelFriendDialog = useRef<HTMLDialogElement>(null);
+  const [openAcceptFriendDialog, setOpenAcceptFriendDialog] = useState(false);
   const currentUserId = useSelector(
     (state: RootState) => state.authSlice.currentUserId
   );
+
+  console.log("re render add friend card ");
 
   return (
     <div className="flex  gap-2  justify-between p-1 rounded  items-center pr-4 text-zinc-900 dark:text-lime-500 hover:text-lime-500 dark:hover:text-zinc-900  hover:bg-zinc-900 dark:bg-gradient-to-r dark:hover:from-lime-500 dark:hover:to-teal-500">
@@ -59,12 +50,7 @@ export default function AddFriendCard({ people }: { people: Person }) {
          is applicable for add friend */}
         {(!people.friendshipStatus || people.friendshipStatus === 4) && (
           <button
-            onClick={() =>
-              setRelationshipActionDialogs((prev) => ({
-                ...prev,
-                openAddFriendDialog: true,
-              }))
-            }
+            onClick={() => addFriendDialog.current?.showModal()}
             className=" hover:text-slate-400  "
           >
             <BsPersonFillAdd size={24} />
@@ -75,12 +61,7 @@ export default function AddFriendCard({ people }: { people: Person }) {
         {people.friendshipStatus === 1 &&
           people.friendshipInitiatorId === currentUserId && (
             <button
-              onClick={() => {
-                setRelationshipActionDialogs((prev) => ({
-                  ...prev,
-                  openRejectOrCancelFriendRequestDialog: true,
-                }));
-              }}
+              onClick={() => rejectOrCancelFriendDialog.current?.showModal()}
               className="btn btn-sm text-lime-500"
             >
               cancel request
@@ -92,26 +73,14 @@ export default function AddFriendCard({ people }: { people: Person }) {
           people.friendshipInitiatorId !== currentUserId && (
             <div>
               <button
-                onClick={() => {
-                  setRelationshipActionDialogs((prev) => ({
-                    ...prev,
-                    openAcceptFriendDialog: true,
-                  }));
-                }}
+                onClick={() => setOpenAcceptFriendDialog(true)}
                 className=" btn btn-sm     bg-teal-500  text-slate-950"
               >
-                {relationshipActionDialogs.openAcceptFriendDialog
-                  ? "loading..."
-                  : "accept request"}
+                {openAcceptFriendDialog ? "loading..." : "accept request"}
               </button>
 
               <button
-                onClick={() =>
-                  setRelationshipActionDialogs((prev) => ({
-                    ...prev,
-                    openRejectOrCancelFriendRequestDialog: true,
-                  }))
-                }
+                onClick={() => rejectOrCancelFriendDialog.current?.showModal()}
                 className=" btn btn-sm     bg-teal-500  text-slate-950"
               >
                 reject request
@@ -121,54 +90,45 @@ export default function AddFriendCard({ people }: { people: Person }) {
         {/* if the person is already friend with the current user */}
         {/* {people.friendshipStatus === 3 && <BsPersonFillCheck size={24} />} */}
         {people.friendshipStatus !== 5 && (
-          <button
-            onClick={() =>
-              setRelationshipActionDialogs((prev) => ({
-                ...prev,
-                openBlockFriendDialog: true,
-              }))
-            }
-          >
+          <button onClick={() => blockDialog.current?.showModal()}>
             <BsPersonFillSlash size={24} />
           </button>
         )}
       </div>
 
-      {relationshipActionDialogs.openAddFriendDialog && (
-        <AddFriendDialog
-          people={people}
-          currentUserId={currentUserId}
-          setUnFriendShipActionDialog={setRelationshipActionDialogs}
-        />
-      )}
-      {relationshipActionDialogs.openRejectOrCancelFriendRequestDialog && (
-        <RejectOrCancelFriendRequestDialog
-          RejectOrCancelDialog={
-            people.friendshipInitiatorId === currentUserId ? "cancel" : "reject"
-          }
-          people={people}
-          currentUserId={currentUserId}
-          setRejectOrCancelFriendRequestDialog={setRelationshipActionDialogs}
-        />
-      )}
-      {relationshipActionDialogs.openAcceptFriendDialog && (
+      <AddFriendDialog
+        people={people}
+        currentUserId={currentUserId}
+        dialogRef={addFriendDialog}
+      />
+
+      <RejectOrCancelFriendRequestDialog
+        RejectOrCancelDialog={
+          people.friendshipInitiatorId === currentUserId ? "cancel" : "reject"
+        }
+        people={people}
+        currentUserId={currentUserId}
+        dialogRef={rejectOrCancelFriendDialog}
+      />
+
+      {openAcceptFriendDialog && (
         <AcceptFriendDialog
           people={people}
           currentUserId={currentUserId}
-          setOpenAcceptFriendDialog={setRelationshipActionDialogs}
+          setOpenAcceptFriendDialog={setOpenAcceptFriendDialog}
         />
       )}
-      {relationshipActionDialogs.openBlockFriendDialog && (
+      {
         <BlockFriendDialog
+          dialogRef={blockDialog}
           people={{
             friendId: people.personId,
             friendshipId: people.friendshipId!,
             name: people.personName,
           }}
           currentUserId={currentUserId}
-          setBlockFriendDialog={setRelationshipActionDialogs}
         />
-      )}
+      }
     </div>
   );
 }

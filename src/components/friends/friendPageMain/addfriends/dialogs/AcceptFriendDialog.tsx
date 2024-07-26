@@ -9,9 +9,8 @@ import { useDispatch } from "react-redux";
 import { StoreDispatch } from "../../../../../redux/store/store";
 import { FriendShipApi } from "../../../../../service/friend-api-service";
 import { searchfriendNameThunk } from "../../../../../redux/features/people/peopleThunks";
-import Modal from "../../../../share-components/modal/Modal";
+import Modal from "../../../../share-components/Modal";
 import toast from "react-hot-toast";
-import { RelationshipActionDialogs } from "../AddFriendCard";
 import { SearchNameContext } from "../../../../../pages/search-people/SearchPeoplePage";
 import { updateSearchingPeopleResult } from "../../../../../redux/features/people/peopleSlice";
 import { fetchFriends } from "../../../../../redux/features/friend/friendThunks";
@@ -23,9 +22,7 @@ export default function AcceptFriendDialog({
   currentUserId,
 }: {
   people: Person;
-  setOpenAcceptFriendDialog: Dispatch<
-    SetStateAction<RelationshipActionDialogs>
-  >;
+  setOpenAcceptFriendDialog: Dispatch<SetStateAction<boolean>>;
   currentUserId: string;
 }) {
   const searchNameContextConsumer = useContext(SearchNameContext);
@@ -51,10 +48,7 @@ export default function AcceptFriendDialog({
         setOperation((prev) => ({ ...prev, loading: false, error: true }));
       } else {
         toast("you have accepted a friend request ✅");
-        setOpenAcceptFriendDialog((prev) => ({
-          ...prev,
-          openAcceptFriendDialog: false,
-        }));
+        setOpenAcceptFriendDialog(false);
         dispatch(
           updateSearchingPeopleResult({
             receipent: currentUserId,
@@ -81,11 +75,7 @@ export default function AcceptFriendDialog({
           ? () => {
               return;
             }
-          : () =>
-              setOpenAcceptFriendDialog((prev) => ({
-                ...prev,
-                openAcceptFriendDialog: false,
-              }))
+          : () => setOpenAcceptFriendDialog(false)
       }
     >
       <div
@@ -104,10 +94,7 @@ export default function AcceptFriendDialog({
               <button
                 onClick={() => {
                   dispatch(searchfriendNameThunk(searchNameContextConsumer));
-                  setOpenAcceptFriendDialog((prev) => ({
-                    ...prev,
-                    openAcceptFriendDialog: false,
-                  }));
+                  setOpenAcceptFriendDialog(false);
                 }}
                 className=" btn btn-sm bg-teal-500 text-slate-950"
               >

@@ -1,5 +1,5 @@
 import { ImCross } from "react-icons/im";
-import Modal from "../../../share-components/modal/Modal";
+import Modal from "../../../share-components/Modal";
 import { backendUrlWihoutApiEndpoint } from "../../../../utils/backendConfig";
 
 export default function ImageDetailDisplayDialog({

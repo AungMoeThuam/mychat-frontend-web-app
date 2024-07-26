@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { StoreDispatch } from "../../../redux/store/store";
 import { FriendShipApi } from "../../../service/friend-api-service";
@@ -10,7 +10,7 @@ import { fetchFriends } from "../../../redux/features/friend/friendThunks";
 import { Person } from "../../../lib/models/models";
 
 export default function RequestFriendCard({ person }: { person: Person }) {
-  const [requestActionDialog, setRequestActionDialog] = useState(false);
+  const requestActionDialog = useRef<HTMLDialogElement>(null);
   const [operation, setOperation] = useState({
     loading: false,
     error: false,
@@ -58,18 +58,14 @@ export default function RequestFriendCard({ person }: { person: Person }) {
           {operation.loading ? "...loading" : "Accept"}
         </button>
         <button
-          onClick={() => setRequestActionDialog(true)}
+          onClick={() => requestActionDialog.current?.showModal()}
           className=" btn btn-sm   bg-zinc-950 border-none text-lime-500"
         >
           Reject
         </button>
       </div>
-      {requestActionDialog && (
-        <RequestActionDialog
-          person={person}
-          onClose={() => setRequestActionDialog(false)}
-        />
-      )}
+
+      <RequestActionDialog person={person} dialogRef={requestActionDialog} />
     </div>
   );
 }
