@@ -11,7 +11,7 @@ export default function Dialog({
 }) {
   return (
     <dialog ref={dialogRef} id="my_modal_2" className="modal">
-      <div className="modal-box text-zinc-950 dark:text-lime-500 flex flex-col justify-center items-center gap-2">
+      <div className="modal-box text-lime-500 flex flex-col justify-center items-center gap-2">
         {children}
       </div>
       {CloseToClickOutside && (

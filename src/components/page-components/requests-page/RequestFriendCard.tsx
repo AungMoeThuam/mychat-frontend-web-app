@@ -59,7 +59,7 @@ export default function RequestFriendCard({ person }: { person: Person }) {
         </button>
         <button
           onClick={() => requestActionDialog.current?.showModal()}
-          className=" btn btn-sm   bg-zinc-950 border-none text-lime-500"
+          className=" btn btn-sm   bg-zinc-950 dark:bg-red-600 dark:text-zinc-950 border-none text-lime-500"
         >
           Reject
         </button>

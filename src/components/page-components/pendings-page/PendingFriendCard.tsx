@@ -24,7 +24,7 @@ export default function PendingFriendCard({ person }: { person: Person }) {
       <div className="flex gap-4">
         <button
           onClick={() => pendingActionDialog.current?.showModal()}
-          className=" btn btn-sm text-lime-500"
+          className=" btn-warning"
         >
           Cancel
         </button>

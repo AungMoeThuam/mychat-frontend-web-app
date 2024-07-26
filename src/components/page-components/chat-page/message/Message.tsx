@@ -95,7 +95,7 @@ function Message({
                     deleteMessageAction();
                     dialog.current?.close();
                   }}
-                  className="btn-warning"
+                  className=" btn-warning"
                 >
                   Yes
                 </button>

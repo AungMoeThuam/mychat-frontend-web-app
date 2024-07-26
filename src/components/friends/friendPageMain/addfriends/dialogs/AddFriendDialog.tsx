@@ -81,7 +81,7 @@ export default function AddFriendDialog({
 
               dialogRef.current?.close();
             }}
-            className=" btn btn-sm bg-teal-500 text-slate-950"
+            className=" btn-success"
           >
             Refresh
           </button>
@@ -94,13 +94,13 @@ export default function AddFriendDialog({
               onClick={() => {
                 action(people.personId);
               }}
-              className=" btn btn-sm bg-red-500 text-zinc-950"
+              className=" btn-warning"
             >
               Yes
             </button>
             <button
               onClick={() => dialogRef.current?.close()}
-              className="btn  btn-sm bg-lime-500 text-zinc-950"
+              className="btn-success"
             >
               No
             </button>

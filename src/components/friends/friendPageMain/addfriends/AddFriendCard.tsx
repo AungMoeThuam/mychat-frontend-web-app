@@ -74,16 +74,16 @@ export default function AddFriendCard({ people }: { people: Person }) {
             <div>
               <button
                 onClick={() => setOpenAcceptFriendDialog(true)}
-                className=" btn btn-sm     bg-teal-500  text-slate-950"
+                className="   bg-lime-500  text-zinc-950 px-2 py-1 rounded-lg mx-1"
               >
-                {openAcceptFriendDialog ? "loading..." : "accept request"}
+                {openAcceptFriendDialog ? "loading..." : "accept"}
               </button>
 
               <button
                 onClick={() => rejectOrCancelFriendDialog.current?.showModal()}
-                className=" btn btn-sm     bg-teal-500  text-slate-950"
+                className="   bg-red-500  text-zinc-950 px-2 py-1 rounded-lg mx-1"
               >
-                reject request
+                reject
               </button>
             </div>
           )}
@@ -118,17 +118,16 @@ export default function AddFriendCard({ people }: { people: Person }) {
           setOpenAcceptFriendDialog={setOpenAcceptFriendDialog}
         />
       )}
-      {
-        <BlockFriendDialog
-          dialogRef={blockDialog}
-          people={{
-            friendId: people.personId,
-            friendshipId: people.friendshipId!,
-            name: people.personName,
-          }}
-          currentUserId={currentUserId}
-        />
-      }
+
+      <BlockFriendDialog
+        dialogRef={blockDialog}
+        people={{
+          friendId: people.personId,
+          friendshipId: people.friendshipId!,
+          name: people.personName,
+        }}
+        currentUserId={currentUserId}
+      />
     </div>
   );
 }

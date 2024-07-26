@@ -3,7 +3,6 @@ import Modal from "../../../share-components/Modal";
 
 export default function DeleteMessageDialog({
   deleteMessageAction,
-  messageId,
   open,
   onClose,
 }: {
@@ -23,14 +22,11 @@ export default function DeleteMessageDialog({
                 deleteMessageAction();
                 onClose(false);
               }}
-              className="btn btn-active btn-sm  bg-red-500 text-zinc-950"
+              className=" btn-warning"
             >
               Yes
             </button>
-            <button
-              onClick={() => onClose(false)}
-              className=" bg-lime-500 text-zinc-950 px-10 py-2 rounded-md"
-            >
+            <button onClick={() => onClose(false)} className="  btn-success">
               No
             </button>
           </div>

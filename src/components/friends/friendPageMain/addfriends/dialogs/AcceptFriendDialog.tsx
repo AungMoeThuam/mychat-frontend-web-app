@@ -96,7 +96,7 @@ export default function AcceptFriendDialog({
                   dispatch(searchfriendNameThunk(searchNameContextConsumer));
                   setOpenAcceptFriendDialog(false);
                 }}
-                className=" btn btn-sm bg-teal-500 text-slate-950"
+                className="  btn-success"
               >
                 Refresh
               </button>

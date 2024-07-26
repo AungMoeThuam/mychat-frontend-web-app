@@ -66,12 +66,12 @@ export default function UnblockActionDialog({
         <>
           <h1>Are u sure to unblock {friend.name}?</h1>
           <div className="flex justify-center gap-4 ">
-            <button onClick={removeBlock} className="btn btn-sm btn-error">
+            <button onClick={removeBlock} className=" btn-warning">
               Yes
             </button>
             <button
               onClick={() => dialogRef.current?.close()}
-              className="btn btn-sm  bg-slate-900"
+              className=" btn-success"
             >
               No
             </button>

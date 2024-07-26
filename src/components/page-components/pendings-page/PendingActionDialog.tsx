@@ -65,12 +65,12 @@ export default function PendingActionDialog({
         <>
           <h1>Are u sure to cancel the request to {person.personName}?</h1>
           <div className="flex justify-center gap-4 ">
-            <button onClick={rejectRequest} className="btn btn-sm btn-error">
+            <button onClick={rejectRequest} className="btn-warning">
               Yes
             </button>
             <button
               onClick={() => dialogRef.current?.close()}
-              className="btn btn-sm  bg-slate-900"
+              className="btn-success"
             >
               No
             </button>

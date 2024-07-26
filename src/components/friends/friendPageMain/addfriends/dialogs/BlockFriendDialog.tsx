@@ -70,7 +70,7 @@ export default function BlockFriendDialog({
               dispatch(searchfriendNameThunk(searchNameContextConsumer));
               dialogRef.current?.close();
             }}
-            className=" btn btn-sm bg-teal-500 text-slate-950"
+            className=" btn-success"
           >
             Refresh
           </button>
@@ -79,15 +79,12 @@ export default function BlockFriendDialog({
         <>
           <h1>Are u sure to block {people.name}? </h1>
           <div className="flex  justify-center gap-5 ">
-            <button
-              onClick={action}
-              className=" btn btn-sm bg-red-500 text-black"
-            >
+            <button onClick={action} className="  btn-warning">
               Yes
             </button>
             <button
               onClick={() => dialogRef.current?.close()}
-              className="btn  btn-sm bg-lime-500 text-zinc-900"
+              className=" btn-success"
             >
               No
             </button>
