@@ -1,22 +1,20 @@
-import { Dispatch, SetStateAction } from "react";
-type ChangeInfo = {
-  changePassword: boolean;
-  changeEmail: boolean;
-};
+import { RefObject } from "react";
 
 const buttonClassName =
   " text-start p-3 w-full rounded-md  border-none text-slate-500 shadow";
 export default function ChangeableInfoList({
-  setChangeInfo,
+  refs,
 }: {
-  setChangeInfo: Dispatch<SetStateAction<ChangeInfo>>;
+  refs: {
+    changePasswordDialog: RefObject<HTMLDialogElement>;
+    changeEmailDialog: RefObject<HTMLDialogElement>;
+  };
 }) {
+  const { changePasswordDialog, changeEmailDialog } = refs;
   return (
     <>
       <button
-        onClick={() =>
-          setChangeInfo((prev) => ({ ...prev, changePassword: true }))
-        }
+        onClick={() => changePasswordDialog.current?.showModal()}
         style={{
           backgroundColor: "#121318",
         }}
@@ -25,9 +23,7 @@ export default function ChangeableInfoList({
         Change Password
       </button>
       <button
-        onClick={() =>
-          setChangeInfo((prev) => ({ ...prev, changeEmail: true }))
-        }
+        onClick={() => changeEmailDialog.current?.showModal()}
         style={{
           backgroundColor: "#121318",
         }}

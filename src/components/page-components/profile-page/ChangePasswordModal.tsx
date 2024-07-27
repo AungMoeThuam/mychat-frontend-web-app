@@ -1,26 +1,15 @@
-import {
-  SetStateAction,
-  Dispatch,
-  useState,
-  FormEvent,
-  ChangeEvent,
-} from "react";
-import Modal from "../../share-components/Modal";
+import { useState, FormEvent, ChangeEvent, RefObject } from "react";
 import API from "../../../service/api-setup";
 import { AxiosError } from "axios";
 import toast from "react-hot-toast";
-
-type ChangeInfo = {
-  changePassword: boolean;
-  changeEmail: boolean;
-};
+import Dialog from "../../share-components/Dialog";
 
 export default function ChangePasswordModal({
   userId,
-  changeAction,
+  dialogRef,
 }: {
   userId: string;
-  changeAction: Dispatch<SetStateAction<ChangeInfo>>;
+  dialogRef: RefObject<HTMLDialogElement>;
 }) {
   const [updatePasswordInfo, setUpdatePasswordInfo] = useState({
     oldPassword: "",
@@ -46,8 +35,7 @@ export default function ChangePasswordModal({
         userId,
         ...updatePasswordInfo,
       });
-      if (res.status === 200)
-        changeAction((prev) => ({ ...prev, changePassword: false }));
+      if (res.status === 200) dialogRef.current?.close();
       toast("Updated Password ✅");
     } catch (error) {
       if (error instanceof AxiosError)
@@ -68,15 +56,10 @@ export default function ChangePasswordModal({
     }));
 
   return (
-    <Modal
-      onClose={() =>
-        changeAction((prev) => ({ ...prev, changePassword: false }))
-      }
-    >
+    <Dialog dialogRef={dialogRef}>
       <form
         onSubmit={updatePassword}
-        onClick={(e) => e.stopPropagation()}
-        className=" w-full m-5 lg:w-2/5 bg-slate-950 py-10 px-4 rounded-md flex flex-col justify-center items-center shadow-xl gap-5"
+        className=" w-[70vw] md:w-[30vw] lg:w-[25vw]  m-5 py-10 px-4 rounded-md flex flex-col justify-center items-center gap-5"
       >
         <h1 className=" text-lg text-white font-bold">Changing Password </h1>
         <label className="form-control w-full max-w-xs ">
@@ -107,7 +90,7 @@ export default function ChangePasswordModal({
             className="input input-sm input-bordered w-full max-w-xs"
           />
         </label>{" "}
-        <label className="form-control w-full max-w-xs ">
+        <label className="form-control w-full max-w-xs   ">
           <div className="label">
             <span className="label-text text-white">Confirm password</span>
           </div>
@@ -123,17 +106,15 @@ export default function ChangePasswordModal({
         {error.isError && (
           <p className=" font-semibold text-red-500">{error.message}</p>
         )}
-        <div className="flex    justify-center mt-2 gap-2 ">
+        <div className="flex   items-center justify-center mt-2 gap-2 ">
           <button
             type="reset"
-            onClick={() =>
-              changeAction((prev) => ({ ...prev, changePassword: false }))
-            }
-            className=" btn btn-sm bg-red-600 border-none px-4"
+            onClick={() => dialogRef.current?.close()}
+            className=" btn-warning"
           >
             cancel
           </button>
-          <button disabled={loading} className=" btn btn-sm btn-success px-5 ">
+          <button disabled={loading} className="   btn-success">
             {loading ? (
               <span className="loading loading-spinner loading-sm"></span>
             ) : (
@@ -142,6 +123,6 @@ export default function ChangePasswordModal({
           </button>
         </div>
       </form>
-    </Modal>
+    </Dialog>
   );
 }

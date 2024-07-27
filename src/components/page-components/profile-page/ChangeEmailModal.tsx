@@ -1,28 +1,17 @@
-import {
-  SetStateAction,
-  Dispatch,
-  FormEvent,
-  ChangeEvent,
-  useState,
-} from "react";
-import Modal from "../../share-components/Modal";
+import { FormEvent, ChangeEvent, useState, RefObject } from "react";
 import API from "../../../service/api-setup";
 import { AxiosError } from "axios";
 import toast from "react-hot-toast";
-
-type ChangeInfo = {
-  changePassword: boolean;
-  changeEmail: boolean;
-};
+import Dialog from "../../share-components/Dialog";
 
 export default function ChangeEmailModal({
-  changeAction,
+  dialogRef,
   email,
   userId,
 }: {
   userId: string;
   email: string;
-  changeAction: Dispatch<SetStateAction<ChangeInfo>>;
+  dialogRef: RefObject<HTMLDialogElement>;
 }) {
   const [updateEmailInfo, setUpdateEmailInfo] = useState({
     password: "",
@@ -60,14 +49,12 @@ export default function ChangeEmailModal({
       ...prev,
       [e.target.name]: e.target.value,
     }));
-  const closeModal = () =>
-    changeAction((prev) => ({ ...prev, changeEmail: false }));
+  const closeModal = () => dialogRef.current?.close();
   return (
-    <Modal onClose={closeModal}>
+    <Dialog dialogRef={dialogRef}>
       <form
         onSubmit={updateEmail}
-        onClick={(e) => e.stopPropagation()}
-        className=" w-full m-5 lg:w-2/5 bg-slate-950 py-10 px-4 rounded-md flex flex-col justify-center items-center shadow-xl gap-5"
+        className=" w-[70vw] md:w-[30vw] lg:w-[25vw] m-5 py-10 px-4 rounded-md flex flex-col justify-center items-center gap-5"
       >
         <h1 className=" text-lg text-white font-bold">Changing Email </h1>
         <label className="form-control w-full max-w-xs ">
@@ -134,6 +121,6 @@ export default function ChangeEmailModal({
           </button>
         </div>
       </form>
-    </Modal>
+    </Dialog>
   );
 }

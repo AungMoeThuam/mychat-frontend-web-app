@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ImCross } from "react-icons/im";
 
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -12,17 +12,14 @@ import useUserProfileInfo from "../../hooks/useUserProfileInfo";
 import UserProfilePhotoDisplayer from "../../components/page-components/profile-page/UserProfilePhotoDisplayer";
 import ChangeableInfoList from "../../components/page-components/profile-page/ChangeableInfoList";
 import ChangePasswordModal from "../../components/page-components/profile-page/ChangePasswordModal";
-import ChangeEmailModal from "../../components/page-components/profile-page/ChnageEmailModal";
-
-type ChangeInfo = {
-  changePassword: boolean;
-  changeEmail: boolean;
-};
+import ChangeEmailModal from "../../components/page-components/profile-page/ChangeEmailModal";
 
 export default function ProfilePage() {
   const [params] = useSearchParams();
   const history = params.get("history");
   const navigate = useNavigate();
+  const changePasswordDialog = useRef<HTMLDialogElement>(null);
+  const changeEmailDialog = useRef<HTMLDialogElement>(null);
   const currentUserId = useSelector(
     (state: RootState) => state.authSlice.currentUserId
   );
@@ -34,10 +31,6 @@ export default function ProfilePage() {
   } = useUserProfileInfo(currentUserId);
 
   const dispatch = useDispatch<StoreDispatch>();
-  const [changeInfo, setChangeInfo] = useState<ChangeInfo>({
-    changePassword: false,
-    changeEmail: false,
-  });
 
   useEffect(() => {
     if (!currentUserId) navigate("/login");
@@ -72,7 +65,9 @@ export default function ProfilePage() {
           <div className="flex flex-col gap-3 items-start  ">
             <UserIdDisplayer currentUserId={currentUserId} />
             <UserNameDisplayer name={user.name} />
-            <ChangeableInfoList setChangeInfo={setChangeInfo} />
+            <ChangeableInfoList
+              refs={{ changePasswordDialog, changeEmailDialog }}
+            />
             <button
               onClick={loggingOut}
               className="btn text-zinc-900 bg-gradient-to-r from-lime-500 to-teal-500  border-none w-full "
@@ -84,21 +79,16 @@ export default function ProfilePage() {
       </div>
       <Toaster position="top-right" />
 
-      {/* modal dialogs */}
+      <ChangePasswordModal
+        dialogRef={changePasswordDialog}
+        userId={currentUserId}
+      />
 
-      {changeInfo.changePassword && (
-        <ChangePasswordModal
-          changeAction={setChangeInfo}
-          userId={currentUserId}
-        />
-      )}
-      {changeInfo.changeEmail && (
-        <ChangeEmailModal
-          changeAction={setChangeInfo}
-          email={user.email}
-          userId={currentUserId}
-        />
-      )}
+      <ChangeEmailModal
+        dialogRef={changeEmailDialog}
+        email={user.email}
+        userId={currentUserId}
+      />
     </div>
   );
 }
