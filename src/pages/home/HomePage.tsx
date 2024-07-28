@@ -42,6 +42,7 @@ export default function HomePage() {
     }
 
     function callHandler(data: any) {
+      console.log(data);
       const { callerId, calleeId, offer } = data;
       localStorage.setItem("offer", JSON.stringify(offer));
       toast((t) => (

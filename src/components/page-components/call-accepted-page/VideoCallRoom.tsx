@@ -23,7 +23,7 @@ export function createWebRtc(): RTCPeerConnection {
 
 export default function VideoCallRoom() {
   let offer = localStorage.getItem("offer");
-
+  const [isSDPReady, setIsSDPReady] = useState(false);
   const { callerId, calleeId } = useParams();
 
   const [remoteVideo, setRemoteVideo] = useState(true);
@@ -36,7 +36,7 @@ export default function VideoCallRoom() {
   let remoteStream = useRef<MediaStream | null>(new MediaStream());
   let videoStream = useRef<MediaStream | null>(new MediaStream());
 
-  const rtcPeerConnection = useRef<null | RTCPeerConnection>(null);
+  const rtcPeerConnection = useRef<RTCPeerConnection>(createWebRtc());
   async function handup() {
     videoStream.current?.getTracks().forEach((e) => e.stop());
     rtcPeerConnection.current?.close();
@@ -45,14 +45,15 @@ export default function VideoCallRoom() {
   }
 
   async function toggleAudio() {
+    console.log(videoStream.current);
     if (videoStream.current) {
-      let as = videoStream.current.getTracks().find((e) => e.kind === "audio");
-
+      let as = videoStream.current.getTracks().find((e) => e.kind === "audio")!;
+      console.log(" as ", as);
       if (as?.enabled) {
         as.enabled = false;
         setLocalMic(false);
       } else {
-        as!.enabled = true;
+        as.enabled = true;
         setLocalMic(true);
       }
     }
@@ -96,8 +97,6 @@ export default function VideoCallRoom() {
       videoRef.current.volume = 0;
     }
 
-    rtcPeerConnection.current = createWebRtc();
-
     rtcPeerConnection.current.oniceconnectionstatechange = () => {
       console.log(
         `ICE connection state: ${rtcPeerConnection.current?.iceConnectionState}`
@@ -117,7 +116,6 @@ export default function VideoCallRoom() {
     };
 
     rtcPeerConnection.current.ontrack = (e) => {
-      console.log(" remote track in accept page ", e.track);
       if (remoteRef.current) {
         remoteRef.current.srcObject = remoteStream.current;
       }
@@ -127,11 +125,8 @@ export default function VideoCallRoom() {
     };
 
     rtcPeerConnection.current.onicecandidate = (e) => {
-      console.log("ice candidate have been triggered! ");
-
-      if (!e.candidate) {
-        let answer = rtcPeerConnection.current?.localDescription;
-        socket.emitEvent("answer", { callerId, calleeId, answer });
+      if (e.candidate && isSDPReady !== true) {
+        setIsSDPReady(true);
       }
     };
     videoStream.current
@@ -146,6 +141,14 @@ export default function VideoCallRoom() {
     let answer = await rtcPeerConnection.current.createAnswer();
     await rtcPeerConnection.current.setLocalDescription(answer);
   }
+  useEffect(() => {
+    if (isSDPReady === true)
+      socket.emitEvent("answer", {
+        callerId,
+        calleeId,
+        answer: rtcPeerConnection.current.localDescription,
+      });
+  }, [isSDPReady]);
 
   useEffect(() => {
     if (videoRef.current && remoteRef.current) {
@@ -154,7 +157,7 @@ export default function VideoCallRoom() {
     }
   }, [loading, remoteVideo, localVideo]);
   useEffect(() => {
-    let a = setTimeout(answerCall, 3000);
+    let a = setTimeout(answerCall, 2000);
 
     const onTurnOffVideoHandler = () => setRemoteVideo(false);
     const onTurnOnVideoHandler = () => setRemoteVideo(true);

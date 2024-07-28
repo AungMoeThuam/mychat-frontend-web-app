@@ -6,13 +6,14 @@ import { IoPersonCircle } from "react-icons/io5";
 import { BsMicFill, BsMicMuteFill } from "react-icons/bs";
 import sound from "../../../assets/audios/video-calling-sound.mp3";
 export default function AudioCallRoom() {
+  const [isSDPReady, setIsSDPReady] = useState(false);
   const { callerId, calleeId } = useParams();
   const localAudioRef = useRef<HTMLAudioElement>(null);
   const remoteAudioRef = useRef<HTMLAudioElement>(null);
   const localAudioStream = useRef<MediaStream | null>(new MediaStream());
   const remoteAudioStream = useRef<MediaStream | null>(new MediaStream());
   const soundRef = useRef<HTMLAudioElement>(null);
-  const rtcPeerConnection = useRef<null | RTCPeerConnection>(null);
+  const rtcPeerConnection = useRef<RTCPeerConnection>(createWebRtc());
   let offer = localStorage.getItem("offer");
   const [localAudio, setLocalAudio] = useState(true);
   const [loading, setLoading] = useState(true);
@@ -37,13 +38,15 @@ export default function AudioCallRoom() {
     window.close();
   }
   async function answerAudioCallHandler() {
-    localAudioStream.current = await navigator.mediaDevices.getUserMedia({
-      audio: true,
-      video: false,
-    });
-    if (localAudioRef.current)
-      localAudioRef.current.srcObject = localAudioStream.current;
-    rtcPeerConnection.current = createWebRtc();
+    setInterval(
+      () =>
+        console.log(
+          rtcPeerConnection.current.connectionState,
+          " - ",
+          rtcPeerConnection.current.iceGatheringState
+        ),
+      5000
+    );
     rtcPeerConnection.current.ontrack = (e) => {
       if (remoteAudioRef.current) {
         remoteAudioRef.current.srcObject = remoteAudioStream.current;
@@ -54,17 +57,13 @@ export default function AudioCallRoom() {
         .getTracks()
         .forEach((e) => remoteAudioStream.current?.addTrack(e));
     };
+
     rtcPeerConnection.current.onicecandidate = (e) => {
-      if (!e.candidate) {
-        let answer = rtcPeerConnection.current?.localDescription;
-        socket.emitEvent("answer", {
-          callerId,
-          calleeId,
-          answer,
-          type: "audio",
-        });
+      if (e.candidate && isSDPReady !== true) {
+        setIsSDPReady(true);
       }
     };
+
     rtcPeerConnection.current.oniceconnectionstatechange = () => {
       if (
         rtcPeerConnection.current?.iceConnectionState === "connected" ||
@@ -80,30 +79,49 @@ export default function AudioCallRoom() {
         setLoading(false);
       }
     };
+
+    localAudioStream.current = await navigator.mediaDevices.getUserMedia({
+      audio: true,
+      video: false,
+    });
+    if (localAudioRef.current)
+      localAudioRef.current.srcObject = localAudioStream.current;
+
     localAudioStream.current
       .getTracks()
       .forEach((e) =>
         rtcPeerConnection.current?.addTrack(e, localAudioStream.current!)
       );
 
-    if (offer)
-      await rtcPeerConnection.current.setRemoteDescription(JSON.parse(offer));
-
-    const answer = await rtcPeerConnection.current.createAnswer();
-    await rtcPeerConnection.current?.setLocalDescription(answer);
+    rtcPeerConnection.current
+      .setRemoteDescription(JSON.parse(offer!))
+      .then(() =>
+        rtcPeerConnection.current
+          .createAnswer()
+          .then((e) => rtcPeerConnection.current.setLocalDescription(e))
+      );
   }
-
   useEffect(() => {
     if (localAudioRef.current && remoteAudioRef.current) {
       localAudioRef.current.srcObject = localAudioStream.current;
       remoteAudioRef.current.srcObject = remoteAudioStream.current;
     }
   }, [loading, localAudio]);
-
   useEffect(() => {
-    let a = setTimeout(answerAudioCallHandler, 3000);
+    if (isSDPReady == true)
+      socket.emitEvent("answer", {
+        calleeId,
+        callerId,
+        answer: rtcPeerConnection.current.localDescription,
+        type: "audio",
+      });
+  }, [isSDPReady]);
+  useEffect(() => {
+    // let a = setTimeout(answerAudioCallHandler, 3000);
+    answerAudioCallHandler();
+
     return () => {
-      clearTimeout(a);
+      // clearTimeout(a);
     };
   }, []);
   return (

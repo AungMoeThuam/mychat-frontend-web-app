@@ -14,6 +14,7 @@ export default function VideoCallRoom() {
   const userId = useSelector(
     (state: RootState) => state.authSlice.currentUserId
   );
+  const [isSDPReady, setIsSDPReady] = useState(false);
   const [localVideoOn, setLocalVideoOn] = useState(true);
   const [localAudioOn, setLocalAudioOn] = useState(true);
   const [remoteVideoOn, setRemoteVideoOn] = useState(true);
@@ -22,22 +23,23 @@ export default function VideoCallRoom() {
   const soundRef = useRef<HTMLAudioElement>(null);
   const remoteRef = useRef<HTMLVideoElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const rtcPeerConnection = useRef<RTCPeerConnection>(createWebRtc());
 
   let remoteStream = useRef<MediaStream | null>(new MediaStream());
   let videoStream = useRef<MediaStream | null>(new MediaStream());
   let timeoutId = useRef<any>();
   let timeoutId2 = useRef<any>();
 
-  const rtcPeerConnection = useRef<null | RTCPeerConnection>(null);
   async function toggleAudio() {
+    console.log(videoStream.current);
     if (videoStream.current) {
-      let as = videoStream.current.getTracks().find((e) => e.kind === "audio");
-
+      let as = videoStream.current.getTracks().find((e) => e.kind === "audio")!;
+      console.log(" as ", as);
       if (as?.enabled) {
         as.enabled = false;
         setLocalAudioOn(false);
       } else {
-        as!.enabled = true;
+        as.enabled = true;
         setLocalAudioOn(true);
       }
     }
@@ -83,7 +85,7 @@ export default function VideoCallRoom() {
   }
 
   async function videoCallHandler() {
-    timeoutId.current = setTimeout(handup, 10000);
+    timeoutId.current = setTimeout(handup, 30000);
     timeoutId2.current = setInterval(() => soundRef.current?.play(), 1000);
     videoStream.current = await navigator.mediaDevices.getUserMedia({
       video: true,
@@ -95,7 +97,6 @@ export default function VideoCallRoom() {
       videoRef.current.volume = 0;
       videoRef.current.muted = true;
     }
-    rtcPeerConnection.current = createWebRtc();
 
     rtcPeerConnection.current.ontrack = (e) => {
       if (remoteRef.current) {
@@ -115,7 +116,7 @@ export default function VideoCallRoom() {
         rtcPeerConnection.current?.iceConnectionState === "completed"
       ) {
         setIsCallAcceptedByCallee(true);
-
+        clearTimeout(timeoutId.current);
         console.log("Peers are connected");
       } else if (
         rtcPeerConnection.current?.iceConnectionState === "closed" ||
@@ -127,14 +128,8 @@ export default function VideoCallRoom() {
     };
     rtcPeerConnection.current.onicecandidate = async (e) => {
       console.log("ice candidate have been triggered! ");
-      if (!e.candidate) {
-        let offer = rtcPeerConnection.current?.localDescription;
-        socket.emitEvent("call", {
-          callerId: userId,
-          calleeId: friendId,
-          offer,
-          type: "video",
-        });
+      if (e.candidate && isSDPReady !== true) {
+        setIsSDPReady(true);
       }
     };
     videoStream.current
@@ -146,6 +141,16 @@ export default function VideoCallRoom() {
     const offer = await rtcPeerConnection.current.createOffer();
     await rtcPeerConnection.current?.setLocalDescription(offer);
   }
+
+  useEffect(() => {
+    if (isSDPReady === true)
+      socket.emitEvent("call", {
+        callerId: userId,
+        calleeId: friendId,
+        offer: rtcPeerConnection.current.localDescription,
+        type: "video",
+      });
+  }, [isSDPReady]);
 
   useEffect(() => {
     if (videoRef.current && remoteRef.current) {

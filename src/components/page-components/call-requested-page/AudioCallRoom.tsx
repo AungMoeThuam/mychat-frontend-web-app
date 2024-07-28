@@ -9,6 +9,7 @@ import { BsMicFill, BsMicMuteFill } from "react-icons/bs";
 import sound from "../../../assets/audios/video-calling-sound.mp3";
 export default function AudioCallRoom() {
   const { friendId } = useParams();
+  const [isSDPReady, setIsSDPReady] = useState(false);
   const userId = useSelector(
     (state: RootState) => state.authSlice.currentUserId
   );
@@ -17,7 +18,7 @@ export default function AudioCallRoom() {
   const localAudioStream = useRef<MediaStream | null>(new MediaStream());
   const remoteAudioStream = useRef<MediaStream | null>(new MediaStream());
   const soundRef = useRef<HTMLAudioElement>(null);
-  const rtcPeerConnection = useRef<null | RTCPeerConnection>(null);
+  const rtcPeerConnection = useRef<RTCPeerConnection>(createWebRtc());
   let timeoutId = useRef<any>();
   let timeoutId2 = useRef<any>();
   const [loading, setLoading] = useState(true);
@@ -44,36 +45,27 @@ export default function AudioCallRoom() {
     }
   }
   async function audioCallHandler() {
+    setInterval(
+      () => console.log(rtcPeerConnection.current.connectionState),
+      5000
+    );
     timeoutId2.current = setInterval(() => soundRef.current?.play(), 1000);
-    localAudioStream.current = await navigator.mediaDevices.getUserMedia({
-      audio: true,
-      video: false,
-    });
-    if (localAudioRef.current)
-      localAudioRef.current.srcObject = localAudioStream.current;
-
-    rtcPeerConnection.current = createWebRtc();
     rtcPeerConnection.current.ontrack = (e) => {
       if (remoteAudioRef.current) {
         remoteAudioRef.current.srcObject = remoteAudioStream.current;
       }
-      setInterval(() => console.log(e.streams), 2000);
 
       e.streams[0]
         .getTracks()
         .forEach((e) => remoteAudioStream.current?.addTrack(e));
     };
+
     rtcPeerConnection.current.onicecandidate = (e) => {
-      if (!e.candidate) {
-        let offer = rtcPeerConnection.current?.localDescription;
-        socket.emitEvent("call", {
-          callerId: userId,
-          calleeId: friendId,
-          offer,
-          type: "audio",
-        });
+      if (e.candidate && isSDPReady !== true) {
+        setIsSDPReady(true);
       }
     };
+
     rtcPeerConnection.current.oniceconnectionstatechange = () => {
       if (
         rtcPeerConnection.current?.iceConnectionState === "connected" ||
@@ -90,15 +82,34 @@ export default function AudioCallRoom() {
         setLoading(false);
       }
     };
+
+    localAudioStream.current = await navigator.mediaDevices.getUserMedia({
+      audio: true,
+      video: false,
+    });
+
+    if (localAudioRef.current)
+      localAudioRef.current.srcObject = localAudioStream.current;
+
     localAudioStream.current
       .getTracks()
       .forEach((e) =>
         rtcPeerConnection.current?.addTrack(e, localAudioStream.current!)
       );
 
-    const offer = await rtcPeerConnection.current.createOffer();
-    await rtcPeerConnection.current?.setLocalDescription(offer);
+    rtcPeerConnection.current
+      .createOffer()
+      .then((e) => rtcPeerConnection.current.setLocalDescription(e));
   }
+  useEffect(() => {
+    if (isSDPReady === true)
+      socket.emitEvent("call", {
+        calleeId: friendId,
+        callerId: userId,
+        offer: rtcPeerConnection.current.localDescription,
+        type: "audio",
+      });
+  }, [isSDPReady]);
   useEffect(() => {
     if (localAudioRef.current && remoteAudioRef.current) {
       localAudioRef.current.srcObject = localAudioStream.current;
@@ -106,15 +117,19 @@ export default function AudioCallRoom() {
     }
   }, [loading, localAudio]);
   useEffect(() => {
-    const answerHandler = async ({ answer }: { answer: any }) => {
+    const answerHandler = async (data: any) => {
+      const { answer } = data;
+      const rtcSessionDescription = new RTCSessionDescription(answer);
       clearTimeout(timeoutId.current);
       clearTimeout(timeoutId2.current);
-      await rtcPeerConnection.current?.setRemoteDescription(answer);
+      await rtcPeerConnection.current?.setRemoteDescription(
+        rtcSessionDescription
+      );
     };
 
     socket.subscribeOneEvent("answer", answerHandler);
 
-    audioCallHandler();
+    setTimeout(audioCallHandler, 2000);
     return () => {
       socket.unbSubcribeOneEvent("answer", answerHandler);
     };
@@ -128,7 +143,7 @@ export default function AudioCallRoom() {
       <div className="flex-1 flex flex-col justify-center  items-center">
         {loading && <audio src={sound} ref={soundRef} />}
         {loading ? (
-          <h1>loading...</h1>
+          <h1>calling...</h1>
         ) : (
           <>
             <IoPersonCircle size={200} />
