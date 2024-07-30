@@ -8,6 +8,7 @@ export type UserState = {
   message: string;
   currentUserId: string;
   profilePhoto: ProfilePhoto;
+  username: string;
 };
 
 const userInitialState: UserState = {
@@ -18,6 +19,7 @@ const userInitialState: UserState = {
   currentUserId: "",
   profilePhoto: {},
   message: "loading...",
+  username: "",
 };
 
 export default userInitialState;

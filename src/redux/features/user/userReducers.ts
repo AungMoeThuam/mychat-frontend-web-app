@@ -24,14 +24,17 @@ const userReducers = {
         token,
         currentUserId,
         profilePhoto,
+        username,
       }: {
         token: string;
         currentUserId: string;
         profilePhoto: ProfilePhoto;
+        username: string;
       } = auth;
       state.token = token;
       state.currentUserId = currentUserId;
       state.profilePhoto = profilePhoto;
+      state.username = username;
 
       socket.connect(state.currentUserId);
     }
@@ -54,6 +57,7 @@ const userReducers = {
     state: UserState,
     action: PayloadAction<{
       credential: {
+        username: string;
         token: string;
         currentUserId: string;
         profilePhoto: {
@@ -73,6 +77,7 @@ const userReducers = {
     state.currentUserId = action.payload.credential.currentUserId;
     state.message = action.payload.message;
     state.profilePhoto = action.payload.credential.profilePhoto;
+    state.username = action.payload.credential.username;
     setStorage(action.payload.credential);
   },
   loginLoading: (state: UserState, action: PayloadAction<boolean>) => {

@@ -19,6 +19,7 @@ const loginUser = createAsyncThunk(
       return dispatch(
         loginSuccess({
           credential: {
+            username: result.data.username,
             token: result.data.token,
             currentUserId: result.data.currentUserId,
             profilePhoto: result.data.profilePhoto,
@@ -52,6 +53,7 @@ const registerUser = createAsyncThunk(
       return dispatch(
         loginSuccess({
           credential: {
+            username: result.data.username,
             token: result.data.token,
             currentUserId: result.data.currentUserId,
             profilePhoto: result.data.profilePhoto,
