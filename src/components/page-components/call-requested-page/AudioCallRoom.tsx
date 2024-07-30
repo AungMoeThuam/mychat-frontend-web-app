@@ -8,6 +8,7 @@ import { IoPersonCircle } from "react-icons/io5";
 import { BsMicFill, BsMicMuteFill } from "react-icons/bs";
 import sound from "../../../assets/audios/video-calling-sound.mp3";
 export default function AudioCallRoom() {
+  const [callEndByCaller, setCallEndByCaller] = useState(false);
   const { friendId, calleeName } = useParams();
   const [isSDPReady, setIsSDPReady] = useState(false);
   const { currentUserId, username } = useSelector(
@@ -25,6 +26,7 @@ export default function AudioCallRoom() {
   const [localAudio, setLocalAudio] = useState(true);
   function handup() {
     setLoading(false);
+    socket.emitEvent("end-call", { targetUserId: friendId });
     localAudioStream.current?.getTracks().forEach((e) => e.stop());
     rtcPeerConnection.current?.close();
     window.close();
@@ -128,10 +130,17 @@ export default function AudioCallRoom() {
       );
     };
 
+    const onEndCallEventHandler = () => {
+      setTimeout(() => window.close(), 3000);
+      setCallEndByCaller(true);
+    };
+    socket.subscribeOneEvent("end-call", onEndCallEventHandler);
+
     socket.subscribeOneEvent("answer", answerHandler);
 
     setTimeout(audioCallHandler, 2000);
     return () => {
+      socket.unbSubcribeOneEvent("end-call", onEndCallEventHandler);
       socket.unbSubcribeOneEvent("answer", answerHandler);
     };
   }, []);
@@ -142,8 +151,11 @@ export default function AudioCallRoom() {
         <p>Audio Call</p>
       </nav>
       <div className="flex-1 flex flex-col justify-center  items-center">
+        {callEndByCaller && (
+          <h1>Call Has Ended! This window will be closed in 3s!</h1>
+        )}
         {loading && <audio src={sound} ref={soundRef} />}
-        {loading ? (
+        {loading && !callEndByCaller ? (
           <h1>calling...</h1>
         ) : (
           <>

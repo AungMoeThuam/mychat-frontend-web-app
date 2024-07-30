@@ -25,7 +25,7 @@ export default function VideoCallRoom() {
   let offer = localStorage.getItem("offer");
   const [isSDPReady, setIsSDPReady] = useState(false);
   const { callerId, calleeId, callerName } = useParams();
-
+  const [callEndByCaller, setCallEndByCaller] = useState(false);
   const [remoteVideo, setRemoteVideo] = useState(true);
   const [localVideo, setLocalVideo] = useState(true);
   const [localMic, setLocalMic] = useState(true);
@@ -38,6 +38,7 @@ export default function VideoCallRoom() {
 
   const rtcPeerConnection = useRef<RTCPeerConnection>(createWebRtc());
   async function handup() {
+    socket.emitEvent("end-call", { targetUserId: callerId });
     videoStream.current?.getTracks().forEach((e) => e.stop());
     rtcPeerConnection.current?.close();
     videoRef.current?.pause();
@@ -161,12 +162,20 @@ export default function VideoCallRoom() {
 
     const onTurnOffVideoHandler = () => setRemoteVideo(false);
     const onTurnOnVideoHandler = () => setRemoteVideo(true);
+    const onEndCallEventHandler = () => {
+      setTimeout(() => window.close(), 3000);
+      setCallEndByCaller(true);
+    };
 
+    socket.subscribeOneEvent("end-call", onEndCallEventHandler);
     socket.subscribeOneEvent("turn-off-video", onTurnOffVideoHandler);
     socket.subscribeOneEvent("turn-on-video", onTurnOnVideoHandler);
+
     return () => {
       socket.unbSubcribeOneEvent("turn-off-video", onTurnOffVideoHandler);
       socket.unbSubcribeOneEvent("turn-on-video", onTurnOnVideoHandler);
+      socket.unbSubcribeOneEvent("end-call", onEndCallEventHandler);
+
       clearTimeout(a);
     };
   }, []);
@@ -177,7 +186,11 @@ export default function VideoCallRoom() {
         {callerName}
       </nav>
       <main className="flex-1 flex flex-col justify-center  items-center">
-        {loading ? (
+        {callEndByCaller && (
+          <h1>Call has ended! This window will be closed in 3s</h1>
+        )}
+
+        {loading && !callEndByCaller ? (
           <h1>loading...</h1>
         ) : (
           <div className=" relative w-full flex-1 flex justify-center ">

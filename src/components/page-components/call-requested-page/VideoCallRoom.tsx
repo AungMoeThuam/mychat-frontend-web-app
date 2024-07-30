@@ -24,6 +24,7 @@ export default function VideoCallRoom() {
   const remoteRef = useRef<HTMLVideoElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const rtcPeerConnection = useRef<RTCPeerConnection>(createWebRtc());
+  const [callEndByCaller, setCallEndByCaller] = useState(false);
 
   let remoteStream = useRef<MediaStream | null>(new MediaStream());
   let videoStream = useRef<MediaStream | null>(new MediaStream());
@@ -78,6 +79,7 @@ export default function VideoCallRoom() {
   }
   function handup() {
     setLoading(false);
+    socket.emitEvent("end-call", { targetUserId: friendId });
     videoStream.current?.getTracks().forEach((e) => e.stop());
     rtcPeerConnection.current?.close();
     videoRef.current?.pause();
@@ -170,7 +172,11 @@ export default function VideoCallRoom() {
 
     const onTurnOffVideoHandler = () => setRemoteVideoOn(false);
     const onTurnOnVideoHandler = () => setRemoteVideoOn(true);
-
+    const onEndCallEventHandler = () => {
+      setTimeout(() => window.close(), 3000);
+      setCallEndByCaller(true);
+    };
+    socket.subscribeOneEvent("end-call", onEndCallEventHandler);
     socket.subscribeOneEvent("turn-off-video", onTurnOffVideoHandler);
     socket.subscribeOneEvent("turn-on-video", onTurnOnVideoHandler);
     socket.subscribeOneEvent("answer", answerHandler);
@@ -180,6 +186,7 @@ export default function VideoCallRoom() {
       socket.unbSubcribeOneEvent("turn-off-video", onTurnOffVideoHandler);
       socket.unbSubcribeOneEvent("turn-on-video", onTurnOnVideoHandler);
       socket.unbSubcribeOneEvent("answer", answerHandler);
+      socket.unbSubcribeOneEvent("end-call", onEndCallEventHandler);
     };
   }, []);
 
@@ -189,8 +196,11 @@ export default function VideoCallRoom() {
         {calleeName}
       </nav>
       <main className=" relative flex-1 flex flex-col justify-center w-full  items-center">
+        {callEndByCaller && (
+          <h1>Call has ended! This window will be closed in 3s</h1>
+        )}
         {!isCallAcceptedByCallee && <audio src={sound} ref={soundRef}></audio>}
-        {isCallAcceptedByCallee && (
+        {isCallAcceptedByCallee && !callEndByCaller && (
           <div className=" relative w-full flex-1 flex justify-center items-center ">
             <video
               style={{ width: "80dvw", height: "80dvh" }}
