@@ -10,9 +10,9 @@ import { createWebRtc } from "../../../pages/CallAccepted";
 import sound from "../../../assets/audios/video-calling-sound.mp3";
 
 export default function VideoCallRoom() {
-  const { friendId } = useParams();
-  const userId = useSelector(
-    (state: RootState) => state.authSlice.currentUserId
+  const { friendId, calleeName } = useParams();
+  const { currentUserId, username } = useSelector(
+    (state: RootState) => state.authSlice
   );
   const [isSDPReady, setIsSDPReady] = useState(false);
   const [localVideoOn, setLocalVideoOn] = useState(true);
@@ -145,7 +145,8 @@ export default function VideoCallRoom() {
   useEffect(() => {
     if (isSDPReady === true)
       socket.emitEvent("call", {
-        callerId: userId,
+        callerName: username,
+        callerId: currentUserId,
         calleeId: friendId,
         offer: rtcPeerConnection.current.localDescription,
         type: "video",
@@ -185,7 +186,7 @@ export default function VideoCallRoom() {
   return (
     <div className="  flex-1 w-dvw h-dvh flex flex-col  justify-center items-center dark:bg-zinc-900 ">
       <nav className=" bg-gradient-to-r  from-lime-500 to-teal-500 w-full text-zinc-950 px-4 py-2">
-        Aung Moe Thu -
+        {calleeName}
       </nav>
       <main className=" relative flex-1 flex flex-col justify-center w-full  items-center">
         {!isCallAcceptedByCallee && <audio src={sound} ref={soundRef}></audio>}

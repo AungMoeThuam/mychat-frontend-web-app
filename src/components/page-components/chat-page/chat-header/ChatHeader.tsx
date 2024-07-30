@@ -33,7 +33,7 @@ export default function ChatHeader(props: {
           onClick={(e) => {
             e.preventDefault();
             window.open(
-              `/call-room-type=audio:initiate=true/${friendId}`,
+              `/call-room-type=audio:initiate=true/${friendId}/${friendName}`,
               "",
               "popup"
             );
@@ -45,7 +45,7 @@ export default function ChatHeader(props: {
           onClick={(e) => {
             e.preventDefault();
             window.open(
-              `/call-room-type=video:initiate=true/${friendId}`,
+              `/call-room-type=video:initiate=true/${friendId}/${friendName}`,
               "",
               "popup"
             );

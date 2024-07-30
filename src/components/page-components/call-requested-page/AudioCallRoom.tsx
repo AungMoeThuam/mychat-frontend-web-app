@@ -8,10 +8,10 @@ import { IoPersonCircle } from "react-icons/io5";
 import { BsMicFill, BsMicMuteFill } from "react-icons/bs";
 import sound from "../../../assets/audios/video-calling-sound.mp3";
 export default function AudioCallRoom() {
-  const { friendId } = useParams();
+  const { friendId, calleeName } = useParams();
   const [isSDPReady, setIsSDPReady] = useState(false);
-  const userId = useSelector(
-    (state: RootState) => state.authSlice.currentUserId
+  const { currentUserId, username } = useSelector(
+    (state: RootState) => state.authSlice
   );
   const localAudioRef = useRef<HTMLAudioElement>(null);
   const remoteAudioRef = useRef<HTMLAudioElement>(null);
@@ -104,8 +104,9 @@ export default function AudioCallRoom() {
   useEffect(() => {
     if (isSDPReady === true)
       socket.emitEvent("call", {
+        callerName: username,
         calleeId: friendId,
-        callerId: userId,
+        callerId: currentUserId,
         offer: rtcPeerConnection.current.localDescription,
         type: "audio",
       });
@@ -137,7 +138,7 @@ export default function AudioCallRoom() {
   return (
     <div className="  flex-1 w-dvw h-dvh flex flex-col  justify-center items-center dark:bg-zinc-900 ">
       <nav className=" bg-gradient-to-r flex justify-between  from-lime-500 to-teal-500 w-full text-zinc-950 px-4 py-2">
-        <h1>Username </h1>
+        {calleeName}
         <p>Audio Call</p>
       </nav>
       <div className="flex-1 flex flex-col justify-center  items-center">
@@ -147,7 +148,7 @@ export default function AudioCallRoom() {
         ) : (
           <>
             <IoPersonCircle size={200} />
-            <h1>Aung Aung </h1>
+            <h1>{calleeName} </h1>
             <TimeDuration />
             <audio
               ref={localAudioRef}

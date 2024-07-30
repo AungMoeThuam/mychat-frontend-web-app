@@ -7,7 +7,7 @@ import { BsMicFill, BsMicMuteFill } from "react-icons/bs";
 import sound from "../../../assets/audios/video-calling-sound.mp3";
 export default function AudioCallRoom() {
   const [isSDPReady, setIsSDPReady] = useState(false);
-  const { callerId, calleeId } = useParams();
+  const { callerId, calleeId, callerName } = useParams();
   const localAudioRef = useRef<HTMLAudioElement>(null);
   const remoteAudioRef = useRef<HTMLAudioElement>(null);
   const localAudioStream = useRef<MediaStream | null>(new MediaStream());
@@ -127,7 +127,7 @@ export default function AudioCallRoom() {
   return (
     <div className="  flex-1 w-dvw h-dvh flex flex-col  justify-center items-center dark:bg-zinc-900 ">
       <nav className=" bg-gradient-to-r flex justify-between  from-lime-500 to-teal-500 w-full text-zinc-950 px-4 py-2">
-        <h1>Username </h1>
+        <h1>{callerName}</h1>
         <p>Audio Call</p>
       </nav>
       <div className="flex-1 flex flex-col justify-center  items-center">
@@ -137,7 +137,7 @@ export default function AudioCallRoom() {
         ) : (
           <>
             <IoPersonCircle size={200} />
-            <h1>Aung Aung </h1>
+            <h1>{callerName}</h1>
             <TimeDuration />
             <audio
               ref={localAudioRef}

@@ -43,11 +43,11 @@ export default function HomePage() {
 
     function callHandler(data: any) {
       console.log(data);
-      const { callerId, calleeId, offer } = data;
+      const { callerId, calleeId, offer, callerName } = data;
       localStorage.setItem("offer", JSON.stringify(offer));
       toast((t) => (
         <span>
-          Moe is calling ! <br></br>
+          {callerName} is calling ! <br></br>
           <button
             className=" bg-lime-500 text-black py-1 px-2 rounded-lg border-none "
             onClick={async () => {
@@ -55,13 +55,13 @@ export default function HomePage() {
 
               if (data.type === "video")
                 window.open(
-                  `/call-room-type=video:initiate=false/${callerId}/${calleeId}`,
+                  `/call-room-type=video:initiate=false/${callerId}/${calleeId}/${callerName}`,
                   "",
                   "popup"
                 );
               else
                 window.open(
-                  `/call-room-type=audio:initiate=false/${callerId}/${calleeId}`,
+                  `/call-room-type=audio:initiate=false/${callerId}/${calleeId}/${callerName}`,
                   "",
                   "popup"
                 );

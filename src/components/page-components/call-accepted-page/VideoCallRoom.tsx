@@ -24,7 +24,7 @@ export function createWebRtc(): RTCPeerConnection {
 export default function VideoCallRoom() {
   let offer = localStorage.getItem("offer");
   const [isSDPReady, setIsSDPReady] = useState(false);
-  const { callerId, calleeId } = useParams();
+  const { callerId, calleeId, callerName } = useParams();
 
   const [remoteVideo, setRemoteVideo] = useState(true);
   const [localVideo, setLocalVideo] = useState(true);
@@ -174,7 +174,7 @@ export default function VideoCallRoom() {
   return (
     <div className="  flex-1 h-dvh flex flex-col  justify-center items-center ">
       <nav className=" bg-gradient-to-r  from-lime-500 to-teal-500 w-full text-zinc-950 px-4 py-2">
-        Aung Moe Thu -
+        {callerName}
       </nav>
       <main className="flex-1 flex flex-col justify-center  items-center">
         {loading ? (
