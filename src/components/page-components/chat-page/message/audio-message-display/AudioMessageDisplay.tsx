@@ -6,7 +6,7 @@ import { BsTrashFill } from "react-icons/bs";
 export default function RecordedAudioDisplayer({
   content,
   flag = false,
-  setFile,
+  setFile = undefined,
 }: {
   content: string;
   flag?: boolean;
@@ -31,11 +31,13 @@ export default function RecordedAudioDisplayer({
   }, []);
   return (
     <div className="flex items-center rounded-md  px-5 bg-zinc-950 dark:bg-gradient-to-r  dark:from-lime-500 dark:to-teal-500">
-      {/* <BsTrashFill
-        className="text-red-500  cursor-pointer"
-        size={20}
-        onClick={() => setFile(null)}
-      /> */}
+      {setFile && (
+        <BsTrashFill
+          className="text-red-500  cursor-pointer"
+          size={20}
+          onClick={() => setFile(null)}
+        />
+      )}
       <div className="relative ">
         <audio
           ref={ref}
@@ -48,8 +50,7 @@ export default function RecordedAudioDisplayer({
             src={
               flag
                 ? content
-                : 
-                `${backendUrlWihoutApiEndpoint}/resources/chats/${content}`
+                : `${backendUrlWihoutApiEndpoint}/resources/chats/${content}`
             }
           />
           not supported
