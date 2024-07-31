@@ -5,6 +5,16 @@ import { Result } from "../utils/constants/types";
 import API from "./api-setup";
 import socket from "./socket";
 
+function extractExtName(fileName: string) {
+  if (!fileName.includes(".")) return "";
+  let temp = fileName.split(".");
+  let lastEle = temp[temp.length - 1];
+
+  if (lastEle === "") return ".";
+
+  return "." + lastEle;
+}
+
 const MessageApi = {
   getMessagesList: async (
     roomId: string,
@@ -72,15 +82,9 @@ const MessageApi = {
         return SuccessResult(true);
       }
 
-      let t = messageToSend.file.name.split(".");
-      let iss =
-        t.length > 2
-          ? t[0] +
-            "." +
-            t.filter((e) => e === "mp4" || e === "mkv" || e === "ts").join("")
-          : messageToSend.file.name;
+      let extName = extractExtName(messageToSend.file.name);
 
-      let filename = `${new Date().getTime()}.${iss.split(".")[1]}`;
+      let filename = `${new Date().getTime()}${extName}`;
 
       const res = await API.post(`/fileupload`, messageToSend.file, {
         headers: {
