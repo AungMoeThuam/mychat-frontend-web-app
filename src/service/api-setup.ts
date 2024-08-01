@@ -1,14 +1,14 @@
 import axios from "axios";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
-export const backendUrl = "http://localhost:4000/api";
-export const backendUrlWihoutApiEndpoint = "http://localhost:4000";
 export const socketUrl = "http://localhost:4000";
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+console.log(" prcess ", import.meta.env);
 const { getStorage } = useLocalStorage("authToken");
 
 const API = axios.create({
-  baseURL: backendUrl,
+  baseURL: API_BASE_URL + "/api",
 });
 
 API.interceptors.request.use((req) => {

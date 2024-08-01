@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { backendUrlWihoutApiEndpoint } from "../../../../utils/backendConfig";
+import { API_BASE_URL } from "../../../../service/api-setup";
 
 export default function VideoMessageDisplay(props: {
   content: string;
@@ -20,9 +20,7 @@ export default function VideoMessageDisplay(props: {
         preload="none"
         controls
       >
-        <source
-          src={`${backendUrlWihoutApiEndpoint}/resources/chats/${content}`}
-        />
+        <source src={`${API_BASE_URL}/resources/chats/${content}`} />
       </video>
     </>
   );

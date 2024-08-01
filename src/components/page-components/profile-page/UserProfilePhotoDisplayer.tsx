@@ -1,7 +1,6 @@
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, StoreDispatch } from "../../../redux/store/store";
-import { backendUrlWihoutApiEndpoint } from "../../../utils/backendConfig";
 import { UserApi } from "../../../service/userApi";
 import { updateProfileImage } from "../../../redux/features/user/userSlice";
 import {
@@ -11,6 +10,7 @@ import {
 } from "../../../utils/constants/messages/errorMessages";
 import { allowUploadImageExtensionTypes } from "../../../utils/constants/allowImageUploadExtensionTypes";
 import { tempCatPhoto } from "../../../assets/temporaryProfilePhoto";
+import { API_BASE_URL } from "../../../service/api-setup";
 
 export default function UserProfilePhotoDisplayer() {
   const dispatch = useDispatch<StoreDispatch>();
@@ -49,7 +49,7 @@ export default function UserProfilePhotoDisplayer() {
         }));
       } else {
         dispatch(updateProfileImage(result.data.profilePhoto));
-        photoRef.current!.src = `${backendUrlWihoutApiEndpoint}/resources/profiles/${result.data.profilePhoto.path}`;
+        photoRef.current!.src = `${API_BASE_URL}/resources/profiles/${result.data.profilePhoto.path}`;
         setOperation((prev) => ({ ...prev, loading: false }));
       }
     } catch (error: any) {
@@ -74,7 +74,7 @@ export default function UserProfilePhotoDisplayer() {
   const cancelSelectedImage = () => {
     setPhoto(null);
     if (photoRef && photoRef.current)
-      photoRef.current.src = `${backendUrlWihoutApiEndpoint}/resources/profiles/${currentUser.profilePhoto.path}`;
+      photoRef.current.src = `${API_BASE_URL}/resources/profiles/${currentUser.profilePhoto.path}`;
 
     if (!rawPhotoSrcObject) URL.revokeObjectURL(rawPhotoSrcObject);
   };
@@ -114,7 +114,7 @@ export default function UserProfilePhotoDisplayer() {
         className=" aspect-auto object-cover w-40 h-40 rounded-full"
         src={
           currentUser.profilePhoto.path
-            ? `${backendUrlWihoutApiEndpoint}/resources/profiles/${currentUser.profilePhoto.path}`
+            ? `${API_BASE_URL}/resources/profiles/${currentUser.profilePhoto.path}`
             : tempCatPhoto
         }
         alt="profile"

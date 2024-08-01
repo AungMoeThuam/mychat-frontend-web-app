@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { backendUrlWihoutApiEndpoint } from "../../../../utils/backendConfig";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store/store";
 import { tempCatPhoto } from "../../../../assets/temporaryProfilePhoto";
@@ -10,6 +9,7 @@ import AcceptFriendDialog from "./dialogs/AcceptFriendDialog";
 import BlockFriendDialog from "./dialogs/BlockFriendDialog";
 import { Person } from "../../../../lib/models/models";
 import { BsPersonFillAdd, BsPersonFillSlash } from "react-icons/bs";
+import { API_BASE_URL } from "../../../../service/api-setup";
 
 export default function AddFriendCard({ people }: { people: Person }) {
   const blockDialog = useRef<HTMLDialogElement>(null);
@@ -29,7 +29,7 @@ export default function AddFriendCard({ people }: { people: Person }) {
           className=" avatar w-10 h-10 rounded-full object-cover"
           src={
             people.profilePhoto
-              ? `${backendUrlWihoutApiEndpoint}/resources/profiles/${people.profilePhoto.path}`
+              ? `${API_BASE_URL}/resources/profiles/${people.profilePhoto.path}`
               : tempCatPhoto
           }
         />

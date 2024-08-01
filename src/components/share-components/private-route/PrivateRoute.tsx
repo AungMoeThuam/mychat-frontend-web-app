@@ -4,12 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState, StoreDispatch } from "../../../redux/store/store";
 import { checkLoginStatus } from "../../../redux/features/user/userSlice";
 import socket from "../../../service/socket";
-import { backendUrlWihoutApiEndpoint } from "../../../utils/backendConfig";
 import axios, { AxiosError } from "axios";
+import { API_BASE_URL } from "../../../service/api-setup";
 
 export async function checkBackendServerIsRunning() {
   try {
-    await axios.get(`${backendUrlWihoutApiEndpoint}/server`);
+    await axios.get(`${API_BASE_URL}/server`);
     return true;
   } catch (error) {
     if (error instanceof AxiosError) return false;

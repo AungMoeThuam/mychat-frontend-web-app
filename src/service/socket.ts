@@ -1,6 +1,6 @@
 import { Socket, io } from "socket.io-client";
 import { Event } from "../utils/constants/socketEvents";
-import { socketUrl } from "../utils/backendConfig";
+import { API_BASE_URL } from "./api-setup";
 
 interface UnSubcribeEventsAndCallbacks {
   event: string;
@@ -62,4 +62,4 @@ class SocketIO {
   }
 }
 export { SocketIO };
-export default SocketIO.getInstance(socketUrl);
+export default SocketIO.getInstance(API_BASE_URL);

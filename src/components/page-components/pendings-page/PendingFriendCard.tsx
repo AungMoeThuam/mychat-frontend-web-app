@@ -1,8 +1,8 @@
 import { useRef } from "react";
-import { backendUrlWihoutApiEndpoint } from "../../../utils/backendConfig";
 import { tempCatPhoto } from "../../../assets/temporaryProfilePhoto";
 import PendingActionDialog from "./PendingActionDialog";
 import { Person } from "../../../lib/models/models";
+import { API_BASE_URL } from "../../../service/api-setup";
 
 export default function PendingFriendCard({ person }: { person: Person }) {
   const pendingActionDialog = useRef<HTMLDialogElement>(null);
@@ -14,7 +14,7 @@ export default function PendingFriendCard({ person }: { person: Person }) {
           className=" avatar w-10 h-10 rounded-full object-cover"
           src={
             person.profilePhoto
-              ? `${backendUrlWihoutApiEndpoint}/resources/profiles/${person.profilePhoto.path}`
+              ? `${API_BASE_URL}/resources/profiles/${person.profilePhoto.path}`
               : tempCatPhoto
           }
         />

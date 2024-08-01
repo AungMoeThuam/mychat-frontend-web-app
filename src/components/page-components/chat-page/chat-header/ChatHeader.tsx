@@ -1,7 +1,7 @@
 import { AiFillPhone, AiFillVideoCamera } from "react-icons/ai";
-import { backendUrlWihoutApiEndpoint } from "../../../../utils/backendConfig";
 import { tempCatPhoto } from "../../../../assets/temporaryProfilePhoto";
 import { useParams } from "react-router-dom";
+import { API_BASE_URL } from "../../../../service/api-setup";
 
 export default function ChatHeader(props: {
   profilePhotoFilePath: string | undefined;
@@ -18,7 +18,7 @@ export default function ChatHeader(props: {
           className=" object-cover w-16 h-16 bg-slate-300 avatar rounded-full shadow mr-2"
           src={
             profilePhotoFilePath
-              ? `${backendUrlWihoutApiEndpoint}/resources/profiles/${profilePhotoFilePath}`
+              ? `${API_BASE_URL}/resources/profiles/${profilePhotoFilePath}`
               : tempCatPhoto
           }
           alt="profile"

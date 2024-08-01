@@ -1,8 +1,8 @@
 import { useRef } from "react";
-import { backendUrlWihoutApiEndpoint } from "../../../utils/backendConfig";
 import { tempCatPhoto } from "../../../assets/temporaryProfilePhoto";
 import { Friend } from "../../../utils/constants/types";
 import UnblockActionDialog from "./UnblockActionDialog";
+import { API_BASE_URL } from "../../../service/api-setup";
 
 export default function BlockFriendCard({ friend }: { friend: Friend }) {
   const blockActionDialog = useRef<HTMLDialogElement>(null);
@@ -14,7 +14,7 @@ export default function BlockFriendCard({ friend }: { friend: Friend }) {
           className=" avatar w-10 h-10 rounded-full object-cover"
           src={
             friend.profilePhoto
-              ? `${backendUrlWihoutApiEndpoint}/resources/profiles/${friend.profilePhoto.path}`
+              ? `${API_BASE_URL}/resources/profiles/${friend.profilePhoto.path}`
               : tempCatPhoto
           }
         />

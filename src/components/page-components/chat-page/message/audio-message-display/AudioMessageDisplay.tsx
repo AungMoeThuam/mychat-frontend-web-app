@@ -1,8 +1,8 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { backendUrlWihoutApiEndpoint } from "../../../../../utils/backendConfig";
 import "./style.css";
 import { audioDurationExtractor } from "../../../../../utils/audioDurationExtractor";
 import { BsTrashFill } from "react-icons/bs";
+import { API_BASE_URL } from "../../../../../service/api-setup";
 export default function RecordedAudioDisplayer({
   content,
   flag = false,
@@ -17,9 +17,7 @@ export default function RecordedAudioDisplayer({
   useEffect(() => {
     async function load() {
       const res = await audioDurationExtractor(
-        flag
-          ? content
-          : `${backendUrlWihoutApiEndpoint}/resources/chats/${content}`
+        flag ? content : `${API_BASE_URL}/resources/chats/${content}`
       );
       setDuration(res);
     }
@@ -47,11 +45,7 @@ export default function RecordedAudioDisplayer({
           controls
         >
           <source
-            src={
-              flag
-                ? content
-                : `${backendUrlWihoutApiEndpoint}/resources/chats/${content}`
-            }
+            src={flag ? content : `${API_BASE_URL}/resources/chats/${content}`}
           />
           not supported
         </audio>

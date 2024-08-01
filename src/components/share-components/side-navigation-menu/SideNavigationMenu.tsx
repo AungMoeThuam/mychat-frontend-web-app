@@ -1,5 +1,4 @@
 import { Link, useLocation } from "react-router-dom";
-import { backendUrlWihoutApiEndpoint } from "../../../utils/backendConfig";
 import { BsChatTextFill, BsPeopleFill } from "react-icons/bs";
 import { IoSettings } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,6 +6,7 @@ import { RootState, StoreDispatch } from "../../../redux/store/store";
 import { logout } from "../../../redux/features/user/userSlice";
 import socket from "../../../service/socket";
 import { tempCatPhoto } from "../../../assets/temporaryProfilePhoto";
+import { API_BASE_URL } from "../../../service/api-setup";
 
 export default function SideNavigationMenu() {
   const dispatch = useDispatch<StoreDispatch>();
@@ -27,7 +27,7 @@ export default function SideNavigationMenu() {
                 className="rounded-full  w-full    "
                 src={
                   profilePhoto.path
-                    ? `${backendUrlWihoutApiEndpoint}/resources/profiles/${profilePhoto.path}`
+                    ? `${API_BASE_URL}/resources/profiles/${profilePhoto.path}`
                     : tempCatPhoto
                 }
               />

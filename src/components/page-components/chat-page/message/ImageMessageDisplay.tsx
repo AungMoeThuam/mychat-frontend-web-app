@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { backendUrlWihoutApiEndpoint } from "../../../../utils/backendConfig";
 import ImageDetailDisplayDialog from "../imageDisplay/ImageDetailDisplay";
+import { API_BASE_URL } from "../../../../service/api-setup";
 
 export default function ImageMessageDisplay(props: { content: string }) {
   const { content } = props;
@@ -10,7 +10,7 @@ export default function ImageMessageDisplay(props: { content: string }) {
       <img
         onClick={() => setShowDetail(true)}
         className=" w-48 lg:w-64 rounded-lg aspect-auto"
-        src={`${backendUrlWihoutApiEndpoint}/resources/chats/${content}`}
+        src={`${API_BASE_URL}/resources/chats/${content}`}
         alt="cat"
       />
       {showDetail && (

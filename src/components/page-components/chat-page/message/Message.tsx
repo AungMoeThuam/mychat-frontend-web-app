@@ -4,7 +4,6 @@ import ImageMessageDisplay from "./ImageMessageDisplay";
 import { BsSaveFill, BsTrashFill } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { StoreDispatch } from "../../../../redux/store/store";
-import { backendUrlWihoutApiEndpoint } from "../../../../utils/backendConfig";
 import toast from "react-hot-toast";
 import FileMessageDisplay from "./FileMessageDisplay";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
@@ -14,6 +13,7 @@ import VideoMessageDisplay from "./VideoMessageDisplay";
 import TextMessageDisplay from "./TextMessageDisplay";
 import { Message as MSG } from "../../../../lib/models/models";
 import Dialog from "../../../share-components/Dialog";
+import { API_BASE_URL } from "../../../../service/api-setup";
 
 function isFile(type: any) {
   const t = ["video", "image", "text", "audio"];
@@ -145,7 +145,7 @@ function Message({
                         document.createElement("a");
 
                       let b = await fetch(
-                        `${backendUrlWihoutApiEndpoint}/resources/chats/${content}`
+                        `${API_BASE_URL}/resources/chats/${content}`
                       );
                       let c = await b.blob();
                       a.href = URL.createObjectURL(c);

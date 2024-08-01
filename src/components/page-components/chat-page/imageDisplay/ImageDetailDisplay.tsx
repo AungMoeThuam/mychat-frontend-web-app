@@ -1,6 +1,6 @@
 import { ImCross } from "react-icons/im";
 import Modal from "../../../share-components/Modal";
-import { backendUrlWihoutApiEndpoint } from "../../../../utils/backendConfig";
+import { API_BASE_URL } from "../../../../service/api-setup";
 
 export default function ImageDetailDisplayDialog({
   imageUrl,
@@ -26,7 +26,7 @@ export default function ImageDetailDisplayDialog({
           <img
             style={{ height: "90dvh" }}
             className=" relative object-contain aspect-auto  rounded-lg"
-            src={`${backendUrlWihoutApiEndpoint}/resources/chats/${imageUrl}`}
+            src={`${API_BASE_URL}/resources/chats/${imageUrl}`}
             alt="cat"
           />
           <button

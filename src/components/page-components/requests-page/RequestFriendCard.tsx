@@ -3,11 +3,11 @@ import { useDispatch } from "react-redux";
 import { StoreDispatch } from "../../../redux/store/store";
 import { FriendShipApi } from "../../../service/friend-api-service";
 import RequestActionDialog from "./RequestActionDialog";
-import { backendUrlWihoutApiEndpoint } from "../../../utils/backendConfig";
 import { tempCatPhoto } from "../../../assets/temporaryProfilePhoto";
 import { acceptRequestAction } from "../../../redux/features/friend-request/requestSlice";
 import { fetchFriends } from "../../../redux/features/friend/friendThunks";
 import { Person } from "../../../lib/models/models";
+import { API_BASE_URL } from "../../../service/api-setup";
 
 export default function RequestFriendCard({ person }: { person: Person }) {
   const requestActionDialog = useRef<HTMLDialogElement>(null);
@@ -42,7 +42,7 @@ export default function RequestFriendCard({ person }: { person: Person }) {
           className=" avatar w-10 h-10 rounded-full object-cover"
           src={
             person.profilePhoto
-              ? `${backendUrlWihoutApiEndpoint}/resources/profiles/${person.profilePhoto.path}`
+              ? `${API_BASE_URL}/resources/profiles/${person.profilePhoto.path}`
               : tempCatPhoto
           }
         />
