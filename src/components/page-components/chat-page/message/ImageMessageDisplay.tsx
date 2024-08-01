@@ -9,7 +9,7 @@ export default function ImageMessageDisplay(props: { content: string }) {
     <>
       <img
         onClick={() => setShowDetail(true)}
-        className=" w-48 lg:w-64 rounded-lg"
+        className=" w-48 lg:w-64 rounded-lg aspect-auto"
         src={`${backendUrlWihoutApiEndpoint}/resources/chats/${content}`}
         alt="cat"
       />

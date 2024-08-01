@@ -6,7 +6,7 @@ export default function FileMessageDisplay({ content }: { content: string }) {
     <a
       target="_blank"
       href={`${backendUrlWihoutApiEndpoint}/resources/chats/${content}`}
-      className={`flex items-center gap-2 text-slate-900`}
+      className={`flex items-center gap-2 `}
     >
       <FaFileAlt size={35} />
       {content}

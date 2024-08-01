@@ -15,7 +15,7 @@ import TextMessageDisplay from "./TextMessageDisplay";
 import { Message as MSG } from "../../../../lib/models/models";
 import Dialog from "../../../share-components/Dialog";
 
-function isItAFile(type: any) {
+function isFile(type: any) {
   const t = ["video", "image", "text", "audio"];
   return !t.includes(type.split("/")[0]);
 }
@@ -69,7 +69,11 @@ function Message({
           }  `}
         >
           <div
-            className={`chat-bubble shadow-lg max-w-xs lg:max-w-2xl text-sm  bg-teal-500  break-words ${
+            className={`${
+              type?.includes("video") || type?.includes("image")
+                ? " rounded-lg p-1 relative"
+                : "chat-bubble relative"
+            } shadow-lg max-w-xs lg:max-w-2xl text-sm break-words  bg-teal-500${
               !isCurrentUserTheSender
                 ? " bg-zinc-800 text-white dark:bg-zinc-800"
                 : "  bg-gradient-to-r from-lime-500 to-teal-500 text-slate-950 "
@@ -85,7 +89,8 @@ function Message({
               <VideoMessageDisplay content={content} type={type} />
             )}
             {type?.includes("text") && <TextMessageDisplay content={content} />}
-            {isItAFile(type) && <FileMessageDisplay content={content} />}
+
+            {isFile(type) && <FileMessageDisplay content={content} />}
 
             <Dialog dialogRef={dialog}>
               Are u sure to delete this message?
