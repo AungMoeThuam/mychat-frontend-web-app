@@ -19,16 +19,16 @@ const MessageApi = {
   getMessagesList: async (
     roomId: string,
     currentUserId: string,
-    friendId: string
+    friendId: string,
+    lastMessageId?: string
   ): Promise<Result> => {
     try {
-      const res = await API.post(`/messages`, {
+      const res = await API.post(`/messages/v1`, {
         currentUserId: currentUserId,
         roomId,
         friendId,
+        lastMessageId,
       });
-
-      console.log("me - ", res.data);
 
       return SuccessResult(res.data);
     } catch (error) {

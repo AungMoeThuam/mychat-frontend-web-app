@@ -13,10 +13,19 @@ const messageReducers = {
   },
   fetchMessagesSuccess: (
     state: MessageState,
-    action: PayloadAction<{ data: Message[]; message: string }>
+    action: PayloadAction<{
+      data: Message[];
+      message: string;
+      pagination?: boolean;
+    }>
   ) => {
     state.loading = false;
     state.success = true;
+    if (action.payload.pagination === true) {
+      state.messagesList = [...action.payload.data, ...state.messagesList];
+      state.message = action.payload.message;
+      return;
+    }
     state.messagesList = action.payload.data;
     state.message = action.payload.message;
   },
@@ -29,6 +38,7 @@ const messageReducers = {
   addMessage: (state: MessageState, action: PayloadAction<Message>) => {
     state.messagesList = [...state.messagesList, action.payload];
   },
+
   updateMessageSuccess: (
     state: MessageState,
     action: PayloadAction<Message & { temporaryMessageId: string }>

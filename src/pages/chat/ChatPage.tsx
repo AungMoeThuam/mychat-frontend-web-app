@@ -33,7 +33,12 @@ export default function Chat() {
   const dispatch = useDispatch<StoreDispatch>();
   const messageSlice = useSelector((state: RootState) => state.messageSlice);
 
-  const loadMoreMessages = async () => {};
+  const loadMoreMessages = async () => {
+    let lastMessageId = messageSlice.messagesList[0].messageId;
+    dispatch(
+      fetchMessages({ lastMessageId, roomId: roomId!, friendId: friendId! })
+    );
+  };
 
   useEffect(() => {
     if (messageSlice.messagesList.length !== 0)
@@ -62,7 +67,6 @@ export default function Chat() {
       }
     }
     async function onMessageStatusListener() {
-      console.log("seen event");
       dispatch(updateMessageStatusIntoSeenAction());
     }
     async function OnTest(data: { friendId: string }) {
@@ -105,19 +109,17 @@ export default function Chat() {
       />
       <main
         id="messageBox"
-        // style={{ backgroundColor: "#18181f" }}
         className="   dark:bg-zinc-900 bg-slate-100  pt-8 px-5 pb-8 w-full flex-1 overflow-y-scroll flex flex-col "
       >
-        {isMessageRemaining && (
-          <div
-            onClick={loadMoreMessages}
-            className="text-center cursor-pointer"
-            ref={loadMessageRef}
-            key={"##3"}
-          >
-            Load More
-          </div>
-        )}
+        <div
+          onClick={loadMoreMessages}
+          className="text-center cursor-pointer"
+          ref={loadMessageRef}
+          key={"##3"}
+        >
+          Load More
+        </div>
+
         {messageSlice.error ? (
           <h1>{messageSlice.message}</h1>
         ) : messageSlice.messagesList.length === 0 ? (

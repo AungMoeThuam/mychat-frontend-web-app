@@ -13,10 +13,10 @@ import toast from "react-hot-toast";
 const fetchMessages = createAsyncThunk(
   "messages/fetchMessages",
   async (
-    info: { roomId: string; friendId: string },
+    info: { roomId: string; friendId: string; lastMessageId?: string },
     { dispatch, getState }
   ) => {
-    const { roomId, friendId } = info;
+    const { roomId, friendId, lastMessageId } = info;
     try {
       dispatch(fetchMessagesLoading(true));
 
@@ -24,14 +24,19 @@ const fetchMessages = createAsyncThunk(
       const result = await MessageApi.getMessagesList(
         roomId,
         currentUserId,
-        friendId
+        friendId,
+        lastMessageId
       );
 
       if (result.error)
         return dispatch(fetchMessagesError({ message: result.error }));
 
       return dispatch(
-        fetchMessagesSuccess({ data: result.data, message: "Success!" })
+        fetchMessagesSuccess({
+          data: result.data,
+          message: "Success!",
+          pagination: lastMessageId != undefined,
+        })
       );
     } catch (error: unknown) {
       if (error instanceof Error)

@@ -1,6 +1,5 @@
 import { AiFillPhone, AiFillVideoCamera } from "react-icons/ai";
 import { tempCatPhoto } from "../../../../assets/temporaryProfilePhoto";
-import { useParams } from "react-router-dom";
 import { API_BASE_URL } from "../../../../service/api-setup";
 
 export default function ChatHeader(props: {
@@ -8,7 +7,6 @@ export default function ChatHeader(props: {
   friendName: string | undefined;
   friendId?: string;
 }) {
-  const { roomId } = useParams();
   const { profilePhotoFilePath, friendName, friendId } = props;
 
   return (
