@@ -1,30 +1,22 @@
 import "./style.css";
 import { memo, useRef } from "react";
-import ImageMessageDisplay from "./ImageMessageDisplay";
-import { BsSaveFill, BsTrashFill } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { StoreDispatch } from "../../../../redux/store/store";
-import toast from "react-hot-toast";
-import FileMessageDisplay from "./FileMessageDisplay";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { deleteMessage } from "../../../../redux/features/message/messageThunks";
-import AudioMessageDisplay from "./audio-message-display/AudioMessageDisplay";
-import VideoMessageDisplay from "./VideoMessageDisplay";
-import TextMessageDisplay from "./TextMessageDisplay";
-import { Message as MSG } from "../../../../lib/models/models";
+import { Message as MSG } from "../../../../lib/types/types";
 import Dialog from "../../../share-components/Dialog";
-import { API_BASE_URL } from "../../../../service/api";
+import Button from "../../../share-components/Button";
+import MessageContent from "./MessageContent";
+import MessageActionMenu from "./MessageActionMenu";
+import MessageDeliveryStatus from "./MessageDeliveryStatus";
+import MessageDate from "./MessageDate";
 
-function isFile(type: any) {
-  const t = ["video", "image", "text", "audio"];
-  return !t.includes(type.split("/")[0]);
-}
-type MessageProps = {
+interface MessageProps {
   message: MSG;
   currentUserId: string;
   previousMessageDate: null | string;
-};
-const M = memo(Message);
+}
 function Message({
   message,
   currentUserId,
@@ -42,7 +34,9 @@ function Message({
   const isCurrentUserTheSender = senderId === currentUserId;
   const friendId = isCurrentUserTheSender ? receiverId : senderId;
   const dispatch = useDispatch<StoreDispatch>();
-  const deleteMessageAction = () => {
+  const dialog = useRef<HTMLDialogElement>(null);
+
+  const deleteMessageHandler = () => {
     dispatch(
       deleteMessage({
         messageId,
@@ -50,12 +44,8 @@ function Message({
         bySender: isCurrentUserTheSender,
       })
     );
+    dialog.current?.close();
   };
-  let prev = previousMessageDate
-    ? new Date(previousMessageDate).toLocaleString().split(",")[0]
-    : null;
-  let cur = new Date(createdAt).toLocaleString().split(",")[0];
-  let dialog = useRef<HTMLDialogElement>(null);
   return (
     <div
       data-id={messageId}
@@ -79,111 +69,43 @@ function Message({
                 : "  bg-gradient-to-r from-lime-500 to-teal-500 text-slate-950 "
             } `}
           >
-            {type?.includes("audio") && (
-              <AudioMessageDisplay content={content} />
-            )}
-            {type?.includes("image") && (
-              <ImageMessageDisplay content={content} />
-            )}
-            {type?.includes("video") && (
-              <VideoMessageDisplay content={content} type={type} />
-            )}
-            {type?.includes("text") && <TextMessageDisplay content={content} />}
-
-            {isFile(type) && <FileMessageDisplay content={content} />}
+            <MessageContent type={type} content={content} />
 
             <Dialog dialogRef={dialog}>
               Are u sure to delete this message?
               <div className="flex  items-center justify-center gap-4 ">
-                <button
-                  onClick={() => {
-                    deleteMessageAction();
-                    dialog.current?.close();
-                  }}
-                  className=" btn-warning"
-                >
+                <Button onClick={deleteMessageHandler} type="warning">
                   Yes
-                </button>
-                <button
-                  onClick={() => dialog.current?.close()}
-                  className="  btn-success"
-                >
-                  No
-                </button>
+                </Button>
+                <Button onClick={() => dialog.current?.close()}>No</Button>
               </div>
             </Dialog>
-            <menu
-              id="menu"
-              style={
-                isCurrentUserTheSender
-                  ? {
-                      left: "-8dvh",
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                    }
-                  : {
-                      right: "-8dvh",
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                    }
-              }
-              className="absolute  text-teal-500 opacity-50"
-            >
-              <div className="flex flex-col justify-center items-center cursor-pointer  text-lime-500 gap-3 ">
-                <BsTrashFill
-                  onClick={() => {
-                    dialog.current?.showModal();
-                  }}
-                  size={20}
-                />
-
-                {!type?.includes("text") && (
-                  <BsSaveFill
-                    onClick={async (e) => {
-                      e.preventDefault();
-                      let a: HTMLAnchorElement | null =
-                        document.createElement("a");
-
-                      let b = await fetch(
-                        `${API_BASE_URL}/resources/chats/${content}`
-                      );
-                      let c = await b.blob();
-                      a.href = URL.createObjectURL(c);
-                      a.download = content;
-                      a.target = "_blank";
-                      a.click();
-                      a = null;
-                      toast("Save a file ✅ ");
-                    }}
-                    size={20}
-                  />
-                )}
-              </div>
-            </menu>
+            <MessageActionMenu
+              isCurrentUserTheSender={isCurrentUserTheSender}
+              type={type}
+              deleteMessageDialog={dialog}
+              content={content}
+            />
           </div>
         </div>
       ) : (
         <div className=" chat-bubble  flex items-center ">
           <AiOutlineLoading3Quarters className="animate-spin  h-5 w-5 mr-3 ..." />
-
           {"sending..."}
         </div>
       )}
       <small className=" text-slate-500 self-center  text-xs flex flex-col w-full">
-        <span className=" self-center ">
-          {prev !== cur && new Date(createdAt).toLocaleString()}
-        </span>
-        <span className=" self-end">
-          {isCurrentUserTheSender &&
-            (deliveryStatus === 0
-              ? "sent"
-              : deliveryStatus === 1
-              ? "delivered"
-              : "seen")}
-        </span>
+        <MessageDate
+          previousMessageDate={previousMessageDate}
+          createdAt={createdAt}
+        />
+        <MessageDeliveryStatus
+          deliveryStatus={deliveryStatus}
+          isCurrentUserTheSender={isCurrentUserTheSender}
+        />
       </small>
     </div>
   );
 }
 
-export default M;
+export default memo(Message);

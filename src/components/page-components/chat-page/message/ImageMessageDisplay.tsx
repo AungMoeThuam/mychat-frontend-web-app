@@ -11,7 +11,7 @@ export default function ImageMessageDisplay(props: { content: string }) {
         onClick={() => setShowDetail(true)}
         className=" w-48 lg:w-64 rounded-lg aspect-auto"
         src={`${API_BASE_URL}/resources/chats/${content}`}
-        alt="cat"
+        alt="photo"
       />
       {showDetail && (
         <ImageDetailDisplayDialog

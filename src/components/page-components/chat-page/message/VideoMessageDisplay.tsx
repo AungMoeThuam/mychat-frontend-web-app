@@ -1,10 +1,7 @@
 import { useRef } from "react";
 import { API_BASE_URL } from "../../../../service/api";
 
-export default function VideoMessageDisplay(props: {
-  content: string;
-  type: string;
-}) {
+export default function VideoMessageDisplay(props: { content: string }) {
   const ref = useRef<HTMLVideoElement>(null);
   const { content } = props;
   return (

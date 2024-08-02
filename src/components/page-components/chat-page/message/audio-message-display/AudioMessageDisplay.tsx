@@ -6,7 +6,7 @@ import { API_BASE_URL } from "../../../../../service/api";
 export default function RecordedAudioDisplayer({
   content,
   flag = false,
-  setFile = undefined,
+  setFile,
 }: {
   content: string;
   flag?: boolean;
