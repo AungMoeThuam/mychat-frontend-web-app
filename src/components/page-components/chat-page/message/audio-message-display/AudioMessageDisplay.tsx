@@ -1,8 +1,8 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import "./style.css";
-import { audioDurationExtractor } from "../../../../../utils/audioDurationExtractor";
+import { audioDurationExtractor } from "../../../../../lib/utils/audioDurationExtractor";
 import { BsTrashFill } from "react-icons/bs";
-import { API_BASE_URL } from "../../../../../service/api-setup";
+import { API_BASE_URL } from "../../../../../service/api";
 export default function RecordedAudioDisplayer({
   content,
   flag = false,

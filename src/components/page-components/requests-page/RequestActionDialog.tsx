@@ -1,10 +1,11 @@
 import { useDispatch } from "react-redux";
-import { FriendShipApi } from "../../../service/friend-api-service";
 import { StoreDispatch } from "../../../redux/store/store";
 import { acceptRequestAction } from "../../../redux/features/friend-request/requestSlice";
 import { RefObject, useState } from "react";
-import { Person } from "../../../lib/models/models";
 import Dialog from "../../share-components/Dialog";
+import friendService from "../../../service/friend.service";
+import { Person } from "../../../lib/types/types";
+import Button from "../../share-components/Button";
 
 type RequestActionDialog = {
   dialogRef: RefObject<HTMLDialogElement>;
@@ -23,7 +24,7 @@ export default function RequestActionDialog({
   });
   const rejectRequest = async () => {
     try {
-      const result = await FriendShipApi.manageFriendShipStatus({
+      const result = await friendService.manageFriendShipStatus({
         type: "reject",
         currentUserId: person.friendshipReceiverId!,
         friendId: person.personId,
@@ -62,15 +63,10 @@ export default function RequestActionDialog({
         <>
           <h1>Are u sure to reject the request from {person.personName}?</h1>
           <div className="flex justify-center gap-4 ">
-            <button onClick={rejectRequest} className=" btn-warning">
+            <Button onClick={rejectRequest} type="warning">
               Yes
-            </button>
-            <button
-              onClick={() => dialogRef.current?.close()}
-              className=" btn-success"
-            >
-              No
-            </button>
+            </Button>
+            <Button onClick={() => dialogRef.current?.close()}>No</Button>
           </div>
         </>
       )}

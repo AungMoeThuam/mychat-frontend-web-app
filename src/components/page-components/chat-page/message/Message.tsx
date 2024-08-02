@@ -13,7 +13,7 @@ import VideoMessageDisplay from "./VideoMessageDisplay";
 import TextMessageDisplay from "./TextMessageDisplay";
 import { Message as MSG } from "../../../../lib/models/models";
 import Dialog from "../../../share-components/Dialog";
-import { API_BASE_URL } from "../../../../service/api-setup";
+import { API_BASE_URL } from "../../../../service/api";
 
 function isFile(type: any) {
   const t = ["video", "image", "text", "audio"];

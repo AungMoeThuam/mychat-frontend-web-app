@@ -4,8 +4,8 @@ import {
   fetchFriendsLoading,
   fetchFriendsSuccess,
 } from "./friendSlice";
-import { FriendShipApi } from "../../../service/friend-api-service";
-import { UNKNOWN_ERROR } from "../../../utils/constants/messages/errorMessages";
+import { UNKNOWN_ERROR } from "../../../lib/constants/errorMessages";
+import friendService from "../../../service/friend.service";
 
 const fetchFriends = createAsyncThunk(
   "friends/fetchFriends",
@@ -13,7 +13,7 @@ const fetchFriends = createAsyncThunk(
     try {
       dispatch(fetchFriendsLoading(true));
 
-      const result = await FriendShipApi.getFriendsList();
+      const result = await friendService.getFriendsList();
 
       if (result.error)
         return dispatch(fetchFriendsError({ message: result.error }));
@@ -32,7 +32,7 @@ const fetchFriendsInBackground = createAsyncThunk(
   "friends/fetchFriendsInBackground",
   async (_, { dispatch }) => {
     try {
-      const result = await FriendShipApi.getFriendsList();
+      const result = await friendService.getFriendsList();
 
       if (result.error)
         return dispatch(fetchFriendsError({ message: result.error }));

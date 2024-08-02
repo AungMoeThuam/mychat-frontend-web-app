@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { tempCatPhoto } from "../../../assets/temporaryProfilePhoto";
 import { Friend } from "../../../utils/constants/types";
 import UnblockActionDialog from "./UnblockActionDialog";
-import { API_BASE_URL } from "../../../service/api-setup";
+import { API_BASE_URL } from "../../../service/api";
 
 export default function BlockFriendCard({ friend }: { friend: Friend }) {
   const blockActionDialog = useRef<HTMLDialogElement>(null);

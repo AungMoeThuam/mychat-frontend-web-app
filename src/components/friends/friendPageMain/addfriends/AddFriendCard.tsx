@@ -9,7 +9,7 @@ import AcceptFriendDialog from "./dialogs/AcceptFriendDialog";
 import BlockFriendDialog from "./dialogs/BlockFriendDialog";
 import { Person } from "../../../../lib/models/models";
 import { BsPersonFillAdd, BsPersonFillSlash } from "react-icons/bs";
-import { API_BASE_URL } from "../../../../service/api-setup";
+import { API_BASE_URL } from "../../../../service/api";
 
 export default function AddFriendCard({ people }: { people: Person }) {
   const blockDialog = useRef<HTMLDialogElement>(null);

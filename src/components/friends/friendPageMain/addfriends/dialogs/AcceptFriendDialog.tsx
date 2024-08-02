@@ -7,14 +7,15 @@ import {
 } from "react";
 import { useDispatch } from "react-redux";
 import { StoreDispatch } from "../../../../../redux/store/store";
-import { FriendShipApi } from "../../../../../service/friend-api-service";
 import { searchfriendNameThunk } from "../../../../../redux/features/people/peopleThunks";
 import Modal from "../../../../share-components/Modal";
 import toast from "react-hot-toast";
-import { SearchNameContext } from "../../../../../pages/search-people/SearchPeoplePage";
+import { SearchNameContext } from "../../../../../pages/SearchPeoplePage";
 import { updateSearchingPeopleResult } from "../../../../../redux/features/people/peopleSlice";
 import { fetchFriends } from "../../../../../redux/features/friend/friendThunks";
-import { Person } from "../../../../../lib/models/models";
+import { Person } from "../../../../../lib/types/types";
+import friendService from "../../../../../service/friend.service";
+import Button from "../../../../share-components/Button";
 
 export default function AcceptFriendDialog({
   people,
@@ -38,7 +39,7 @@ export default function AcceptFriendDialog({
   const acceptFriendRequest = async () => {
     setOperation((prev) => ({ ...prev, loading: true }));
     try {
-      const { error } = await FriendShipApi.manageFriendShipStatus({
+      const { error } = await friendService.manageFriendShipStatus({
         friendId: people.personId,
         currentUserId,
         type: "accept",
@@ -91,15 +92,14 @@ export default function AcceptFriendDialog({
                 There is a conflict concurrent request at the moment! try
                 refresh
               </h1>
-              <button
+              <Button
                 onClick={() => {
                   dispatch(searchfriendNameThunk(searchNameContextConsumer));
                   setOpenAcceptFriendDialog(false);
                 }}
-                className="  btn-success"
               >
                 Refresh
-              </button>
+              </Button>
             </div>
           )
         )}

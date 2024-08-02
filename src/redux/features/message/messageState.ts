@@ -1,4 +1,4 @@
-import { Message } from "../../../lib/models/models";
+import { Message } from "../../../lib/types/types";
 
 export type MessageState = {
   error: boolean;

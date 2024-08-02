@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { FaVideo, FaVideoSlash } from "react-icons/fa";
 import { IoPersonCircle } from "react-icons/io5";
 import { IoIosMic, IoIosMicOff } from "react-icons/io";
-import socket from "../../../service/socket";
+import socket from "../../../service/socket.service";
 import { RootState } from "../../../redux/store/store";
 import { createWebRtc } from "../../../pages/CallAccepted";
 import sound from "../../../assets/audios/video-calling-sound.mp3";

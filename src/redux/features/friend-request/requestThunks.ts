@@ -4,7 +4,7 @@ import {
   fetchRequestsListLoading,
   fetchRequestsListSuccess,
 } from "./requestSlice";
-import { FriendShipApi } from "../../../service/friend-api-service";
+import friendService from "../../../service/friend.service";
 
 const getRequestsListThunk = createAsyncThunk(
   "requests/getALl",
@@ -12,7 +12,7 @@ const getRequestsListThunk = createAsyncThunk(
     try {
       dispatch(fetchRequestsListLoading(true));
 
-      const result = await FriendShipApi.getRequestsList(currentUserId);
+      const result = await friendService.getRequestsList(currentUserId);
 
       if (result.error)
         return dispatch(fetchRequestsListError({ message: result.error }));

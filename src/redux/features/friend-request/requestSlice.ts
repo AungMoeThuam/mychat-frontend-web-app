@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import requestInitialState from "./requestState";
-import { Person } from "../../../lib/models/models";
+import { Person } from "../../../lib/types/types";
 
 const requestSlice = createSlice({
   name: "requestSlice",

@@ -1,6 +1,6 @@
 import { AiFillPhone, AiFillVideoCamera } from "react-icons/ai";
 import { tempCatPhoto } from "../../../../assets/temporaryProfilePhoto";
-import { API_BASE_URL } from "../../../../service/api-setup";
+import { API_BASE_URL } from "../../../../service/api";
 
 export default function ChatHeader(props: {
   profilePhotoFilePath: string | undefined;

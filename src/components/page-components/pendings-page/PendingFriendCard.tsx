@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { tempCatPhoto } from "../../../assets/temporaryProfilePhoto";
 import PendingActionDialog from "./PendingActionDialog";
 import { Person } from "../../../lib/models/models";
-import { API_BASE_URL } from "../../../service/api-setup";
+import { API_BASE_URL } from "../../../service/api";
 
 export default function PendingFriendCard({ person }: { person: Person }) {
   const pendingActionDialog = useRef<HTMLDialogElement>(null);

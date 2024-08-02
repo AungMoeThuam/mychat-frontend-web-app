@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { FaVideo, FaVideoSlash } from "react-icons/fa";
 import { IoIosMic, IoIosMicOff } from "react-icons/io";
-import socket from "../../../service/socket";
+import socket from "../../../service/socket.service";
 
 export function createWebRtc(): RTCPeerConnection {
   const rtcPeerConnection = new RTCPeerConnection({

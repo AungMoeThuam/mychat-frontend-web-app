@@ -1,8 +1,8 @@
 import { PayloadAction } from "@reduxjs/toolkit";
-import { ProfilePhoto } from "../../../utils/constants/types";
-import socket from "../../../service/socket";
-import { useLocalStorage } from "../../../hooks/useLocalStorage";
+import socket from "../../../service/socket.service";
 import { UserState } from "./userState";
+import { ProfilePhoto } from "../../../lib/types/types";
+import useLocalStorage from "../../../lib/hooks/useLocalStorage";
 const { getStorage, setStorage, removeStorage } = useLocalStorage("authToken");
 
 const userReducers = {

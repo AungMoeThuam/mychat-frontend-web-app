@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import API from "../../../service/api-setup";
+import API from "../../../service/api";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store/store";
 

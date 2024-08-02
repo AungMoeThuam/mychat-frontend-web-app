@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import timeDurationFormatter from "../../../../utils/timeDurationFormatter";
-import { Friend } from "../../../../lib/models/models";
-import { API_BASE_URL } from "../../../../service/api-setup";
+import timeDurationFormatter from "../../../../lib/utils/timeDurationFormatter";
+import { API_BASE_URL } from "../../../../service/api";
+import { Friend } from "../../../../lib/types/types";
 const tempPhoto =
   "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 export default function Conversation({

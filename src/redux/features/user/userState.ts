@@ -1,4 +1,4 @@
-import { ProfilePhoto } from "../../../utils/constants/types";
+import { ProfilePhoto } from "../../../lib/types/types";
 
 export type UserState = {
   error: boolean;

@@ -1,6 +1,6 @@
 import { PayloadAction } from "@reduxjs/toolkit";
 import { MessageState } from "./messageState";
-import { Message } from "../../../lib/models/models";
+import { Message } from "../../../lib/types/types";
 
 const messageReducers = {
   fetchMessagesError: (

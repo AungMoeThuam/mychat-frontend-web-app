@@ -1,19 +1,19 @@
-import userApiService from "../../../service/user-api-service";
+import authService from "../../../service/auth.service";
 import {
   PASSWORD_NOT_MATCHED_WARNING,
   UNKNOWN_ERROR,
-} from "../../../utils/constants/messages/errorMessages";
-import { LOGINSUCESS } from "../../../utils/constants/messages/sucessMessages";
-import { RegisterForm } from "../../../utils/constants/types";
+} from "../../../lib/constants/errorMessages";
+import { LOGINSUCESS } from "../../../lib/constants/sucessMessages";
 import { loginError, loginLoading, loginSuccess } from "./userSlice";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { RegisterForm } from "../../../lib/types/types";
 
 const loginUser = createAsyncThunk(
   "auth/loginUser",
   async (form: { email: string; password: string }, { dispatch }) => {
     try {
       dispatch(loginLoading(true));
-      const result = await userApiService.login(form);
+      const result = await authService.login(form);
       if (result.error) return dispatch(loginError({ message: result.error }));
 
       return dispatch(
@@ -47,7 +47,7 @@ const registerUser = createAsyncThunk(
           })
         );
 
-      const result = await userApiService.register(form);
+      const result = await authService.register(form);
       if (result.error) return dispatch(loginError({ message: result.error }));
 
       return dispatch(

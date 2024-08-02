@@ -1,6 +1,6 @@
 import { PayloadAction } from "@reduxjs/toolkit";
 import { PeopleState } from "./peopleState";
-import { Person } from "../../../lib/models/models";
+import { Person } from "../../../lib/types/types";
 
 const peopleReducers = {
   searchPeopleLoading: (state: PeopleState) => {

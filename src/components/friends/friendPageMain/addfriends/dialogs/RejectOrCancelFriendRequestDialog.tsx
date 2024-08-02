@@ -1,12 +1,13 @@
 import { RefObject, useContext, useState } from "react";
 import { useDispatch } from "react-redux";
 import { StoreDispatch } from "../../../../../redux/store/store";
-import { FriendShipApi } from "../../../../../service/friend-api-service";
 import { searchfriendNameThunk } from "../../../../../redux/features/people/peopleThunks";
 import toast from "react-hot-toast";
-import { SearchNameContext } from "../../../../../pages/search-people/SearchPeoplePage";
-import { Person } from "../../../../../lib/models/models";
+import { SearchNameContext } from "../../../../../pages/SearchPeoplePage";
 import Dialog from "../../../../share-components/Dialog";
+import friendService from "../../../../../service/friend.service";
+import { Person } from "../../../../../lib/types/types";
+import Button from "../../../../share-components/Button";
 
 export default function RejectOrCancelFriendRequestDialog({
   RejectOrCancelDialog,
@@ -31,7 +32,7 @@ export default function RejectOrCancelFriendRequestDialog({
     setOperation((prev) => ({ ...prev, loading: true }));
 
     try {
-      const res = await FriendShipApi.manageFriendShipStatus({
+      const res = await friendService.manageFriendShipStatus({
         type: "reject",
         friendId: people.personId,
         currentUserId,
@@ -66,15 +67,14 @@ export default function RejectOrCancelFriendRequestDialog({
           <h1>
             There is a conflict concurrent request at the moment! try refresh
           </h1>
-          <button
+          <Button
             onClick={() => {
               dialogRef.current?.close();
               dispatch(searchfriendNameThunk(searchNameContextConsumer));
             }}
-            className=" btn-success"
           >
             Refresh
-          </button>
+          </Button>
         </div>
       ) : (
         <>
@@ -86,15 +86,10 @@ export default function RejectOrCancelFriendRequestDialog({
             ?
           </h1>
           <div className="flex  justify-center gap-5 ">
-            <button onClick={action} className=" btn-warning">
+            <Button onClick={action} type="warning">
               Yes
-            </button>
-            <button
-              onClick={() => dialogRef.current?.close()}
-              className="btn-success"
-            >
-              No
-            </button>
+            </Button>
+            <Button onClick={() => dialogRef.current?.close()}>No</Button>
           </div>
         </>
       )}

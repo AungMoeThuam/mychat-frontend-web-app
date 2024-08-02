@@ -1,8 +1,9 @@
 import { FormEvent, ChangeEvent, useState, RefObject } from "react";
-import API from "../../../service/api-setup";
+import API from "../../../service/api";
 import { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import Dialog from "../../share-components/Dialog";
+import Button from "../../share-components/Button";
 
 export default function ChangeEmailModal({
   dialogRef,
@@ -106,19 +107,16 @@ export default function ChangeEmailModal({
           <p className=" text-sm font-semibold text-red-500">{error.message}</p>
         )}
         <div className="flex    justify-center mt-2 gap-2 ">
-          <button
-            onClick={closeModal}
-            className=" btn btn-sm bg-red-600 border-none px-4"
-          >
+          <Button onClick={closeModal} type="warning">
             cancel
-          </button>
-          <button disabled={loading} className=" btn btn-sm btn-success px-5 ">
+          </Button>
+          <Button disabled={loading}>
             {loading ? (
               <span className="loading loading-spinner loading-sm"></span>
             ) : (
               "save"
             )}
-          </button>
+          </Button>
         </div>
       </form>
     </Dialog>

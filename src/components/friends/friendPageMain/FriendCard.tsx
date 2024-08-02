@@ -3,12 +3,12 @@ import { useRef } from "react";
 import UnFriendDialog from "./UnFriendDialog";
 import { tempCatPhoto } from "../../../assets/temporaryProfilePhoto";
 import BlockFriendDialog from "./addfriends/dialogs/BlockFriendDialog";
-import { Friend } from "../../../lib/models/models";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store/store";
 import { BsPersonFillDash, BsPersonFillSlash } from "react-icons/bs";
 import { BiSolidMessageSquareDetail } from "react-icons/bi";
-import { API_BASE_URL } from "../../../service/api-setup";
+import { API_BASE_URL } from "../../../service/api";
+import { Friend } from "../../../lib/types/types";
 
 export default function FriendCard({ friend }: { friend: Friend }) {
   const blockDialog = useRef<HTMLDialogElement>(null);

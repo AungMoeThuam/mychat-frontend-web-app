@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Friend } from "../../../utils/constants/types";
 import blockInitialState from "./blockState";
+import { Friend } from "../../../lib/types/types";
 
 const blockSlice = createSlice({
   name: "blockSlice",

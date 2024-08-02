@@ -1,11 +1,12 @@
 import { RefObject, useState } from "react";
-import { FriendShipApi } from "../../../service/friend-api-service";
 import { useDispatch } from "react-redux";
 import { StoreDispatch } from "../../../redux/store/store";
 import { unFriend } from "../../../redux/features/friend/friendSlice";
 import toast from "react-hot-toast";
-import { Friend } from "../../../lib/models/models";
 import Dialog from "../../share-components/Dialog";
+import { Friend } from "../../../lib/types/types";
+import friendService from "../../../service/friend.service";
+import Button from "../../share-components/Button";
 
 interface UnFriendDialogProps {
   friend: Friend;
@@ -25,7 +26,7 @@ export default function UnFriendDialog({
   const unFriendAction = async () => {
     setOperation((prev) => ({ ...prev, loading: true }));
     try {
-      const result = await FriendShipApi.unFriend(friend.friendshipId);
+      const result = await friendService.unFriend(friend.friendshipId);
       if (result.error)
         return setOperation((prev) => ({
           ...prev,
@@ -48,12 +49,8 @@ export default function UnFriendDialog({
       ) : operation.error ? (
         <>
           <h1>Error try refresh!</h1>
-          <button
-            onClick={() => dialogRef.current?.close()}
-            className="btn-success"
-          >
-            Refresh
-          </button>
+
+          <Button onClick={() => dialogRef.current?.close()}>Refresh</Button>
         </>
       ) : (
         <>
@@ -64,15 +61,11 @@ export default function UnFriendDialog({
             </p>
           </div>
           <div className="flex gap-2">
-            <button onClick={unFriendAction} className=" btn-warning">
+            <Button onClick={unFriendAction} type="warning">
               Yes
-            </button>
-            <button
-              onClick={() => dialogRef.current?.close()}
-              className=" btn-success"
-            >
-              No
-            </button>
+            </Button>
+
+            <Button onClick={() => dialogRef.current?.close()}>No</Button>
           </div>
         </>
       )}

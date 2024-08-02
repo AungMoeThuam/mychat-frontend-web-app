@@ -5,8 +5,8 @@ import {
   searchPeopleSuccess,
 } from "./peopleSlice";
 import { RootState } from "../../store/store";
-import { FriendShipApi } from "../../../service/friend-api-service";
-import { UNKNOWN_ERROR } from "../../../utils/constants/messages/errorMessages";
+import { UNKNOWN_ERROR } from "../../../lib/constants/errorMessages";
+import friendService from "../../../service/friend.service";
 
 const searchfriendNameThunk = createAsyncThunk(
   "searchFriend/searchname",
@@ -15,7 +15,7 @@ const searchfriendNameThunk = createAsyncThunk(
       dispatch(searchPeopleLoading());
       let currentUserId = (getState() as RootState).authSlice.currentUserId;
 
-      const result = await FriendShipApi.searchFriendsByName(
+      const result = await friendService.searchFriendsByName(
         name,
         currentUserId
       );

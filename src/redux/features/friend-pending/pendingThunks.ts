@@ -1,11 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { FriendShipApi } from "../../../service/friend-api-service";
 import {
   fetchPendingsListError,
   fetchPendingsListLoading,
   fetchPendingsListSuccess,
 } from "./pendingSlice";
-import { UNKNOWN_ERROR } from "../../../utils/constants/messages/errorMessages";
+import { UNKNOWN_ERROR } from "../../../lib/constants/errorMessages";
+import friendService from "../../../service/friend.service";
 
 const getPendingsListThunk = createAsyncThunk(
   "pendings/getALl",
@@ -14,7 +14,7 @@ const getPendingsListThunk = createAsyncThunk(
     try {
       dispatch(fetchPendingsListLoading(true));
 
-      const result = await FriendShipApi.getPendingsList(currentUserId);
+      const result = await friendService.getPendingsList(currentUserId);
 
       if (result.error)
         return dispatch(fetchPendingsListError({ message: result.error }));

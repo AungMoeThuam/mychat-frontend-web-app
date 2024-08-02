@@ -6,9 +6,9 @@ import {
   fetchMessagesLoading,
   fetchMessagesSuccess,
 } from "./messageSlice";
-import { MessageApi } from "../../../service/message-api-service";
-import { UNKNOWN_ERROR } from "../../../utils/constants/messages/errorMessages";
+import { UNKNOWN_ERROR } from "../../../lib/constants/errorMessages";
 import toast from "react-hot-toast";
+import messageService from "../../../service/message.service";
 
 const fetchMessages = createAsyncThunk(
   "messages/fetchMessages",
@@ -21,7 +21,7 @@ const fetchMessages = createAsyncThunk(
       dispatch(fetchMessagesLoading(true));
 
       const { currentUserId } = (getState() as RootState).authSlice;
-      const result = await MessageApi.getMessagesList(
+      const result = await messageService.getMessagesList(
         roomId,
         currentUserId,
         friendId,
@@ -62,7 +62,7 @@ const deleteMessage = createAsyncThunk(
   ) => {
     try {
       const currentUserId = (getState() as RootState).authSlice.currentUserId;
-      const result = await MessageApi.deleteMessage({
+      const result = await messageService.deleteMessage({
         messageId,
         bySender,
         friendId,
@@ -92,7 +92,7 @@ const fetchMessagesInBackground = createAsyncThunk(
     const { roomId, friendId } = info;
     try {
       const { currentUserId } = (getState() as RootState).authSlice;
-      const result = await MessageApi.getMessagesList(
+      const result = await messageService.getMessagesList(
         roomId,
         currentUserId,
         friendId

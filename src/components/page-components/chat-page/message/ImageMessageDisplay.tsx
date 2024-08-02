@@ -1,6 +1,6 @@
 import { useState } from "react";
 import ImageDetailDisplayDialog from "../imageDisplay/ImageDetailDisplay";
-import { API_BASE_URL } from "../../../../service/api-setup";
+import { API_BASE_URL } from "../../../../service/api";
 
 export default function ImageMessageDisplay(props: { content: string }) {
   const { content } = props;

@@ -1,6 +1,6 @@
 import { ImCross } from "react-icons/im";
 import Modal from "../../../share-components/Modal";
-import { API_BASE_URL } from "../../../../service/api-setup";
+import { API_BASE_URL } from "../../../../service/api";
 
 export default function ImageDetailDisplayDialog({
   imageUrl,

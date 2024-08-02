@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "../../../../service/api-setup";
+import { API_BASE_URL } from "../../../../service/api";
 import { FaFileAlt } from "react-icons/fa";
 
 export default function FileMessageDisplay({ content }: { content: string }) {

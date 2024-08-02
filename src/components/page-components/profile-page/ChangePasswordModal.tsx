@@ -1,8 +1,9 @@
 import { useState, FormEvent, ChangeEvent, RefObject } from "react";
-import API from "../../../service/api-setup";
+import API from "../../../service/api";
 import { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import Dialog from "../../share-components/Dialog";
+import Button from "../../share-components/Button";
 
 export default function ChangePasswordModal({
   userId,
@@ -107,20 +108,16 @@ export default function ChangePasswordModal({
           <p className=" font-semibold text-red-500">{error.message}</p>
         )}
         <div className="flex   items-center justify-center mt-2 gap-2 ">
-          <button
-            type="reset"
-            onClick={() => dialogRef.current?.close()}
-            className=" btn-warning"
-          >
+          <Button onClick={() => dialogRef.current?.close()} type="warning">
             cancel
-          </button>
-          <button disabled={loading} className="   btn-success">
+          </Button>
+          <Button disabled={loading}>
             {loading ? (
               <span className="loading loading-spinner loading-sm"></span>
             ) : (
               "save"
             )}
-          </button>
+          </Button>
         </div>
       </form>
     </Dialog>

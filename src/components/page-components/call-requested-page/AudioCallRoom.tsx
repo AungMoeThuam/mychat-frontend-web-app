@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { createWebRtc } from "../../../pages/CallAccepted";
-import socket from "../../../service/socket";
+import socket from "../../../service/socket.service";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store/store";

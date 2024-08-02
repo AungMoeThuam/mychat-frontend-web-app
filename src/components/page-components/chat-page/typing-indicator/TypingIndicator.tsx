@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import socket from "../../../../service/socket";
-import { Event } from "../../../../utils/constants/socketEvents";
+import socket from "../../../../service/socket.service";
+import { Event } from "../../../../lib/utils/socketEvents";
 
 export default function TypingIndicator() {
   const [typingIndicator, setTypingIndicator] = useState(false);

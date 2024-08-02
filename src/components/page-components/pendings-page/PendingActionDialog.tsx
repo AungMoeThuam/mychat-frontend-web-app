@@ -1,11 +1,12 @@
 import { useDispatch } from "react-redux";
-import { FriendShipApi } from "../../../service/friend-api-service";
 import { StoreDispatch } from "../../../redux/store/store";
 import { RefObject, useState } from "react";
 import { cancelPendingAction } from "../../../redux/features/friend-pending/pendingSlice";
 import toast from "react-hot-toast";
-import { Person } from "../../../lib/models/models";
 import Dialog from "../../share-components/Dialog";
+import friendService from "../../../service/friend.service";
+import { Person } from "../../../lib/types/types";
+import Button from "../../share-components/Button";
 
 type PendingActionDialog = {
   dialogRef: RefObject<HTMLDialogElement>;
@@ -24,7 +25,7 @@ export default function PendingActionDialog({
   });
   const rejectRequest = async () => {
     try {
-      const result = await FriendShipApi.manageFriendShipStatus({
+      const result = await friendService.manageFriendShipStatus({
         type: "reject",
         currentUserId: person.friendshipInitiatorId!,
         friendId: person.personId,
@@ -65,15 +66,10 @@ export default function PendingActionDialog({
         <>
           <h1>Are u sure to cancel the request to {person.personName}?</h1>
           <div className="flex justify-center gap-4 ">
-            <button onClick={rejectRequest} className="btn-warning">
+            <Button onClick={rejectRequest} type="warning">
               Yes
-            </button>
-            <button
-              onClick={() => dialogRef.current?.close()}
-              className="btn-success"
-            >
-              No
-            </button>
+            </Button>
+            <Button onClick={() => dialogRef.current?.close()}>No</Button>
           </div>
         </>
       )}

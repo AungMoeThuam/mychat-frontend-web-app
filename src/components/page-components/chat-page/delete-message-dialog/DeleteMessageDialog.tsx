@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import Modal from "../../../share-components/Modal";
+import Button from "../../../share-components/Button";
 
 export default function DeleteMessageDialog({
   deleteMessageAction,
@@ -17,18 +18,16 @@ export default function DeleteMessageDialog({
         <Modal onClose={() => onClose(false)}>
           Are u sure to delete this message?
           <div className="flex  items-center justify-center gap-4 my-2">
-            <button
+            <Button
               onClick={() => {
                 deleteMessageAction();
                 onClose(false);
               }}
-              className=" btn-warning"
+              type="warning"
             >
               Yes
-            </button>
-            <button onClick={() => onClose(false)} className="  btn-success">
-              No
-            </button>
+            </Button>
+            <Button onClick={() => onClose(false)}>No</Button>
           </div>
         </Modal>
       )}

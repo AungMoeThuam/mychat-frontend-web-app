@@ -5,15 +5,15 @@ import "./style.css";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, StoreDispatch } from "../../../../redux/store/store";
 import { MdKeyboardVoice } from "react-icons/md";
-import voiceRecorderService from "../../../../utils/voiceRecorder";
+import voiceRecorderService from "../../../../lib/utils/voiceRecorder";
 import FilePicker from "./FilePicker";
 import SelectedFileDisplayer from "./SelectFileDisplay";
 import VoiceRecorder from "./VoiceRecorderDisplay";
-import { MessageApi } from "../../../../service/message-api-service";
 import toast from "react-hot-toast";
 import { addMessage } from "../../../../redux/features/message/messageSlice";
 import RecordedAudioDisplayer from "../message/audio-message-display/AudioMessageDisplay";
-import generateVideoThumbnail from "../../../../utils/videoThumbnailGenerator";
+import generateVideoThumbnail from "../../../../lib/utils/videoThumbnailGenerator";
+import messageService from "../../../../service/message.service";
 
 export default function ChatInput(props: { friendId: any; roomId: any }) {
   const { roomId } = props;
@@ -46,7 +46,7 @@ export default function ChatInput(props: { friendId: any; roomId: any }) {
 
     let f = file;
     setFile(null);
-    const result = await MessageApi.sendMessage({
+    const result = await messageService.sendMessage({
       temporaryMessageId,
       content: f ? f.name : content,
       type: f ? f.type : "text",

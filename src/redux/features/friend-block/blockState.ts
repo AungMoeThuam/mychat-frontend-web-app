@@ -1,4 +1,4 @@
-import { Friend } from "../../../utils/constants/types";
+import { Friend } from "../../../lib/types/types";
 
 type BlockState = {
   error: boolean;

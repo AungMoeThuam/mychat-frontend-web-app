@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import pendingInitialState from "./pendingState";
-import { Person } from "../../../lib/models/models";
+import { Person } from "../../../lib/types/types";
 
 const pendingSlice = createSlice({
   name: "pendingSlice",

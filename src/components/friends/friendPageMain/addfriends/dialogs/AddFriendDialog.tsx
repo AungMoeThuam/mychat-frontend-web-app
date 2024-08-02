@@ -1,17 +1,18 @@
 import { RefObject, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, StoreDispatch } from "../../../../../redux/store/store";
-import { FriendShipApi } from "../../../../../service/friend-api-service";
 import { searchfriendNameThunk } from "../../../../../redux/features/people/peopleThunks";
 import toast from "react-hot-toast";
-import { SearchNameContext } from "../../../../../pages/search-people/SearchPeoplePage";
+import { SearchNameContext } from "../../../../../pages/SearchPeoplePage";
 import {
   operationError,
   operationLoading,
   operationSuccess,
 } from "../../../../../redux/slices/friendshipDialogSlice";
-import { Person } from "../../../../../lib/models/models";
 import Dialog from "../../../../share-components/Dialog";
+import { Person } from "../../../../../lib/types/types";
+import friendService from "../../../../../service/friend.service";
+import Button from "../../../../share-components/Button";
 
 export default function AddFriendDialog({
   people,
@@ -36,7 +37,7 @@ export default function AddFriendDialog({
     if (process === "cancel") return;
 
     try {
-      const res = await FriendShipApi.manageFriendShipStatus({
+      const res = await friendService.manageFriendShipStatus({
         type: "request",
         friendId: id,
         currentUserId,
@@ -75,35 +76,23 @@ export default function AddFriendDialog({
           <h1>
             There is a conflict concurrent request at the moment! try refresh
           </h1>
-          <button
+          <Button
             onClick={() => {
               dispatch(searchfriendNameThunk(searchNameContextConsumer));
-
               dialogRef.current?.close();
             }}
-            className=" btn-success"
           >
             Refresh
-          </button>
+          </Button>
         </div>
       ) : (
         <>
           <h1>Are u sure to add friend to {people.personName}? </h1>
           <div className="flex  justify-center gap-5 ">
-            <button
-              onClick={() => {
-                action(people.personId);
-              }}
-              className=" btn-warning"
-            >
+            <Button onClick={() => action(people.personId)} type="warning">
               Yes
-            </button>
-            <button
-              onClick={() => dialogRef.current?.close()}
-              className="btn-success"
-            >
-              No
-            </button>
+            </Button>
+            <Button onClick={() => dialogRef.current?.close()}>No</Button>
           </div>
         </>
       )}

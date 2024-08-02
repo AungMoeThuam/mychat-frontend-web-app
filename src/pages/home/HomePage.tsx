@@ -3,14 +3,13 @@ import { Outlet, useSearchParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { StoreDispatch } from "../../redux/store/store";
 import { useEffect } from "react";
-import socket from "../../service/socket";
-import { Event } from "../../utils/constants/socketEvents";
+import socket from "../../service/socket.service";
+import { Event } from "../../lib/utils/socketEvents";
 import toast, { Toaster } from "react-hot-toast";
 import { searchfriendNameThunk } from "../../redux/features/people/peopleThunks";
 import { updateSearchingPeopleResult } from "../../redux/features/people/peopleSlice";
 import { fetchFriends } from "../../redux/features/friend/friendThunks";
-import SideNavigationMenu from "../../components/share-components/side-navigation-menu/SideNavigationMenu";
-import componentRenderInspector from "../../utils/test/componentRenderInspector";
+import SideNavigationMenu from "../../components/share-components/SideNavigationMenu";
 import ConversationList from "../../components/page-components/home-page/conversation/ConversationList";
 
 export default function HomePage() {
@@ -42,7 +41,6 @@ export default function HomePage() {
     }
 
     function callHandler(data: any) {
-      console.log(data);
       const { callerId, calleeId, offer, callerName } = data;
       localStorage.setItem("offer", JSON.stringify(offer));
       toast((t) => (
@@ -85,8 +83,6 @@ export default function HomePage() {
       socket.unbSubcribeOneEvent("call", callHandler);
     };
   }, []);
-
-  componentRenderInspector("home");
 
   return (
     <div

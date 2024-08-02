@@ -1,16 +1,17 @@
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, StoreDispatch } from "../../../redux/store/store";
-import { UserApi } from "../../../service/userApi";
 import { updateProfileImage } from "../../../redux/features/user/userSlice";
 import {
   NOT_ALLOWED_IMAGE_EXTENSION_WARNING,
   UNKNOWN_ERROR,
   UPLOAD_IMAGE_FILE_SIZE_WARNING,
-} from "../../../utils/constants/messages/errorMessages";
-import { allowUploadImageExtensionTypes } from "../../../utils/constants/allowImageUploadExtensionTypes";
+} from "../../../lib/constants/errorMessages";
+import { allowUploadImageExtensionTypes } from "../../../lib/utils/allowImageUploadExtensionTypes";
 import { tempCatPhoto } from "../../../assets/temporaryProfilePhoto";
-import { API_BASE_URL } from "../../../service/api-setup";
+import { API_BASE_URL } from "../../../service/api";
+import userService from "../../../service/user.service";
+import Button from "../../share-components/Button";
 
 export default function UserProfilePhotoDisplayer() {
   const dispatch = useDispatch<StoreDispatch>();
@@ -36,7 +37,7 @@ export default function UserProfilePhotoDisplayer() {
     setOperation((prev) => ({ ...prev, loading: true }));
 
     try {
-      const result = await UserApi.uploadProfilePhoto(
+      const result = await userService.uploadProfilePhoto(
         photo,
         currentUser.currentUserId
       );
@@ -130,18 +131,10 @@ export default function UserProfilePhotoDisplayer() {
             <h1>...uploading...</h1>
           ) : (
             <>
-              <button
-                onClick={cancelSelectedImage}
-                className=" btn btn-sm border-none bg-zinc-900 "
-              >
+              <Button onClick={cancelSelectedImage} type="warning">
                 cancel
-              </button>
-              <button
-                onClick={uploadProfilePhoto}
-                className="btn btn-sm border-none bg-lime-500 text-zinc-950"
-              >
-                Save
-              </button>
+              </Button>
+              <Button onClick={uploadProfilePhoto}>Save</Button>
             </>
           )}
         </div>

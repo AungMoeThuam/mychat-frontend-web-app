@@ -1,13 +1,13 @@
 import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { StoreDispatch } from "../../../redux/store/store";
-import { FriendShipApi } from "../../../service/friend-api-service";
 import RequestActionDialog from "./RequestActionDialog";
 import { tempCatPhoto } from "../../../assets/temporaryProfilePhoto";
 import { acceptRequestAction } from "../../../redux/features/friend-request/requestSlice";
 import { fetchFriends } from "../../../redux/features/friend/friendThunks";
-import { Person } from "../../../lib/models/models";
-import { API_BASE_URL } from "../../../service/api-setup";
+import { API_BASE_URL } from "../../../service/api";
+import friendService from "../../../service/friend.service";
+import { Person } from "../../../lib/types/types";
 
 export default function RequestFriendCard({ person }: { person: Person }) {
   const requestActionDialog = useRef<HTMLDialogElement>(null);
@@ -19,7 +19,7 @@ export default function RequestFriendCard({ person }: { person: Person }) {
   const dispatch = useDispatch<StoreDispatch>();
   const acceptRequest = async () => {
     try {
-      const result = await FriendShipApi.manageFriendShipStatus({
+      const result = await friendService.manageFriendShipStatus({
         type: "accept",
         friendId: person.personId,
         currentUserId: person.friendshipReceiverId!,

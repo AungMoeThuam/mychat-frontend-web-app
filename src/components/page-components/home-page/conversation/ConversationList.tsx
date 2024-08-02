@@ -6,11 +6,11 @@ import {
   fetchFriends,
 } from "../../../../redux/features/friend/friendThunks";
 import { RootState, StoreDispatch } from "../../../../redux/store/store";
-import socket from "../../../../service/socket";
-import { Event } from "../../../../utils/constants/socketEvents";
+import socket from "../../../../service/socket.service";
+import { Event } from "../../../../lib/utils/socketEvents";
 import { updateOnlineStatus } from "../../../../redux/features/friend/friendSlice";
 import { deleteMessageSuccess } from "../../../../redux/features/message/messageSlice";
-import { Friend } from "../../../../lib/models/models";
+import { Friend } from "../../../../lib/types/types";
 
 export default function ConversationList() {
   const { friendsList, error, loading, message } = useSelector(

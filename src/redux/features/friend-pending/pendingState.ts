@@ -1,4 +1,4 @@
-import { Person } from "../../../lib/models/models";
+import { Person } from "../../../lib/types/types";
 
 type PendingState = {
   error: boolean;

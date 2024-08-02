@@ -1,11 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
-import { FriendShipApi } from "../../../service/friend-api-service";
-import { Friend } from "../../../utils/constants/types";
 import { RootState, StoreDispatch } from "../../../redux/store/store";
 import { RefObject, useState } from "react";
 import toast from "react-hot-toast";
 import { cancelBlockAction } from "../../../redux/features/friend-block/blockSlice";
 import Dialog from "../../share-components/Dialog";
+import { Friend } from "../../../lib/types/types";
+import friendService from "../../../service/friend.service";
+import Button from "../../share-components/Button";
 
 type UnblockActionDialog = {
   dialogRef: RefObject<HTMLDialogElement>;
@@ -27,7 +28,7 @@ export default function UnblockActionDialog({
   );
   const removeBlock = async () => {
     try {
-      const result = await FriendShipApi.unblock(
+      const result = await friendService.unblock(
         friend.friendshipId!,
         currentUserId
       );
@@ -64,17 +65,12 @@ export default function UnblockActionDialog({
         <h1>{operation.message} </h1>
       ) : (
         <>
-          <h1>Are u sure to unblock {friend.name}?</h1>
+          <h1>Are u sure to unblock {friend.friendName}?</h1>
           <div className="flex justify-center gap-4 ">
-            <button onClick={removeBlock} className=" btn-warning">
+            <Button onClick={removeBlock} type="warning">
               Yes
-            </button>
-            <button
-              onClick={() => dialogRef.current?.close()}
-              className=" btn-success"
-            >
-              No
-            </button>
+            </Button>
+            <Button onClick={() => dialogRef.current?.close()}>No</Button>
           </div>
         </>
       )}

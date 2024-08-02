@@ -1,11 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { FriendShipApi } from "../../../service/friend-api-service";
 import {
   fetchBlocksListError,
   fetchBlocksListLoading,
   fetchBlocksListSuccess,
 } from "./blockSlice";
-import { UNKNOWN_ERROR } from "../../../utils/constants/messages/errorMessages";
+import { UNKNOWN_ERROR } from "../../../lib/constants/errorMessages";
+import friendService from "../../../service/friend.service";
 
 const getBlocksListThunk = createAsyncThunk(
   "blocks/getALl",
@@ -14,7 +14,7 @@ const getBlocksListThunk = createAsyncThunk(
     try {
       dispatch(fetchBlocksListLoading(true));
 
-      const result = await FriendShipApi.getBlocksList(currentUserId);
+      const result = await friendService.getBlocksList(currentUserId);
 
       if (result.error)
         return dispatch(fetchBlocksListError({ message: result.error }));

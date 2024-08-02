@@ -8,8 +8,8 @@ import {
   useEffect,
 } from "react";
 import "./style.css";
-import socket from "../../../../service/socket";
-import { Event } from "../../../../utils/constants/socketEvents";
+import socket from "../../../../service/socket.service";
+import { Event } from "../../../../lib/utils/socketEvents";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store/store";

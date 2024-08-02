@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { API_BASE_URL } from "../../../../service/api-setup";
+import { API_BASE_URL } from "../../../../service/api";
 
 export default function VideoMessageDisplay(props: {
   content: string;
