@@ -28,11 +28,10 @@ export default function Chat() {
     roomId: roomId!,
   });
   const ref = useRef<HTMLDivElement>(null);
-  const loadMessageRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch<StoreDispatch>();
   const messageSlice = useSelector((state: RootState) => state.messageSlice);
 
-  const loadMoreMessages = async () => {
+  const loadMoreMessages = () => {
     let lastMessageId = messageSlice.messagesList[0].messageId;
     dispatch(
       fetchMessages({ lastMessageId, roomId: roomId!, friendId: friendId! })
@@ -46,37 +45,29 @@ export default function Chat() {
       });
   }, [messageSlice.messagesList]);
 
-  useEffect(() => {}, []);
   useEffect(() => {
     socket.emitEvent(Event.JOINROOM, {
       roomId,
       userId: currentUserId,
       friendId,
     });
-    const onReadMessage = (data: any) => {
+    const onReadMessage = (data: any) =>
       dispatch(clearUnreadMessageCount(data));
-    };
 
     onReadMessage(roomId);
 
-    async function onMessageListner(data: any) {
-      console.log(data);
+    const onMessageListner = (data: any) =>
+      data.friendshipId === roomId && dispatch(updateMessageSuccess(data));
 
-      if (data.friendshipId === roomId) {
-        dispatch(updateMessageSuccess(data));
-      }
-    }
-    async function onMessageStatusListener() {
+    const onMessageStatusListener = () =>
       dispatch(updateMessageStatusIntoSeenAction());
-    }
-    async function OnTest(data: { friendId: string }) {
+
+    const onMessageDeliveredListener = (data: { friendId: string }) => {
       const { friendId: fId } = data;
       if (fId === friendId && roomId)
         dispatch(updateMessageStatusIntoDeliveredAction());
-    }
-    const onError = (data: any) => {
-      toast(data.message);
     };
+    const onError = (data: any) => toast(data.message);
 
     socket.subscribeOneEvent("error", onError);
     socket.subscribeOneEvent(Event.MESSAGE, onMessageListner);
@@ -84,7 +75,10 @@ export default function Chat() {
       Event.MESSAGE_STATUS_SEEN,
       onMessageStatusListener
     );
-    socket.subscribeOneEvent(Event.MESSAGE_STATUS_DELIVERED, OnTest);
+    socket.subscribeOneEvent(
+      Event.MESSAGE_STATUS_DELIVERED,
+      onMessageDeliveredListener
+    );
 
     if (roomId) dispatch(fetchMessages({ roomId, friendId: friendId! }));
 
@@ -95,7 +89,10 @@ export default function Chat() {
         Event.MESSAGE_STATUS_SEEN,
         onMessageStatusListener
       );
-      socket.unbSubcribeOneEvent(Event.MESSAGE_STATUS_DELIVERED, OnTest);
+      socket.unbSubcribeOneEvent(
+        Event.MESSAGE_STATUS_DELIVERED,
+        onMessageDeliveredListener
+      );
       socket.leaveRoom(roomId!);
     };
   }, [roomId, friendInfo]);
@@ -111,14 +108,10 @@ export default function Chat() {
         id="messageBox"
         className="   dark:bg-zinc-900 bg-slate-100  pt-8 px-5 pb-8 w-full flex-1 overflow-y-scroll flex flex-col "
       >
-        <div
-          onClick={loadMoreMessages}
-          className="text-center cursor-pointer"
-          ref={loadMessageRef}
+        <LoadMoreMessageButton
           key={"##3"}
-        >
-          Load More
-        </div>
+          loadMoreMessages={loadMoreMessages}
+        />
 
         {messageSlice.error ? (
           <h1>{messageSlice.message}</h1>
@@ -133,10 +126,26 @@ export default function Chat() {
       {friendInfo ? (
         <ChatInputSection friendId={friendInfo.friendId} roomId={roomId} />
       ) : (
-        <div className=" row-span-1 shadow-lg   h-fit  p-2 w-full flex justify-between items-center   px-2">
-          <h1>only friend can have conversation!</h1>
-        </div>
+        <DisplayWarningMessage />
       )}
+    </div>
+  );
+}
+function DisplayWarningMessage() {
+  return (
+    <div className=" row-span-1 shadow-lg   h-fit  p-2 w-full flex justify-between items-center   px-2">
+      <h1>only friend can have conversation!</h1>
+    </div>
+  );
+}
+function LoadMoreMessageButton({
+  loadMoreMessages,
+}: {
+  loadMoreMessages: () => void;
+}) {
+  return (
+    <div onClick={loadMoreMessages} className="text-center cursor-pointer">
+      Load More
     </div>
   );
 }

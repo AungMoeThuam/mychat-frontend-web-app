@@ -1,12 +1,10 @@
+import isFile from "../../../../lib/utils/isFile";
 import AudioMessageDisplay from "./audio-message-display/AudioMessageDisplay";
 import FileMessageDisplay from "./FileMessageDisplay";
 import ImageMessageDisplay from "./ImageMessageDisplay";
 import TextMessageDisplay from "./TextMessageDisplay";
 import VideoMessageDisplay from "./VideoMessageDisplay";
-function isFile(type: any) {
-  const t = ["video", "image", "text", "audio"];
-  return !t.includes(type.split("/")[0]);
-}
+
 interface MessageContentProps {
   type: string;
   content: string;

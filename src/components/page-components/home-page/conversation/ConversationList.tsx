@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Conversation from "./Conversation";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchFriendsInBackground,
@@ -11,13 +10,18 @@ import { Event } from "../../../../lib/utils/socketEvents";
 import { updateOnlineStatus } from "../../../../redux/features/friend/friendSlice";
 import { deleteMessageSuccess } from "../../../../redux/features/message/messageSlice";
 import { Friend } from "../../../../lib/types/types";
+import Conversation from "./Conversation";
 
-export default function ConversationList() {
+export default function ChatList() {
   const { friendsList, error, loading, message } = useSelector(
     (state: RootState) => state.friendSlice
   );
   const dispatch = useDispatch<StoreDispatch>();
   const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    dispatch(fetchFriends());
+  }, []);
 
   useEffect(() => {
     const listener = (data: { userId: string; active: boolean }) =>
@@ -29,8 +33,6 @@ export default function ConversationList() {
     }) => dispatch(deleteMessageSuccess(data));
 
     const onNewMessageListener = () => dispatch(fetchFriendsInBackground());
-
-    dispatch(fetchFriends());
 
     socket.subscribeOneEvent(Event.NEWACTIVEUSER, listener);
     socket.subscribeOneEvent(Event.NEWOFFLINEUSER, listener);
@@ -52,16 +54,9 @@ export default function ConversationList() {
 
   return (
     <>
-      <div
-        style={{
-          height: "8%",
-        }}
-        className=" p-2 "
-      >
+      <div className=" p-2">
         <input
-          onChange={(e) => {
-            setSearch(e.target.value);
-          }}
+          onChange={(e) => setSearch(e.target.value)}
           className="input input-sm input-bordered w-full max-w-xs "
           placeholder="search..."
           type="search"
@@ -70,11 +65,7 @@ export default function ConversationList() {
           value={search}
         />
       </div>
-      <div
-        style={{ height: "92%" }}
-        className=" overflow-y-scroll py-2 "
-        id="conversationList"
-      >
+      <div className=" h-[92%] overflow-y-scroll py-2" id="conversationList">
         {friendsList.length === 0 ? (
           <h1>no conversation yet!</h1>
         ) : (
@@ -86,8 +77,8 @@ export default function ConversationList() {
                   key={item.friendshipId}
                   data={{
                     ...item,
-                    unreadMessagesCount: item.unreadMessagesCount
-                      ? item.unreadMessagesCount
+                    unreadMessageCount: item.unreadMessageCount
+                      ? item.unreadMessageCount
                       : 0,
                     CurrentUserIsLastMessageSender:
                       item.lastMessageSenderId === item.friendId ? false : true, // if the last message senderid is the currentuserId, then true

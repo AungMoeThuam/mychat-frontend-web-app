@@ -126,6 +126,7 @@ const friendService = {
   getFriendsList: async (): Promise<Result> => {
     try {
       const { data } = await API.post("/friends");
+      console.log(" friend list ", data);
       return SuccessResult(data);
     } catch (error) {
       return ErrorResult(error);

@@ -18,7 +18,7 @@ export interface Friend {
   isTheLastMessageDeletedByReceiver: boolean;
   isActiveNow: boolean;
   profilePhoto: ProfilePhoto;
-  unreadMessagesCount: number;
+  unreadMessageCount: number;
 }
 
 export interface Person {
