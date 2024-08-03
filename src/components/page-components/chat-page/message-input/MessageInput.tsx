@@ -38,10 +38,8 @@ export default function MessageInput(props: MessageInputProps) {
     (state: RootState) => state.authSlice.currentUserId
   );
 
-  const handleFocus: FocusEventHandler<HTMLTextAreaElement> = () => {
-    console.log("start typing!");
+  const handleFocus: FocusEventHandler<HTMLTextAreaElement> = () =>
     socket.emitEvent(Event.STARTTYPING, { friendId, userId: currentUserId });
-  };
 
   const handleBlur = () => {
     socket.emitEvent(Event.STOPTYPING, { friendId, userId: currentUserId });

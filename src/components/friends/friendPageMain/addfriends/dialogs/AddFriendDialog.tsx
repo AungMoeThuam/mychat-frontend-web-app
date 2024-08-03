@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState, StoreDispatch } from "../../../../../redux/store/store";
 import { searchfriendNameThunk } from "../../../../../redux/features/people/peopleThunks";
 import toast from "react-hot-toast";
-import { SearchNameContext } from "../../../../../pages/SearchPeoplePage";
+import { SearchNameContext } from "../../../../../pages/SearchPeople";
 import {
   operationError,
   operationLoading,

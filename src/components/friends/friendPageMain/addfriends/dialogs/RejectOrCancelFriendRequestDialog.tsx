@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { StoreDispatch } from "../../../../../redux/store/store";
 import { searchfriendNameThunk } from "../../../../../redux/features/people/peopleThunks";
 import toast from "react-hot-toast";
-import { SearchNameContext } from "../../../../../pages/SearchPeoplePage";
+import { SearchNameContext } from "../../../../../pages/SearchPeople";
 import Dialog from "../../../../share-components/Dialog";
 import friendService from "../../../../../service/friend.service";
 import { Person } from "../../../../../lib/types/types";

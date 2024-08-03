@@ -117,7 +117,7 @@ export default function ChatInput(props: { friendId: any; roomId: any }) {
   return (
     <form
       onSubmit={sendMessage}
-      className=" row-span-1 shadow-lg border-t-4 border-slate-100 dark:border-zinc-950   h-fit  p-2 w-full flex justify-between items-center  dark:bg-zinc-900  px-2"
+      className="row-span-1 shadow-lg border-t-4 border-slate-100 dark:border-zinc-950   h-fit  p-2 w-full flex justify-between items-center  dark:bg-zinc-900  px-2"
     >
       <div className="flex-1 flex justify-center">
         {file === null ? (

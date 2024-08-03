@@ -1,19 +1,19 @@
 import { createBrowserRouter } from "react-router-dom";
-import HomePage from "../pages/home/HomePage";
-import Chat from "../pages/ChatPage";
+import Home from "../pages/home/Home";
+import Chat from "../pages/Chat";
 import Setting from "../pages/Setting";
-import FriendsPage from "../pages/FriendsPage";
+import Friends from "../pages/Friends";
 import FriendPageMain from "../components/friends/friendPageMain/FriendPageMain";
-import PendingsPage from "../pages/PendingsPage";
-import RequestsPage from "../pages/RequestsPage";
-import LoginPage from "../pages/LoginPage";
-import RegisterPage from "../pages/RegisterPage";
-import BlocksPage from "../pages/BlocksPage";
-import CallAcceptedPage from "../pages/CallAccepted";
-import CallRequestedPage from "../pages/CallRequested";
-import ProfilePage from "../pages/ProfilePage";
-import SearchPeoplePage from "../pages/SearchPeoplePage";
-import ServerDownPage from "../pages/ServerDownPage";
+import Pendings from "../pages/Pendings";
+import Requests from "../pages/Requests";
+import Login from "../pages/Login";
+import Register from "../pages/Register";
+import Blocks from "../pages/Blocks";
+import CallAccepted from "../pages/CallAccepted";
+import CallRequested from "../pages/CallRequested";
+import Profile from "../pages/Profile";
+import SearchPeople from "../pages/SearchPeople";
+import ServerDown from "../pages/ServerDown";
 import PublicRoute from "./PublicRoute";
 import PrivateRoute from "./PrivateRoute";
 
@@ -22,7 +22,7 @@ const router = createBrowserRouter([
     path: "/",
     element: (
       <PrivateRoute>
-        <HomePage />
+        <Home />
       </PrivateRoute>
     ),
     children: [
@@ -44,7 +44,7 @@ const router = createBrowserRouter([
 
       {
         path: "/friends",
-        element: <FriendsPage />,
+        element: <Friends />,
         children: [
           {
             index: true,
@@ -52,20 +52,20 @@ const router = createBrowserRouter([
           },
           {
             path: "pendings",
-            element: <PendingsPage />,
+            element: <Pendings />,
           },
 
           {
             path: "requests",
-            element: <RequestsPage />,
+            element: <Requests />,
           },
           {
             path: "addfriends",
-            element: <SearchPeoplePage />,
+            element: <SearchPeople />,
           },
           {
             path: "blocks",
-            element: <BlocksPage />,
+            element: <Blocks />,
           },
         ],
       },
@@ -77,7 +77,7 @@ const router = createBrowserRouter([
     path: "/profile",
     element: (
       <PrivateRoute>
-        <ProfilePage />
+        <Profile />
       </PrivateRoute>
     ),
   },
@@ -85,7 +85,7 @@ const router = createBrowserRouter([
     path: "/call-room-type=audio:initiate=true/:friendId/:calleeName",
     element: (
       <PrivateRoute>
-        <CallRequestedPage callRoomType="audio" />
+        <CallRequested callRoomType="audio" />
       </PrivateRoute>
     ),
   },
@@ -93,7 +93,7 @@ const router = createBrowserRouter([
     path: "/call-room-type=video:initiate=true/:friendId/:calleeName",
     element: (
       <PrivateRoute>
-        <CallRequestedPage />
+        <CallRequested />
       </PrivateRoute>
     ),
   },
@@ -102,7 +102,7 @@ const router = createBrowserRouter([
     path: "/call-room-type=video:initiate=false/:callerId/:calleeId/:callerName",
     element: (
       <PrivateRoute>
-        <CallAcceptedPage />
+        <CallAccepted />
       </PrivateRoute>
     ),
   },
@@ -110,7 +110,7 @@ const router = createBrowserRouter([
     path: "/call-room-type=audio:initiate=false/:callerId/:calleeId/:callerName",
     element: (
       <PrivateRoute>
-        <CallAcceptedPage callRoomType="audio" />
+        <CallAccepted callRoomType="audio" />
       </PrivateRoute>
     ),
   },
@@ -119,7 +119,7 @@ const router = createBrowserRouter([
     path: "/login",
     element: (
       <PublicRoute>
-        <LoginPage />
+        <Login />
       </PublicRoute>
     ),
   },
@@ -127,13 +127,13 @@ const router = createBrowserRouter([
     path: "/register",
     element: (
       <PublicRoute>
-        <RegisterPage />
+        <Register />
       </PublicRoute>
     ),
   },
   {
     path: "/serverdown",
-    element: <ServerDownPage />,
+    element: <ServerDown />,
   },
 ]);
 

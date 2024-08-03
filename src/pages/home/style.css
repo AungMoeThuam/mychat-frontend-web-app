@@ -1,6 +1,5 @@
 #conversationList::-webkit-scrollbar {
   width: 5px;
-  /* background-color: #0a0a0a; */
 }
 
 #conversationList::-webkit-scrollbar-thumb {

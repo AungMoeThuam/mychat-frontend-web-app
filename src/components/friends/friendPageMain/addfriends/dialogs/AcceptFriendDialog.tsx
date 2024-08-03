@@ -10,7 +10,7 @@ import { StoreDispatch } from "../../../../../redux/store/store";
 import { searchfriendNameThunk } from "../../../../../redux/features/people/peopleThunks";
 import Modal from "../../../../share-components/Modal";
 import toast from "react-hot-toast";
-import { SearchNameContext } from "../../../../../pages/SearchPeoplePage";
+import { SearchNameContext } from "../../../../../pages/SearchPeople";
 import { updateSearchingPeopleResult } from "../../../../../redux/features/people/peopleSlice";
 import { fetchFriends } from "../../../../../redux/features/friend/friendThunks";
 import { Person } from "../../../../../lib/types/types";
