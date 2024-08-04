@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store/store";
 import MessageCard from "./message/Message";
-import { Message } from "../../../lib/models/models";
+import { Message } from "../../../lib/types/types";
 
 type MessageListProps = {
   error: boolean;

@@ -1,22 +1,14 @@
-import {
-  Dispatch,
-  ForwardedRef,
-  forwardRef,
-  PropsWithChildren,
-  SetStateAction,
-} from "react";
+import { Dispatch, RefObject, SetStateAction } from "react";
 import toast from "react-hot-toast";
 import { FiPaperclip } from "react-icons/fi";
 
 type FilePickerProps = {
   setFile: Dispatch<SetStateAction<File | null>>;
   roomId: string;
+  submitBtnRef: RefObject<HTMLButtonElement>;
 };
-const FilePicker = forwardRef<
-  HTMLButtonElement,
-  PropsWithChildren<FilePickerProps>
->(function (props, ref: ForwardedRef<HTMLButtonElement>) {
-  const { setFile, roomId } = props;
+export default function FilePicker(props: FilePickerProps) {
+  const { setFile, submitBtnRef } = props;
   return (
     <label
       htmlFor="dropzone-file"
@@ -44,7 +36,8 @@ const FilePicker = forwardRef<
             });
 
           e.target.value = "";
-          ref!.current!.focus();
+
+          submitBtnRef.current?.focus();
         }}
         onKeyDown={() => alert("h")}
         id="dropzone-file"
@@ -53,7 +46,4 @@ const FilePicker = forwardRef<
       />
     </label>
   );
-});
-
-FilePicker.displayName = "FilePicker";
-export default FilePicker;
+}

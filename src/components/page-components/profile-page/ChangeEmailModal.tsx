@@ -1,6 +1,5 @@
 import { FormEvent, ChangeEvent, useState, RefObject } from "react";
 import API from "../../../service/api";
-import { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import Dialog from "../../share-components/Dialog";
 import Button from "../../share-components/Button";
@@ -34,12 +33,13 @@ export default function ChangeEmailModal({
       if (res.status === 200) closeModal();
       toast("Updated email ✅");
     } catch (error) {
-      if (error instanceof AxiosError)
-        seterror((prev) => ({
-          ...prev,
-          isError: true,
-          message: error.response?.data.error,
-        }));
+      const err = error as any;
+      seterror((prev) => ({
+        ...prev,
+        isError: true,
+        message: err.response?.data.error,
+      }));
+
       console.log(error);
     } finally {
       setLoading(false);

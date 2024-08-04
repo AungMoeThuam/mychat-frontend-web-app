@@ -18,7 +18,7 @@ export default function Setting() {
               checked={darkMode}
               type="checkbox"
               className="toggle bg-lime-500"
-              onChange={(e) => {
+              onChange={() => {
                 setDarkMode((prev) => !prev);
                 let isAlreadyDarkMode = document.body
                   .querySelector("#root")

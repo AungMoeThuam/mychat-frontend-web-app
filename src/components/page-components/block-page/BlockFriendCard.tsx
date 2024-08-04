@@ -1,8 +1,8 @@
 import { useRef } from "react";
 import { tempCatPhoto } from "../../../assets/temporaryProfilePhoto";
-import { Friend } from "../../../utils/constants/types";
 import UnblockActionDialog from "./UnblockActionDialog";
 import { API_BASE_URL } from "../../../service/api";
+import { Friend } from "../../../lib/types/types";
 
 export default function BlockFriendCard({ friend }: { friend: Friend }) {
   const blockActionDialog = useRef<HTMLDialogElement>(null);
@@ -19,7 +19,7 @@ export default function BlockFriendCard({ friend }: { friend: Friend }) {
           }
         />
 
-        <h1>{friend.name}</h1>
+        <h1>{friend.friendName}</h1>
       </div>
       <div className="flex gap-4">
         <button

@@ -133,7 +133,7 @@ export default function ChatInput(props: { friendId: any; roomId: any }) {
             <div className=" px-3 flex-1 flex items-center gap-2">
               <FilePicker
                 roomId={roomId}
-                ref={submitBtnRef}
+                submitBtnRef={submitBtnRef}
                 setFile={setFile}
               />
               <MdKeyboardVoice

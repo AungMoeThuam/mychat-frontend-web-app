@@ -1,4 +1,4 @@
-import { Friend } from "../../../lib/models/models";
+import { Friend } from "../../../lib/types/types";
 
 export type FriendState = {
   error: boolean;

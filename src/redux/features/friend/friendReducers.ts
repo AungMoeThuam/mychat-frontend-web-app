@@ -1,7 +1,6 @@
 import { PayloadAction } from "@reduxjs/toolkit";
-import { Message } from "../../../utils/constants/types";
 import { FriendState } from "./friendState";
-import { Friend } from "../../../lib/models/models";
+import { Friend, Message } from "../../../lib/types/types";
 
 const frinedReducers = {
   fetchFriendsError: (
@@ -39,24 +38,24 @@ const frinedReducers = {
     let temp: Friend;
     state.friendsList = state.friendsList
       .map((item: Friend) => {
-        if (item.friendshipId === action.payload.roomId) {
+        if (item.friendshipId === action.payload.friendshipId) {
           item.lastMessageCreatedAt = action.payload.createdAt;
           item.lastMessageContent = action.payload.content;
           item.lastMessageSenderId = action.payload.senderId;
           item.lastMessageType = action.payload.type;
-          item.unreadMessagesCount += 1;
+          item.unreadMessageCount += 1;
           temp = item;
           return item;
         } else return item;
       })
-      .filter((item) => item.friendshipId !== action.payload.roomId);
+      .filter((item) => item.friendshipId !== action.payload.friendshipId);
     state.friendsList.unshift(temp!); // temporarary code need to be fixed next
   },
   addNewMessage: (state: FriendState, action: PayloadAction<Message>) => {
     let temp: Friend;
     state.friendsList = state.friendsList
       .map((item: Friend) => {
-        if (item.friendId === action.payload.roomId) {
+        if (item.friendId === action.payload.friendshipId) {
           item.lastMessageCreatedAt = action.payload.createdAt;
           item.lastMessageContent = action.payload.content;
           item.lastMessageSenderId = action.payload.senderId;
@@ -65,7 +64,7 @@ const frinedReducers = {
           return item;
         } else return item;
       })
-      .filter((item) => item.friendshipId !== action.payload.roomId);
+      .filter((item) => item.friendshipId !== action.payload.friendshipId);
     state.friendsList.unshift(temp!); // temporarary code need to be fixed next
   },
   updateOnlineStatus: (
@@ -86,7 +85,7 @@ const frinedReducers = {
   ) => {
     state.friendsList = state.friendsList.map((item) => {
       if (item.friendshipId === action.payload) {
-        item.unreadMessagesCount = 0;
+        item.unreadMessageCount = 0;
         return item;
       }
       return item;
