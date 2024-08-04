@@ -34,6 +34,7 @@ export default function LoginPage() {
   ) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
   const login: FormEventHandler = (e: FormEvent) => {
+    console.log(form);
     e.preventDefault();
     diapatch(loginUser(form));
   };
@@ -60,13 +61,13 @@ export default function LoginPage() {
           className=" px-4  py-2 flex flex-col gap-2 text-sm "
         >
           <Input
-            name="Email"
+            name="email"
             type="email"
             onChange={onChange}
             placeholder="example@example.com"
           />
           <Input
-            name="Password"
+            name="password"
             type="password"
             onChange={onChange}
             placeholder="..."

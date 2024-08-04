@@ -64,10 +64,10 @@ export default function RegisterPage() {
           onSubmit={onRegister}
           className=" px-4  py-2 flex flex-col gap-2 text-sm "
         >
-          <Input name="Name" type="text" onChange={onChange} />
-          <Input name="Email" type="email" onChange={onChange} />
-          <Input name="Password" type="password" onChange={onChange} />
-          <Input name="Confirm Password" type="password" onChange={onChange} />
+          <Input name="name" type="text" onChange={onChange} />
+          <Input name="rmail" type="email" onChange={onChange} />
+          <Input name="password" type="password" onChange={onChange} />
+          <Input name="confirmPassword" type="password" onChange={onChange} />
           {error === true && (
             <p className=" text-red-500 font-bold">{message}</p>
           )}

@@ -16,7 +16,7 @@ export default function Input({
       <label htmlFor={name}>{name}</label>
       <input
         required
-        className="rounded-md border p-2 bg-slate-100  "
+        className="rounded-md border p-2 bg-slate-100 text-zinc-950  "
         type={type}
         name={name}
         id={name}
