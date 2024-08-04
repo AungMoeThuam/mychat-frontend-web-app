@@ -8,10 +8,10 @@ import {
   useState,
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../redux/features/user/userThunks";
 import { RootState, StoreDispatch } from "../redux/store/store";
+import Input from "../components/share-components/Input";
 type LoginCredential = {
   email: string;
   password: string;
@@ -43,55 +43,47 @@ export default function LoginPage() {
   }, [success]);
 
   return (
-    <div className="h-screen bg-slate-950">
-      <main className=" h-full  px-2 md:px-18 lg:px-40 py-10 flex justify-center md:grid grid-cols-12  ">
-        <section className=" hidden col-span-6 md:flex  lg:flex flex-col  justify-center align-middle ">
-          <h1 className="">MyChat</h1>
-          <img
-            className=" object-cover"
-            loading="lazy"
-            alt="background"
-            src={homebackground}
+    <main className=" primary-dark px-10 md:px-20 lg:px-40 w-[100dvw] h-[100dvh] flex justify-center items-center">
+      <section className=" flex-1 hidden  md:flex flex-col gap-10  ">
+        <h1 className=" text-4xl text-lime-500">MyChat Messenger</h1>
+        <img
+          className="object-cover"
+          loading="lazy"
+          alt="background"
+          src={homebackground}
+        />
+      </section>
+      <section className=" flex-1 flex flex-col justify-center  px-6 md:px-8 lg:px-10 ">
+        <h1 className=" text-2xl font-bold text-lime-500">Login</h1>
+        <form
+          onSubmit={login}
+          className=" px-4  py-2 flex flex-col gap-2 text-sm "
+        >
+          <Input
+            name="Email"
+            type="email"
+            onChange={onChange}
+            placeholder="example@example.com"
           />
-        </section>
-        <section className=" h-full col-span-12 flex flex-col justify-center md:col-span-6  px-6 md:px-8 lg:px-10 ">
-          <h1 className=" text-2xl font-bold">Login</h1>
-          <form
-            onSubmit={login}
-            className=" px-4  py-2 flex flex-col gap-2 text-sm "
-          >
-            <label htmlFor="email">Email</label>
-            <input
-              required
-              className="rounded-md border p-2 bg-slate-100 "
-              type="email"
-              name="email"
-              id="email"
-              placeholder="example@email.com"
-              onChange={onChange}
-            />
-            <label htmlFor="password">Password</label>
-            <input
-              required
-              className="rounded-md border p-2 bg-slate-100"
-              type="password"
-              name="password"
-              id="password"
-              placeholder="..."
-              onChange={onChange}
-            />
-            {error === true && (
-              <p className=" text-red-500 font-bold">{message}</p>
-            )}
-            <input
-              className=" btn btn-md bg-teal-900 font-bold text-white p-2 cursor-pointer"
-              type="submit"
-              value={loading === true ? "loading...." : "Login"}
-            />
-            <Link to={"/register"}>Registered?</Link>
-          </form>
-        </section>
-      </main>
-    </div>
+          <Input
+            name="Password"
+            type="password"
+            onChange={onChange}
+            placeholder="..."
+          />
+          {error === true && (
+            <p className=" text-red-500 font-bold">{message}</p>
+          )}
+          <input
+            className=" btn btn-md secondary font-bold text-zinc-950 p-2 cursor-pointer"
+            type="submit"
+            value={loading === true ? "loading...." : "Login"}
+          />
+          <Link className=" text-lime-500 underline" to={"/register"}>
+            not Registered yet?
+          </Link>
+        </form>
+      </section>
+    </main>
   );
 }

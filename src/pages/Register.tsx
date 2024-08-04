@@ -12,6 +12,7 @@ import { RootState, StoreDispatch } from "../redux/store/store";
 import { registerUser } from "../redux/features/user/userThunks";
 import { Link, useNavigate } from "react-router-dom";
 import { RegisterForm } from "../lib/types/types";
+import Input from "../components/share-components/Input";
 
 export default function RegisterPage() {
   const [form, setForm] = useState<RegisterForm>({
@@ -42,79 +43,48 @@ export default function RegisterPage() {
   }, [success]);
 
   return (
-    <>
-      <h1>MyChat</h1>
-      <main className="   px-2 md:px-18 lg:px-40 py-10 flex justify-center md:grid grid-cols-12  ">
-        <section className=" hidden col-span-6 md:flex  lg:flex justify-center align-middle ">
-          <img
-            className=" object-cover"
-            loading="lazy"
-            alt="background"
-            src={homebackground}
-          />
-        </section>
-        <section className="col-span-12 md:col-span-6 px-6 md:px-8 lg:px-10 ">
+    <main className=" primary-dark px-10 md:px-20 lg:px-40 w-[100dvw] h-[100dvh] flex justify-center items-center">
+      <section className=" flex-1 hidden  md:flex flex-col gap-10  ">
+        <h1 className=" text-4xl text-lime-500">MyChat Messenger</h1>
+        <img
+          className="object-cover"
+          loading="lazy"
+          alt="background"
+          src={homebackground}
+        />
+      </section>
+      <section className="flex-1  px-6 md:px-8 lg:px-10  ">
+        <div className="text-lime-500">
           <h1 className=" text-2xl font-bold">Registeration</h1>
           <p className=" text-lg font-semibold">
             Join MyChat to stay close with your friends!
           </p>
-          <form
-            onSubmit={onRegister}
-            className=" px-4  py-2 flex flex-col gap-2 text-sm "
+        </div>
+        <form
+          onSubmit={onRegister}
+          className=" px-4  py-2 flex flex-col gap-2 text-sm "
+        >
+          <Input name="Name" type="text" onChange={onChange} />
+          <Input name="Email" type="email" onChange={onChange} />
+          <Input name="Password" type="password" onChange={onChange} />
+          <Input name="Confirm Password" type="password" onChange={onChange} />
+          {error === true && (
+            <p className=" text-red-500 font-bold">{message}</p>
+          )}
+          <input
+            className=" btn border-none  secondary text-zinc-950"
+            type="submit"
+            disabled={loading}
+            value={loading === true ? "Loading...." : "Register"}
+          />
+          <Link
+            className="  font-semibold text-lime-500 underline"
+            to={"/login"}
           >
-            <label htmlFor="name">Name</label>
-            <input
-              required
-              className="border p-2 bg-slate-100"
-              type="text"
-              name="name"
-              id="name"
-              placeholder="david"
-              onChange={onChange}
-            />
-            <label htmlFor="email">Email</label>
-            <input
-              required
-              className="border p-2 bg-slate-100"
-              type="email"
-              name="email"
-              id="email"
-              placeholder="example@email.com"
-              onChange={onChange}
-            />{" "}
-            <label htmlFor="password">Password</label>
-            <input
-              required
-              className="border p-2 bg-slate-100"
-              type="password"
-              name="password"
-              id="password"
-              placeholder="..."
-              onChange={onChange}
-            />
-            <label htmlFor="confirmPassword">Confirm Password</label>
-            <input
-              required
-              className="border p-2 bg-slate-100"
-              type="password"
-              name="confirmPassword"
-              id="confirmPassword"
-              placeholder="..."
-              onChange={onChange}
-            />
-            {error === true && (
-              <p className=" text-red-500 font-bold">{message}</p>
-            )}
-            <input
-              className=" bg-yellow-400 p-2 cursor-pointer"
-              type="submit"
-              disabled={loading}
-              value={loading === true ? "loading...." : "register"}
-            />
-            <Link to={"/logi regis"}>Login</Link>
-          </form>
-        </section>
-      </main>
-    </>
+            Login
+          </Link>
+        </form>
+      </section>
+    </main>
   );
 }
