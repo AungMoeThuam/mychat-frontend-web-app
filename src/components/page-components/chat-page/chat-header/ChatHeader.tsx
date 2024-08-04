@@ -23,7 +23,8 @@ export default function ChatHeader(props: {
         />
         <div className="flex flex-col text-lg font-bold   ">
           {friendName}
-          <span className=" text-sm font-normal">1 minute ago</span>
+          {/* to show last active time */}
+          <span className=" text-sm font-normal">...</span>
         </div>
       </div>
       <ul className="flex gap-4 items-center pr-4 ">
