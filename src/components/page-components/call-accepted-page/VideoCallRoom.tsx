@@ -3,23 +3,7 @@ import { useParams } from "react-router-dom";
 import { FaVideo, FaVideoSlash } from "react-icons/fa";
 import { IoIosMic, IoIosMicOff } from "react-icons/io";
 import socket from "../../../service/socket.service";
-
-export function createWebRtc(): RTCPeerConnection {
-  const rtcPeerConnection = new RTCPeerConnection({
-    iceServers: [
-      {
-        urls: ["stun:stun.l.google.com:19302"],
-      },
-      {
-        urls: "turn:numb.viagenie.ca",
-        credential: "muazkh",
-        username: "webrtc@live.com",
-      },
-    ],
-  });
-
-  return rtcPeerConnection;
-}
+import createWebRtc from "../../../lib/utils/rtcPeerConnection";
 
 export default function VideoCallRoom() {
   let offer = localStorage.getItem("offer");

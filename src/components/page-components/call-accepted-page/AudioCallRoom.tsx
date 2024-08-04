@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { createWebRtc } from "../../../pages/CallAccepted";
 import socket from "../../../service/socket.service";
 import { useParams } from "react-router-dom";
 import { IoPersonCircle } from "react-icons/io5";
 import { BsMicFill, BsMicMuteFill } from "react-icons/bs";
 import sound from "../../../assets/audios/video-calling-sound.mp3";
+import createWebRtc from "../../../lib/utils/rtcPeerConnection";
 export default function AudioCallRoom() {
   const [callEndByCaller, setCallEndByCaller] = useState(false);
   const [isSDPReady, setIsSDPReady] = useState(false);

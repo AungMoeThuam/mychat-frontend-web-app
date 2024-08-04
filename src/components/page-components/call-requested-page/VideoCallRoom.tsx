@@ -6,8 +6,8 @@ import { IoPersonCircle } from "react-icons/io5";
 import { IoIosMic, IoIosMicOff } from "react-icons/io";
 import socket from "../../../service/socket.service";
 import { RootState } from "../../../redux/store/store";
-import { createWebRtc } from "../../../pages/CallAccepted";
 import sound from "../../../assets/audios/video-calling-sound.mp3";
+import createWebRtc from "../../../lib/utils/rtcPeerConnection";
 
 export default function VideoCallRoom() {
   const { friendId, calleeName } = useParams();
