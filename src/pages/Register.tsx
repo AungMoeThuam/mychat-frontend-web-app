@@ -65,7 +65,7 @@ export default function RegisterPage() {
           className=" px-4  py-2 flex flex-col gap-2 text-sm "
         >
           <Input name="name" type="text" onChange={onChange} />
-          <Input name="rmail" type="email" onChange={onChange} />
+          <Input name="email" type="email" onChange={onChange} />
           <Input name="password" type="password" onChange={onChange} />
           <Input name="confirmPassword" type="password" onChange={onChange} />
           {error === true && (
