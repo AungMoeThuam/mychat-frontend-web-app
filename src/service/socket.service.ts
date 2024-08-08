@@ -9,7 +9,7 @@ class SocketIO {
   subscribedEvents: string[] = [];
   constructor(url: string) {
     this.io = io(url, {
-      path: "/api/io/",
+      path: "/io/",
       autoConnect: false,
     });
     console.log(url);
