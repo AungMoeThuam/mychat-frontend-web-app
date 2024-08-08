@@ -28,7 +28,7 @@ export default function RecordedAudioDisplayer({
     };
   }, []);
   return (
-    <div className="flex items-center rounded-md  px-5">
+    <div className="flex  bg-zinc-950  items-center rounded-md  px-5">
       {setFile && (
         <BsTrashFill
           className="text-red-500  cursor-pointer"
