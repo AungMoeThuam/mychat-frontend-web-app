@@ -12,6 +12,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../redux/features/user/userThunks";
 import { RootState, StoreDispatch } from "../redux/store/store";
 import Input from "../components/share-components/Input";
+import { resetAuth } from "../redux/features/user/userSlice";
 type LoginCredential = {
   email: string;
   password: string;
@@ -41,6 +42,10 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (success === true) navigate("/");
+
+    return () => {
+      diapatch(resetAuth());
+    };
   }, [success]);
 
   return (

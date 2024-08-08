@@ -18,6 +18,7 @@ export const {
   loginError,
   loginLoading,
   loginSuccess,
+  resetAuth,
 } = userSlice.actions;
 export default userSlice.reducer;
 export type { UserSliceActions, UserSliceState };

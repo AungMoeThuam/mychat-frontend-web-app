@@ -86,6 +86,12 @@ const userReducers = {
     state.loading = action.payload;
     state.message = "loading...";
   },
+  resetAuth: (state: UserState) => {
+    state.error = false;
+    state.success = false;
+    state.loading = false;
+    state.message = "";
+  },
 };
 
 export default userReducers;

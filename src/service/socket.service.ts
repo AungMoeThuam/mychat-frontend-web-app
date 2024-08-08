@@ -3,6 +3,7 @@ import { Event } from "../lib/utils/socketEvents";
 import { API_BASE_URL } from "./api";
 import useLocalStorage from "../lib/hooks/useLocalStorage";
 const { getStorage } = useLocalStorage("authToken");
+const token = getStorage() ? getStorage().token : null;
 class SocketIO {
   static instance: SocketIO;
   io: Socket;
@@ -13,7 +14,7 @@ class SocketIO {
       path: "/io/",
       autoConnect: false,
       extraHeaders: {
-        Authorization: "Bearer " + getStorage().token,
+        Authorization: "Bearer " + token,
       },
     });
     console.log(url);
