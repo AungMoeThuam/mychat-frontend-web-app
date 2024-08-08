@@ -9,9 +9,8 @@ class SocketIO {
   subscribedEvents: string[] = [];
   constructor(url: string) {
     this.io = io(url, {
-      path: "/io/",
+      path: "/api/io/",
       autoConnect: false,
-      transports: ["websocket"],
     });
     console.log(url);
   }
