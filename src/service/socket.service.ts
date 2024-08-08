@@ -11,10 +11,9 @@ class SocketIO {
     this.io = io(url, {
       path: "/io/",
       autoConnect: false,
-      //   query: {
-      //     userId: getAuth()?._id,
-      //   },
+      transports: ["websocket"],
     });
+    console.log(url);
   }
 
   connect(currentUserId: string) {
