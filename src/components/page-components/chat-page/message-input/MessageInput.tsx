@@ -10,9 +10,6 @@ import {
 import "./style.css";
 import socket from "../../../../service/socket.service";
 import { Event } from "../../../../lib/utils/socketEvents";
-import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../../redux/store/store";
 import { ImSmile } from "react-icons/im";
 import Picker from "@emoji-mart/react";
 type MessageInputProps = {
@@ -33,18 +30,15 @@ export default function MessageInput(props: MessageInputProps) {
     setContent,
   } = props;
 
-  const { friendId } = useParams();
-  const currentUserId = useSelector(
-    (state: RootState) => state.authSlice.currentUserId
-  );
-
   const handleFocus: FocusEventHandler<HTMLTextAreaElement> = () =>
-    socket.emitEvent(Event.STARTTYPING, { friendId, userId: currentUserId });
+    socket.emitEvent(Event.STARTTYPING, {
+      roomId,
+    });
 
-  const handleBlur = () => {
-    socket.emitEvent(Event.STOPTYPING, { friendId, userId: currentUserId });
-    console.log("stop typing!", friendId);
-  };
+  const handleBlur = () =>
+    socket.emitEvent(Event.STOPTYPING, {
+      roomId,
+    });
 
   const handleInput = (e: FormEvent<HTMLTextAreaElement>) => {
     let rows = e.currentTarget.value.split("\n").length;

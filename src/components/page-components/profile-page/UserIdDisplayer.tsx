@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 export default function UserIdDisplayer(props: { currentUserId: string }) {
   const { currentUserId } = props;
   return (
-    <div className="flex  items-center gap-3">
+    <div className="flex w-full  items-center justify-between gap-3">
       <h1 className=" font-mono text-slate-500">
         id - <b>{currentUserId}</b>
       </h1>
